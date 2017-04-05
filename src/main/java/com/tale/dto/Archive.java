@@ -11,41 +11,42 @@ import java.util.List;
  */
 public class Archive implements Serializable {
 
-    private String date_str;
-    private Date date;
-    private String count;
-    private List<Contents> articles;
+	private static final long serialVersionUID = 1L;
+	private String date_str;
+	private Date date;
+	private String count;
+	private List<Contents> articles;
 
-    public String getDate_str() {
-        return date_str;
-    }
+	public String getDate_str() {
+		return date_str;
+	}
 
-    public void setDate_str(String date_str) {
-        this.date_str = date_str;
-    }
+	public void setDate_str(String date_str) {
+		this.date_str = date_str;
+	}
 
-    public Date getDate() {
-        return date;
-    }
+	public Date getDate() {
+		return date;
+	}
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+	public void setDate(Date date) {
+		this.date = date;
+	}
 
-    public String getCount() {
-        return count;
-    }
+	public String getCount() {
+		return count;
+	}
 
-    public void setCount(String count) {
-        this.count = count;
-    }
+	public void setCount(String count) {
+		this.count = count;
+	}
 
-    public List<Contents> getArticles() {
-        return articles;
-    }
+	public List<Contents> getArticles() {
+		return articles;
+	}
 
-    public void setArticles(List<Contents> articles) {
-        this.articles = articles;
-    }
+	public void setArticles(List<Contents> articles) {
+		this.articles = articles;
+	}
 
 }

@@ -1,13 +1,12 @@
 package com.tale.init;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.blade.kit.CollectionKit;
 import com.blade.kit.base.Config;
 import com.tale.dto.PluginMenu;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Tale 常量存储

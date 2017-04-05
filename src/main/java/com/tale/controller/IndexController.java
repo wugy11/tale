@@ -302,7 +302,7 @@ public class IndexController extends BaseController {
      */
     @Route(value = "comment", method = HttpMethod.POST)
     @JSON
-    public RestResponse comment(Request request, Response response,
+    public RestResponse<?> comment(Request request, Response response,
                                 @QueryParam Integer cid, @QueryParam Integer coid,
                                 @QueryParam String author, @QueryParam String mail,
                                 @QueryParam String url, @QueryParam String text, @QueryParam String _csrf_token) {

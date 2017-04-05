@@ -7,13 +7,14 @@ import com.tale.model.Metas;
  */
 public class MetaDto extends Metas {
 
-    private int count;
+	private static final long serialVersionUID = 1L;
+	private int count;
 
-    public int getCount() {
-        return count;
-    }
+	public int getCount() {
+		return count;
+	}
 
-    public void setCount(int count) {
-        this.count = count;
-    }
+	public void setCount(int count) {
+		this.count = count;
+	}
 }

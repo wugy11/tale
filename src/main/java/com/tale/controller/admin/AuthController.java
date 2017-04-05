@@ -48,7 +48,8 @@ public class AuthController extends BaseController {
         return "admin/login";
     }
 
-    @Route(value = "login", method = HttpMethod.POST)
+    @SuppressWarnings("rawtypes")
+	@Route(value = "login", method = HttpMethod.POST)
     @JSON
     public RestResponse doLogin(@QueryParam String username,
                                 @QueryParam String password,

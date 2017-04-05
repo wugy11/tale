@@ -7,34 +7,36 @@ import java.io.Serializable;
  */
 public class ThemeDto implements Serializable {
 
-    /**
-     * 主题名称
-     */
-    private String name;
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * 是否有设置项
-     */
-    private boolean hasSetting;
+	/**
+	 * 主题名称
+	 */
+	private String name;
 
-    public ThemeDto(String name) {
-        this.name = name;
-    }
+	/**
+	 * 是否有设置项
+	 */
+	private boolean hasSetting;
 
-    public String getName() {
-        return name;
-    }
+	public ThemeDto(String name) {
+		this.name = name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public boolean isHasSetting() {
-        return hasSetting;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setHasSetting(boolean hasSetting) {
-        this.hasSetting = hasSetting;
-    }
+	public boolean isHasSetting() {
+		return hasSetting;
+	}
+
+	public void setHasSetting(boolean hasSetting) {
+		this.hasSetting = hasSetting;
+	}
 
 }

@@ -108,7 +108,7 @@ public class ArticleController extends BaseController {
      */
     @Route(value = "publish", method = HttpMethod.POST)
     @JSON
-    public RestResponse publishArticle(@QueryParam String title, @QueryParam String content,
+    public RestResponse<?> publishArticle(@QueryParam String title, @QueryParam String content,
                                        @QueryParam String tags, @QueryParam String categories,
                                        @QueryParam String status, @QueryParam String slug,
                                        @QueryParam String fmt_type,@QueryParam String thumb_img,
@@ -172,7 +172,7 @@ public class ArticleController extends BaseController {
      */
     @Route(value = "modify", method = HttpMethod.POST)
     @JSON
-    public RestResponse modifyArticle(@QueryParam Integer cid, @QueryParam String title,
+    public RestResponse<?> modifyArticle(@QueryParam Integer cid, @QueryParam String title,
                                       @QueryParam String content,@QueryParam String fmt_type,
                                       @QueryParam String tags, @QueryParam String categories,
                                       @QueryParam String status, @QueryParam String slug,
@@ -223,7 +223,7 @@ public class ArticleController extends BaseController {
      */
     @Route(value = "delete")
     @JSON
-    public RestResponse delete(@QueryParam int cid, Request request) {
+    public RestResponse<?> delete(@QueryParam int cid, Request request) {
         try {
             contentsService.delete(cid);
             siteService.cleanCache(Types.C_STATISTICS);

@@ -40,7 +40,8 @@ public class LinksController extends BaseController {
         return "admin/links";
     }
 
-    @Route(value = "save", method = HttpMethod.POST)
+    @SuppressWarnings("rawtypes")
+	@Route(value = "save", method = HttpMethod.POST)
     @JSON
     public RestResponse saveLink(@QueryParam String title, @QueryParam String url,
                                  @QueryParam String logo, @QueryParam Integer mid,
@@ -71,7 +72,8 @@ public class LinksController extends BaseController {
         return RestResponse.ok();
     }
 
-    @Route(value = "delete")
+    @SuppressWarnings("rawtypes")
+	@Route(value = "delete")
     @JSON
     public RestResponse delete(@QueryParam int mid) {
         try {

@@ -10,66 +10,68 @@ import java.io.Serializable;
 @Table(name = "t_attach")
 public class Attach implements Serializable {
 
-    private Integer id;
-    private String fname;
-    private String ftype;
-    private String fkey;
-    private Integer author_id;
-    private Integer created;
+	private static final long serialVersionUID = 1L;
 
-    public Attach(){
+	private Integer id;
+	private String fname;
+	private String ftype;
+	private String fkey;
+	private Integer author_id;
+	private Integer created;
 
-    }
+	public Attach() {
 
-    public Attach(String fname) {
-        this.fname = fname;
-    }
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public Attach(String fname) {
+		this.fname = fname;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public String getFname() {
-        return fname;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setFname(String fname) {
-        this.fname = fname;
-    }
+	public String getFname() {
+		return fname;
+	}
 
-    public String getFtype() {
-        return ftype;
-    }
+	public void setFname(String fname) {
+		this.fname = fname;
+	}
 
-    public void setFtype(String ftype) {
-        this.ftype = ftype;
-    }
+	public String getFtype() {
+		return ftype;
+	}
 
-    public String getFkey() {
-        return fkey;
-    }
+	public void setFtype(String ftype) {
+		this.ftype = ftype;
+	}
 
-    public void setFkey(String fkey) {
-        this.fkey = fkey;
-    }
+	public String getFkey() {
+		return fkey;
+	}
 
-    public Integer getAuthor_id() {
-        return author_id;
-    }
+	public void setFkey(String fkey) {
+		this.fkey = fkey;
+	}
 
-    public void setAuthor_id(Integer author_id) {
-        this.author_id = author_id;
-    }
+	public Integer getAuthor_id() {
+		return author_id;
+	}
 
-    public Integer getCreated() {
-        return created;
-    }
+	public void setAuthor_id(Integer author_id) {
+		this.author_id = author_id;
+	}
 
-    public void setCreated(Integer created) {
-        this.created = created;
-    }
+	public Integer getCreated() {
+		return created;
+	}
+
+	public void setCreated(Integer created) {
+		this.created = created;
+	}
 }
