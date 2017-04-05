@@ -21,74 +21,69 @@ import com.tale.model.Users;
 import com.tale.service.LogService;
 import com.tale.service.UsersService;
 import com.tale.utils.TaleUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- * 登录，退出
- * Created by biezhi on 2017/2/21.
+ * 登录，退出 Created by biezhi on 2017/2/21.
  */
 @Controller("admin")
 public class AuthController extends BaseController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
+	// private static final Logger LOGGER =
+	// LoggerFactory.getLogger(AuthController.class);
 
-    @Inject
-    private UsersService usersService;
+	@Inject
+	private UsersService usersService;
 
-    @Inject
-    private LogService logService;
+	@Inject
+	private LogService logService;
 
-    @Route(value = "login", method = HttpMethod.GET)
-    public String login(Response response) {
-        if(null != this.user()){
-            response.go("/admin/index");
-            return null;
-        }
-        return "admin/login";
-    }
+	@Route(value = "login", method = HttpMethod.GET)
+	public String login(Response response) {
+		if (null != this.user()) {
+			response.go("/admin/index");
+			return null;
+		}
+		return "admin/login";
+	}
 
-    @SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes")
 	@Route(value = "login", method = HttpMethod.POST)
-    @JSON
-    public RestResponse doLogin(@QueryParam String username,
-                                @QueryParam String password,
-                                @QueryParam String remeber_me,
-                                Request request,
-                                Session session, Response response) {
+	@JSON
+	public RestResponse doLogin(@QueryParam String username, @QueryParam String password, @QueryParam String remeber_me,
+			Request request, Session session, Response response) {
 
-        Integer error_count = cache.get("login_error_count");
-        try {
-            error_count = null == error_count ? 0 : error_count;
+		Integer error_count = cache.get("login_error_count");
+		try {
+			error_count = null == error_count ? 0 : error_count;
 
-            if(null != error_count && error_count > 3){
-                return RestResponse.fail("您输入密码已经错误超过3次，请10分钟后尝试");
-            }
+			if (null != error_count && error_count > 3) {
+				return RestResponse.fail("您输入密码已经错误超过3次，请10分钟后尝试");
+			}
 
-            Users user = usersService.login(username, password);
-            session.attribute(TaleConst.LOGIN_SESSION_KEY, user);
-            if (StringKit.isNotBlank(remeber_me)) {
-                TaleUtils.setCookie(response, user.getUid());
-            }
-            Users temp = new Users();
-            temp.setUid(user.getUid());
-            temp.setLogged(DateKit.getCurrentUnixTime());
-            usersService.update(temp);
-            LOGGER.info("登录成功：{}", JSONKit.toJSONString(request.querys()));
-            cache.set("login_error_count", 0);
-            logService.save(LogActions.LOGIN, JSONKit.toJSONString(request.querys()), request.address(), user.getUid());
-        } catch (Exception e) {
-            error_count+=1;
-            cache.set("login_error_count", error_count, 10 * 60);
-            String msg = "登录失败";
-            if (e instanceof TipException) {
-                msg = e.getMessage();
-            } else {
-                LOGGER.error(msg, e);
-            }
-            return RestResponse.fail(msg);
-        }
-        return RestResponse.ok();
-    }
+			Users user = usersService.login(username, password);
+			session.attribute(TaleConst.LOGIN_SESSION_KEY, user);
+			if (StringKit.isNotBlank(remeber_me)) {
+				TaleUtils.setCookie(response, user.getUid());
+			}
+			Users temp = new Users();
+			temp.setUid(user.getUid());
+			temp.setLogged(DateKit.getCurrentUnixTime());
+			usersService.update(temp);
+			LOGGER.info("登录成功：{}", JSONKit.toJSONString(request.querys()));
+			cache.set("login_error_count", 0);
+			logService.save(LogActions.LOGIN, JSONKit.toJSONString(request.querys()), request.address(), user.getUid());
+		} catch (Exception e) {
+			error_count += 1;
+			cache.set("login_error_count", error_count, 10 * 60);
+			String msg = "登录失败";
+			if (e instanceof TipException) {
+				msg = e.getMessage();
+			} else {
+				LOGGER.error(msg, e);
+			}
+			return RestResponse.fail(msg);
+		}
+		return RestResponse.ok();
+	}
 
 }

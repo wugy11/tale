@@ -1,5 +1,8 @@
 package com.tale.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.blade.mvc.http.Request;
 import com.tale.model.Users;
 import com.tale.utils.MapCache;
@@ -10,6 +13,8 @@ import com.tale.utils.TaleUtils;
  */
 public abstract class BaseController {
 
+	protected Logger LOGGER = LoggerFactory.getLogger(getClass());
+	
     public static String THEME = "themes/default";
 
     protected MapCache cache = MapCache.single();

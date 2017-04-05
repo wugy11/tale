@@ -1,7 +1,5 @@
 package com.tale.utils;
 
-import com.blade.kit.StringKit;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -42,7 +40,8 @@ public class ZipUtils {
         zos.close();
     }
 
-    public static void addFileToZip(String path, String srcFile, ZipOutputStream zip)
+    @SuppressWarnings("resource")
+	public static void addFileToZip(String path, String srcFile, ZipOutputStream zip)
             throws Exception {
 
         File folder = new File(srcFile);

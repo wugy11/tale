@@ -1,6 +1,5 @@
 package com.tale.controller;
 
-
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.FileKit;
 import com.blade.kit.StringKit;
@@ -19,13 +18,11 @@ import com.tale.model.Users;
 import com.tale.service.OptionsService;
 import com.tale.service.SiteService;
 import com.tale.utils.TaleUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Controller("install")
 public class InstallController extends BaseController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(InstallController.class);
+//    private static final Logger LOGGER = LoggerFactory.getLogger(InstallController.class);
 
     @Inject
     private SiteService siteService;

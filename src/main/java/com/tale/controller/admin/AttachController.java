@@ -1,5 +1,12 @@
 package com.tale.controller.admin;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 import com.blade.ioc.annotation.Inject;
 import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.Paginator;
@@ -25,15 +32,6 @@ import com.tale.service.AttachService;
 import com.tale.service.LogService;
 import com.tale.service.SiteService;
 import com.tale.utils.TaleUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 附件管理
@@ -43,7 +41,8 @@ import java.util.Map;
 @Controller("admin/attach")
 public class AttachController extends BaseController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AttachController.class);
+	// private static final Logger LOGGER =
+	// LoggerFactory.getLogger(AttachController.class);
 
 	public static final String CLASSPATH = AttachController.class.getClassLoader().getResource("").getPath();
 
