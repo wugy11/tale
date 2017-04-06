@@ -24,6 +24,8 @@ import jetbrick.template.runtime.InterpretContext;
  * Created by biezhi on 2017/2/28.
  */
 public final class Theme {
+	
+	public static String THEME = "themes/default";
 
 	private static SiteService siteService;
 

@@ -115,7 +115,7 @@ public class SiteServiceImpl implements SiteService {
 					"select cid from t_contents where type = ? and status = ? order by rand() * cid limit ?",
 					Types.ARTICLE, Types.PUBLISH, limit);
 			if (CollectionKit.isNotEmpty(cids)) {
-				Integer[] inCids = cids.toArray(new Integer[cids.size()]);
+				Object[] inCids = cids.toArray(new Integer[cids.size()]);
 				return activeRecord.list(new Take(Contents.class).in("cid", inCids));
 			}
 		}

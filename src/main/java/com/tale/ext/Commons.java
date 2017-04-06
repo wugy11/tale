@@ -10,7 +10,6 @@ import com.blade.kit.DateKit;
 import com.blade.kit.StringKit;
 import com.blade.kit.Tools;
 import com.blade.kit.UUID;
-import com.tale.controller.BaseController;
 import com.tale.init.TaleConst;
 import com.tale.service.SiteService;
 import com.tale.utils.TaleUtils;
@@ -133,7 +132,7 @@ public final class Commons {
 	 * @return
 	 */
 	public static String theme_url() {
-		return Commons.site_url(TEMPLATES + BaseController.THEME);
+		return Commons.site_url(TEMPLATES + Theme.THEME);
 	}
 
 	/**
@@ -143,7 +142,7 @@ public final class Commons {
 	 * @return
 	 */
 	public static String theme_url(String sub) {
-		return Commons.site_url(TEMPLATES + BaseController.THEME + sub);
+		return Commons.site_url(TEMPLATES + Theme.THEME + sub);
 	}
 
 	/**

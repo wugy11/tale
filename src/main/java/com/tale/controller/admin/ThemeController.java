@@ -22,6 +22,7 @@ import com.tale.dto.LogActions;
 import com.tale.dto.ThemeDto;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
+import com.tale.ext.Theme;
 import com.tale.init.TaleConst;
 import com.tale.init.TaleLoader;
 import com.tale.service.LogService;
@@ -126,7 +127,7 @@ public class ThemeController extends BaseController {
 			optionsService.deleteOption("theme_option_");
 
 			TaleConst.OPTIONS.put("site_theme", site_theme);
-			BaseController.THEME = "themes/" + site_theme;
+			Theme.THEME = "themes/" + site_theme;
 
 			String themePath = "/templates/themes/" + site_theme;
 			try {
