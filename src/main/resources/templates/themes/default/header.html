@@ -23,6 +23,11 @@
     <script src="//cdn.bootcss.com/html5shiv/r29/html5.min.js"></script>
     <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+<style type="text/css">
+.login {
+	float: right;
+}
+</style>
 </head>
 <body #if(!is_post) class="bg-grey" #end
 	gtools_scp_screen_capture_injected="true">
@@ -52,6 +57,7 @@
 			</div>
 			<div class="navbar-menu">
 				<a href="${site_url('/admin/login')}" target="_blank">登录</a>
+				<!-- <a href="${site_url('/logout')}">注销</a> -->
 			</div>
 			<div class="navbar-mobile-menu" onclick="">
 				<span class="icon-menu cross"><span class="middle"></span></span>
