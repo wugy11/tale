@@ -266,6 +266,16 @@ public class IndexController extends BaseController {
 		request.attribute("is_archive", true);
 		return this.render("archives");
 	}
+	
+	/**
+	 * 分类页
+	 */
+	@Route(values = { "categories", "categories.html" }, method = HttpMethod.GET)
+	public String categories(Request request) {
+		List<Metas> categories = metasService.getMetas(Types.CATEGORY);
+		request.attribute("categories", categories);
+		return this.render("categories");
+	}
 
 	/**
 	 * 友链页
