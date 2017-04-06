@@ -176,6 +176,7 @@ public class SiteServiceImpl implements SiteService {
 				List<Contents> contentss = activeRecord.list(new Take(Contents.class).eq("type", Types.ARTICLE)
 						.eq("status", Types.PUBLISH).gt("created", start).lt("created", end).orderby("created desc"));
 				archive.setArticles(contentss);
+				archive.setDate_str(date_str + "(" + contentss.size() + ")");
 			});
 		}
 		return archives;
