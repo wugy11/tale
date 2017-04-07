@@ -241,8 +241,9 @@ public class IndexController extends BaseController {
 	@Route(values = { "categories", "categories.html" }, method = HttpMethod.GET)
 	public String categories(Request request) throws Exception {
 		List<MetaDto> categories = getMetas(Types.CATEGORY);
-		request.attribute("categories", categories);
-		return this.render("categories");
+		request.attribute("categories_tags", categories);
+		request.attribute("type", "文章分类");
+		return this.render("categories-tags");
 	}
 
 	/**
@@ -251,8 +252,9 @@ public class IndexController extends BaseController {
 	@Route(values = { "tags", "tags.html" }, method = HttpMethod.GET)
 	public String tags(Request request) throws Exception {
 		List<MetaDto> tags = getMetas(Types.TAG);
-		request.attribute("tags", tags);
-		return this.render("tags");
+		request.attribute("categories_tags", tags);
+		request.attribute("type", "标签");
+		return this.render("categories-tags");
 	}
 
 	private List<MetaDto> getMetas(String type) throws Exception {
