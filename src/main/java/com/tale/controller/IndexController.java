@@ -56,8 +56,6 @@ public class IndexController extends BaseController {
 
 	/**
 	 * 首页
-	 *
-	 * @return
 	 */
 	@Route(value = "/", method = HttpMethod.GET)
 	public String index(Request request, @QueryParam(value = "limit", defaultValue = "12") int limit) {
@@ -90,11 +88,6 @@ public class IndexController extends BaseController {
 
 	/**
 	 * 首页分页
-	 *
-	 * @param request
-	 * @param page
-	 * @param limit
-	 * @return
 	 */
 	@Route(values = { "page/:page", "page/:page.html" }, method = HttpMethod.GET)
 	public String index(Request request, @PathParam int page,
@@ -147,8 +140,6 @@ public class IndexController extends BaseController {
 
 	/**
 	 * 分类页
-	 *
-	 * @return
 	 */
 	@Route(values = { "category/:keyword", "category/:keyword.html" }, method = HttpMethod.GET)
 	public String categories(Request request, @PathParam String keyword,
@@ -159,29 +150,11 @@ public class IndexController extends BaseController {
 	@Route(values = { "category/:keyword/:page", "category/:keyword/:page.html" }, method = HttpMethod.GET)
 	public String categories(Request request, @PathParam String keyword, @PathParam int page,
 			@QueryParam(value = "limit", defaultValue = "12") int limit) {
-		page = page < 0 || page > TaleConst.MAX_PAGE ? 1 : page;
-		MetaDto metaDto = metasService.getMeta(Types.CATEGORY, keyword);
-		if (null == metaDto) {
-			return this.render_404();
-		}
-
-		Paginator<Contents> contentsPaginator = contentsService.getArticles(metaDto.getMid(), page, limit);
-
-		request.attribute("articles", contentsPaginator);
-		request.attribute("meta", metaDto);
-		request.attribute("type", "分类");
-		request.attribute("keyword", keyword);
-		request.attribute("is_category", true);
-		request.attribute("page_prefix", "/category/" + keyword);
-
-		return this.render("page-category");
+		return renderByType(Types.CATEGORY, request, keyword, page, limit);
 	}
 
 	/**
 	 * 标签页
-	 *
-	 * @param name
-	 * @return
 	 */
 	@Route(values = { "tag/:name", "tag/:name.html" }, method = HttpMethod.GET)
 	public String tags(Request request, @PathParam String name,
@@ -191,19 +164,16 @@ public class IndexController extends BaseController {
 
 	/**
 	 * 标签分页
-	 *
-	 * @param request
-	 * @param name
-	 * @param page
-	 * @param limit
-	 * @return
 	 */
 	@Route(values = { "tag/:name/:page", "tag/:name/:page.html" }, method = HttpMethod.GET)
 	public String tags(Request request, @PathParam String name, @PathParam int page,
 			@QueryParam(value = "limit", defaultValue = "12") int limit) {
+		return renderByType(Types.TAG, request, name, page, limit);
+	}
 
+	private String renderByType(String type, Request request, String name, int page, int limit) {
 		page = page < 0 || page > TaleConst.MAX_PAGE ? 1 : page;
-		MetaDto metaDto = metasService.getMeta(Types.TAG, name);
+		MetaDto metaDto = metasService.getMeta(type, name);
 		if (null == metaDto) {
 			return this.render_404();
 		}
@@ -211,11 +181,11 @@ public class IndexController extends BaseController {
 		Paginator<Contents> contentsPaginator = contentsService.getArticles(metaDto.getMid(), page, limit);
 		request.attribute("articles", contentsPaginator);
 		request.attribute("meta", metaDto);
-		request.attribute("type", "标签");
+		request.attribute("type", Types.TAG.equalsIgnoreCase(type) ? "标签" : "分类");
 		request.attribute("keyword", name);
-		request.attribute("is_tag", true);
-		request.attribute("page_prefix", "/tag/" + name);
-
+		request.attribute("name", name + "(" + contentsPaginator.getList().size() + ")");
+		// request.attribute("is_tag", true);
+		request.attribute("page_prefix", "/" + type + "/" + name);
 		return this.render("page-category");
 	}
 
@@ -256,8 +226,6 @@ public class IndexController extends BaseController {
 
 	/**
 	 * 归档页
-	 *
-	 * @return
 	 */
 	@Route(values = { "archives", "archives.html" }, method = HttpMethod.GET)
 	public String archives(Request request) {
@@ -268,29 +236,42 @@ public class IndexController extends BaseController {
 	}
 
 	/**
-	 * 分类页
+	 * 总分类页
 	 */
 	@Route(values = { "categories", "categories.html" }, method = HttpMethod.GET)
-	public String categories(Request request) {
-		List<MetaDto> categories = siteService.getMetas(Types.RECENT_META, Types.CATEGORY, TaleConst.MAX_POSTS);
+	public String categories(Request request) throws Exception {
+		List<MetaDto> categories = getMetas(Types.CATEGORY);
 		request.attribute("categories", categories);
 		return this.render("categories");
 	}
 
 	/**
-	 * 标签页
+	 * 总标签页
 	 */
 	@Route(values = { "tags", "tags.html" }, method = HttpMethod.GET)
-	public String tags(Request request) {
-		List<MetaDto> tags = siteService.getMetas(Types.RECENT_META, Types.TAG, TaleConst.MAX_POSTS);
+	public String tags(Request request) throws Exception {
+		List<MetaDto> tags = getMetas(Types.TAG);
 		request.attribute("tags", tags);
 		return this.render("tags");
 	}
 
+	private List<MetaDto> getMetas(String type) throws Exception {
+		List<MetaDto> metas = siteService.getMetas(Types.RECENT_META, Types.CATEGORY, TaleConst.MAX_POSTS);
+		for (MetaDto metaDto : metas) {
+			int count = metaDto.getCount();
+			if (count > 0) {
+				String name = metaDto.getName();
+				StringBuilder label = new StringBuilder().append("<a href=\"/" + type + "/")
+						.append(URLEncoder.encode(name, "UTF-8")).append("\">").append(name).append("(").append(count)
+						.append(")</a>");
+				metaDto.setName(label.toString());
+			}
+		}
+		return metas;
+	}
+
 	/**
 	 * 友链页
-	 *
-	 * @return
 	 */
 	@Route(values = { "links", "links.html" }, method = HttpMethod.GET)
 	public String links(Request request) {
@@ -301,8 +282,6 @@ public class IndexController extends BaseController {
 
 	/**
 	 * feed页
-	 *
-	 * @return
 	 */
 	@Route(values = { "feed", "feed.xml" }, method = HttpMethod.GET)
 	public void feed(Response response) {
@@ -319,9 +298,6 @@ public class IndexController extends BaseController {
 
 	/**
 	 * 注销
-	 *
-	 * @param session
-	 * @param response
 	 */
 	@Route("logout")
 	public void logout(Session session, Response response) {

@@ -4,7 +4,12 @@
 		<h3>标签</h3>
 		<ul class="flinks">
 			#for(tag : tags)
-			<li>🔒 <a href="#" target="_blank">${tag.name} (${tag.count})</a></li>
+			<li>🔒 ${tag.name}</li>
+			<!-- #if(tag.count != 0)
+					<a href="#" target="_blank">${tag.name} (${tag.count})</a>
+				#else
+					${tag.name} (${tag.count})
+				#end -->
 			#end
 		</ul>
 	</div>
