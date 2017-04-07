@@ -266,15 +266,25 @@ public class IndexController extends BaseController {
 		request.attribute("is_archive", true);
 		return this.render("archives");
 	}
-	
+
 	/**
 	 * 分类页
 	 */
 	@Route(values = { "categories", "categories.html" }, method = HttpMethod.GET)
 	public String categories(Request request) {
-		List<Metas> categories = metasService.getMetas(Types.CATEGORY);
+		List<MetaDto> categories = siteService.getMetas(Types.RECENT_META, Types.CATEGORY, TaleConst.MAX_POSTS);
 		request.attribute("categories", categories);
 		return this.render("categories");
+	}
+
+	/**
+	 * 标签页
+	 */
+	@Route(values = { "tags", "tags.html" }, method = HttpMethod.GET)
+	public String tags(Request request) {
+		List<MetaDto> tags = siteService.getMetas(Types.RECENT_META, Types.TAG, TaleConst.MAX_POSTS);
+		request.attribute("tags", tags);
+		return this.render("tags");
 	}
 
 	/**
