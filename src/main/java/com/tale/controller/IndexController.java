@@ -258,7 +258,7 @@ public class IndexController extends BaseController {
 	}
 
 	private List<MetaDto> getMetas(String type) throws Exception {
-		List<MetaDto> metas = siteService.getMetas(Types.RECENT_META, Types.CATEGORY, TaleConst.MAX_POSTS);
+		List<MetaDto> metas = siteService.getMetas(Types.RECENT_META, type, TaleConst.MAX_POSTS);
 		for (MetaDto metaDto : metas) {
 			int count = metaDto.getCount();
 			if (count > 0) {
