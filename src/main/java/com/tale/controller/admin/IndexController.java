@@ -27,6 +27,7 @@ import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
 import com.tale.init.TaleConst;
+import com.tale.init.TaleLoader;
 import com.tale.model.Comments;
 import com.tale.model.Contents;
 import com.tale.model.Logs;
@@ -279,7 +280,7 @@ public class IndexController extends BaseController {
 		}
 		try {
 			// sh tale.sh reload 10
-			String webHome = new File(AttachController.CLASSPATH).getParent();
+			String webHome = new File(TaleLoader.CLASSPATH).getParent();
 			String cmd = "sh " + webHome + "/bin tale.sh reload " + sleep;
 			LOGGER.info("execute shell: {}", cmd);
 			ShellUtils.shell(cmd);

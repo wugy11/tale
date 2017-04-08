@@ -26,6 +26,7 @@ import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
 import com.tale.init.TaleConst;
+import com.tale.init.TaleLoader;
 import com.tale.model.Attach;
 import com.tale.model.Users;
 import com.tale.service.AttachService;
@@ -43,8 +44,6 @@ public class AttachController extends BaseController {
 
 	// private static final Logger LOGGER =
 	// LoggerFactory.getLogger(AttachController.class);
-
-	public static final String CLASSPATH = AttachController.class.getClassLoader().getResource("").getPath();
 
 	@Inject
 	private AttachService attachService;
@@ -146,7 +145,7 @@ public class AttachController extends BaseController {
 				return RestResponse.fail("不存在该附件");
 			attachService.delete(id);
 			siteService.cleanCache(Types.C_STATISTICS);
-			String upDir = CLASSPATH.substring(0, CLASSPATH.length() - 1);
+			String upDir = TaleLoader.CLASSPATH.substring(0, TaleLoader.CLASSPATH.length() - 1);
 			FileKit.delete(upDir + attach.getFkey());
 			logService.save(LogActions.DEL_ATTACH, attach.getFkey(), request.address(), this.getUid());
 		} catch (Exception e) {

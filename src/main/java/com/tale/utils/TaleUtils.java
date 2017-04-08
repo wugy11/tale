@@ -1,7 +1,31 @@
 package com.tale.utils;
 
+import java.awt.Image;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
+import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.imageio.ImageIO;
+
+import org.commonmark.Extension;
+import org.commonmark.ext.gfm.tables.TablesExtension;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
+
 import com.blade.context.WebContextHolder;
-import com.blade.kit.*;
+import com.blade.kit.DateKit;
+import com.blade.kit.FileKit;
+import com.blade.kit.StringKit;
+import com.blade.kit.Tools;
 import com.blade.mvc.http.Request;
 import com.blade.mvc.http.Response;
 import com.blade.mvc.http.wrapper.Session;
@@ -10,28 +34,12 @@ import com.sun.syndication.feed.rss.Content;
 import com.sun.syndication.feed.rss.Item;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.WireFeedOutput;
-import com.tale.controller.admin.AttachController;
 import com.tale.ext.Commons;
 import com.tale.ext.Theme;
 import com.tale.init.TaleConst;
+import com.tale.init.TaleLoader;
 import com.tale.model.Contents;
 import com.tale.model.Users;
-import org.commonmark.Extension;
-import org.commonmark.ext.gfm.tables.TablesExtension;
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.text.Normalizer;
-import java.util.*;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Tale工具类
@@ -386,7 +394,7 @@ public class TaleUtils {
         return '(' + sbuf.substring(1);
     }
 
-    public static final String upDir = AttachController.CLASSPATH.substring(0, AttachController.CLASSPATH.length() - 1);
+    public static final String upDir = TaleLoader.CLASSPATH.substring(0, TaleLoader.CLASSPATH.length() - 1);
 
     public static String getFileKey(String name){
         String prefix = "/upload/" + DateKit.dateFormat(new Date(), "yyyy/MM");

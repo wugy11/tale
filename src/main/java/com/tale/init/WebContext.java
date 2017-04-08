@@ -20,7 +20,6 @@ import com.blade.kit.FileKit;
 import com.blade.kit.StringKit;
 import com.blade.mvc.view.ViewSettings;
 import com.blade.mvc.view.template.JetbrickTemplateEngine;
-import com.tale.controller.admin.AttachController;
 import com.tale.dto.Types;
 import com.tale.ext.AdminCommons;
 import com.tale.ext.Commons;
@@ -51,7 +50,7 @@ public class WebContext implements BeanProcessor, WebContextListener {
 		List<String> macros = new ArrayList<>(8);
 		macros.add("/comm/macros.html");
 		// 扫描主题下面的所有自定义宏
-		String themeDir = AttachController.CLASSPATH + "templates/themes";
+		String themeDir = TaleLoader.CLASSPATH + "templates/themes";
 		try {
 			themeDir = new URI(themeDir).getPath();
 		} catch (URISyntaxException e) {
@@ -87,7 +86,7 @@ public class WebContext implements BeanProcessor, WebContextListener {
 		if (StringKit.isNotBlank(ips)) {
 			TaleConst.BLOCK_IPS.addAll(Arrays.asList(StringKit.split(ips, ",")));
 		}
-		if (FileKit.exist(AttachController.CLASSPATH + "install.lock")) {
+		if (FileKit.exist(TaleLoader.CLASSPATH + "install.lock")) {
 			TaleConst.INSTALL = Boolean.TRUE;
 		}
 

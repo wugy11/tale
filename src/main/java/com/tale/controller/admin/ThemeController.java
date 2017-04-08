@@ -46,7 +46,7 @@ public class ThemeController extends BaseController {
 	@Route(value = "", method = HttpMethod.GET)
 	public String index(Request request) {
 		// 读取主题
-		String themesDir = AttachController.CLASSPATH + "templates/themes";
+		String themesDir = TaleLoader.CLASSPATH + "templates/themes";
 		File[] themesFile = new File(themesDir).listFiles();
 		List<ThemeDto> themes = new ArrayList<>(themesFile.length);
 		for (File f : themesFile) {

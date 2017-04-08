@@ -18,7 +18,6 @@ import com.blade.kit.DateKit;
 import com.blade.kit.FileKit;
 import com.blade.kit.StringKit;
 import com.blade.kit.Tools;
-import com.tale.controller.admin.AttachController;
 import com.tale.dto.Archive;
 import com.tale.dto.BackResponse;
 import com.tale.dto.Comment;
@@ -29,6 +28,7 @@ import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.init.SqliteJdbc;
 import com.tale.init.TaleConst;
+import com.tale.init.TaleLoader;
 import com.tale.model.Attach;
 import com.tale.model.Comments;
 import com.tale.model.Contents;
@@ -200,8 +200,8 @@ public class SiteServiceImpl implements SiteService {
 			if (!FileKit.isDirectory(bk_path)) {
 				throw new TipException("请输入一个存在的目录");
 			}
-			String bkAttachDir = AttachController.CLASSPATH + "upload";
-			String bkThemesDir = AttachController.CLASSPATH + "templates/themes";
+			String bkAttachDir = TaleLoader.CLASSPATH + "upload";
+			String bkThemesDir = TaleLoader.CLASSPATH + "templates/themes";
 
 			String fname = DateKit.dateFormat(new Date(), fmt) + "_" + StringKit.getRandomNumber(5) + ".zip";
 
@@ -218,7 +218,7 @@ public class SiteServiceImpl implements SiteService {
 		if ("db".equals(bk_type)) {
 			String filePath = "upload/" + DateKit.getToday("yyyyMMddHHmmss") + "_" + StringKit.getRandomNumber(8)
 					+ ".db";
-			String cp = AttachController.CLASSPATH + filePath;
+			String cp = TaleLoader.CLASSPATH + filePath;
 			FileKit.createParentDir(cp);
 			FileKit.copy(SqliteJdbc.DB_PATH, cp);
 			backResponse.setSql_path("/" + filePath);
