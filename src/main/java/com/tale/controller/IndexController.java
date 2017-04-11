@@ -93,8 +93,9 @@ public class IndexController extends BaseController {
 	public String index(Request request, @PathParam int page,
 			@QueryParam(value = "limit", defaultValue = "12") int limit) {
 		page = page < 0 || page > TaleConst.MAX_PAGE ? 1 : page;
-		Take take = new Take(Contents.class).eq("type", Types.ARTICLE).eq("status", Types.PUBLISH).page(page, limit,
-				"created desc");
+		// allow_feed代表隐藏/显示：1表示显示，0表示隐藏，这里主要用于首页是否展示文章
+		Take take = new Take(Contents.class).eq("type", Types.ARTICLE).eq("status", Types.PUBLISH).eq("allow_feed", 1)
+				.page(page, limit, "created desc");
 		Paginator<Contents> articles = contentsService.getArticles(take);
 		request.attribute("articles", articles);
 		if (page > 1) {
