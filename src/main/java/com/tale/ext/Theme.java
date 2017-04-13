@@ -9,6 +9,7 @@ import com.blade.jdbc.model.Paginator;
 import com.blade.kit.StringKit;
 import com.tale.dto.Comment;
 import com.tale.dto.MetaDto;
+import com.tale.dto.SocialTypes;
 import com.tale.dto.Types;
 import com.tale.init.TaleConst;
 import com.tale.model.Comments;
@@ -24,7 +25,7 @@ import jetbrick.template.runtime.InterpretContext;
  * Created by biezhi on 2017/2/28.
  */
 public final class Theme {
-	
+
 	public static String THEME = "themes/default";
 
 	private static SiteService siteService;
@@ -573,17 +574,7 @@ public final class Theme {
 	 */
 	public static String social_link(String socialtype) {
 		String id = Commons.site_option("social_" + socialtype);
-		switch (socialtype) {
-		case "github":
-			return "https://github.com/" + id;
-		case "weibo":
-			return "http://weibo.com/" + id;
-		case "twitter":
-			return "https://twitter.com/" + id;
-		case "zhihu":
-			return "https://www.zhihu.com/people/" + id;
-		}
-		return "";
+		return SocialTypes.getLink(socialtype) + id;
 	}
 
 	/**
