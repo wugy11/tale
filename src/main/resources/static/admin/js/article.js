@@ -6,7 +6,28 @@ var refreshIntervalId = setInterval("autoSave()", 60 * 1000);
 
 $(document).ready(function () {
 
-    mditor = window.mditor = Mditor.fromTextarea(document.getElementById('md-editor'));
+	// window.mditor =
+    mditor = Mditor.fromTextarea(document.getElementById('md-editor'));
+    
+    mditor.on('ready', function() {
+    	//更改按钮行为
+    	//示例，更改「图片」按钮配置，其它按钮是同样的方法
+    	let imgBtn = mditor.toolbar.getItem('image');
+    	//替换按钮动作
+    	console.log(imgBtn);
+    	imgBtn.handler = function(){
+    		//自定义处理逻辑
+    		//this 指向当前 mditor 实例
+    		this.editor.wrapSelectText('![alt](', ')');
+    	}; 
+    });
+	
+	//还可以替换其它信息
+	// btn.icon = '...';   //设置按钮图标
+	// btn.title = '...';  //投置按钮标题
+	// btn.control = true; //作为控制按钮显示在右侧
+	// btn.key = 'ctrl+d'; //设置按钮快捷建
+	
     // 富文本编辑器
     htmlEditor = $('.summernote').summernote({
         lang: 'zh-CN',
