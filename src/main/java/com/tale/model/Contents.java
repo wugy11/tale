@@ -56,13 +56,13 @@ public class Contents implements Serializable {
     private Integer comments_num;
 
     // 是否允许评论
-    private Boolean allow_comment;
+    private boolean allow_comment;
 
     // 是否允许ping
-    private Boolean allow_ping;
+    private boolean allow_ping;
 
     // 允许出现在聚合中
-    private Boolean allow_feed;
+    private boolean allow_feed;
 
     public Contents() {
     }
@@ -163,7 +163,7 @@ public class Contents implements Serializable {
         this.comments_num = comments_num;
     }
 
-    public Boolean getAllow_comment() {
+    public boolean getAllow_comment() {
         return allow_comment;
     }
 
@@ -171,7 +171,7 @@ public class Contents implements Serializable {
         this.allow_comment = allow_comment;
     }
 
-    public Boolean getAllow_ping() {
+    public boolean getAllow_ping() {
         return allow_ping;
     }
 
@@ -179,7 +179,7 @@ public class Contents implements Serializable {
         this.allow_ping = allow_ping;
     }
 
-    public Boolean getAllow_feed() {
+    public boolean getAllow_feed() {
         return allow_feed;
     }
 

@@ -154,7 +154,10 @@ public class SiteServiceImpl implements SiteService {
 
 	@Override
 	public List<Archive> getArchives() {
-
+		// Users loginUser = TaleUtils.getLoginUser();
+		// Integer uid = -1;
+		// if (null != loginUser)
+		// uid = loginUser.getUid();
 		String sql = "select strftime('%Y年%m月', datetime(created, 'unixepoch') ) as date_str, count(*) as count  from t_contents\n"
 				+ "where type = 'post' and status = 'publish' group by date_str order by date_str desc";
 
@@ -175,6 +178,7 @@ public class SiteServiceImpl implements SiteService {
 				int end = DateKit.getUnixTimeByDate(endSd) - 1;
 				List<Contents> contentss = activeRecord.list(new Take(Contents.class).eq("type", Types.ARTICLE)
 						.eq("status", Types.PUBLISH).gt("created", start).lt("created", end).orderby("created desc"));
+				contentss = TaleUtils.getViewableList(contentss);
 				archive.setArticles(contentss);
 				archive.setDate_str(date_str + "(" + contentss.size() + ")");
 			});

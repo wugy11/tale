@@ -29,7 +29,6 @@ import com.tale.init.TaleConst;
 import com.tale.model.Comments;
 import com.tale.model.Contents;
 import com.tale.model.Metas;
-import com.tale.model.Users;
 import com.tale.service.CommentsService;
 import com.tale.service.ContentsService;
 import com.tale.service.MetasService;
@@ -95,10 +94,26 @@ public class IndexController extends BaseController {
 			@QueryParam(value = "limit", defaultValue = "12") int limit) {
 		page = page < 0 || page > TaleConst.MAX_PAGE ? 1 : page;
 		// allow_feed代表隐藏/显示(这里主要用于首页是否展示文章)：1表示显示，0表示隐藏，隐藏的文章只能作者本人看到
-		Take take = new Take(Contents.class).eq("type", Types.ARTICLE).eq("status", Types.PUBLISH).eq("allow_feed", 1)
-				.page(page, limit, "created desc");
-		Users loginUser = TaleUtils.getLoginUser();
+		// PageRow pageRow = new PageRow(page, limit, "created desc");
+		// StringBuilder sql = new StringBuilder("select * from t_contents where
+		// type = ? and status = ?");
+		// Users loginUser = TaleUtils.getLoginUser();
+		// if (null == loginUser) {
+		// sql.append(" and allow_feed = 1");
+		// sql = "select * from t_contents where type = ? and status = ? and
+		// allow_feed = 1";
+		// } else {
+		// sql = "select * from t_contents where type = ? and status = ? and
+		// (allow_feed = 0 and author_id="
+		// + loginUser.getUid() + " or allow_feed = 1)";
+		// }
+		// Object[] args = new Object[] { "post", "publish" };
+		Take take = new Take(Contents.class).eq("type", Types.ARTICLE).eq("status", Types.PUBLISH).page(page, limit,
+				"created desc");
 		Paginator<Contents> articles = contentsService.getArticles(take);
+		List<Contents> viewableList = TaleUtils.getViewableList(articles.getList());
+		articles.setList(viewableList);
+		articles.setTotal(viewableList.size());
 		request.attribute("articles", articles);
 		if (page > 1) {
 			this.title(request, "第" + page + "页");
