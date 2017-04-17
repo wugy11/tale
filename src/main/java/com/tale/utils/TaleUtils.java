@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
@@ -420,23 +419,12 @@ public class TaleUtils {
 	/**
 	 * 获取可查看的文章列表
 	 */
-	public static List<Contents> getViewableList(List<Contents> contentsList) {
-		Users loginUser = getLoginUser();
-		// List<Contents> viewableList = CollectionKit.newArrayList();
-		// 若文章关闭了订阅，则用户只能看到自己发布的文章
-		// contentsList.forEach(contents -> {
-		// boolean allowFeed = contents.getAllow_feed();
-		// if (allowFeed) {
-		// viewableList.add(contents);
-		// } else {
-		// if (null != loginUser && contents.getAuthor_id() ==
-		// loginUser.getUid())
-		// viewableList.add(contents);
-		// }
-		// });
-		// return viewableList;
-		return contentsList.stream().filter(contents -> contents.getAllow_feed()
-				|| (!contents.getAllow_feed() && null != loginUser && loginUser.getUid() == contents.getAuthor_id()))
-				.collect(Collectors.toList());
-	}
+//	public static List<Contents> getViewableList(List<Contents> contentsList) {
+//		// Users loginUser = getLoginUser();
+//		// List<Contents> viewableList = CollectionKit.newArrayList();
+//		// 若文章关闭了订阅，则用户只能看到自己发布的文章
+//		// || (!contents.getAllow_feed() && null != loginUser &&
+//		// loginUser.getUid() == contents.getAuthor_id())
+//		return contentsList.stream().filter(contents -> contents.getAllow_feed()).collect(Collectors.toList());
+//	}
 }

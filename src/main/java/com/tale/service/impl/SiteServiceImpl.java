@@ -176,9 +176,10 @@ public class SiteServiceImpl implements SiteService {
 				Date endSd = calender.getTime();
 
 				int end = DateKit.getUnixTimeByDate(endSd) - 1;
-				List<Contents> contentss = activeRecord.list(new Take(Contents.class).eq("type", Types.ARTICLE)
-						.eq("status", Types.PUBLISH).gt("created", start).lt("created", end).orderby("created desc"));
-				contentss = TaleUtils.getViewableList(contentss);
+				List<Contents> contentss = activeRecord
+						.list(new Take(Contents.class).eq("type", Types.ARTICLE).eq("status", Types.PUBLISH)
+								.eq("allow_feed", 1).gt("created", start).lt("created", end).orderby("created desc"));
+				// contentss = TaleUtils.getViewableList(contentss);
 				archive.setArticles(contentss);
 				archive.setDate_str(date_str + "(" + contentss.size() + ")");
 			});
@@ -250,7 +251,7 @@ public class SiteServiceImpl implements SiteService {
 
 		// 获取最新的项目
 		if (Types.RECENT_META.equals(searchType)) {
-			String sql = "select a.*, count(b.cid) as count from t_metas a left join `t_relationships` b on a.mid = b.mid "
+			String sql = "select a.*, count(b.cid) as count from t_metas a  left join `t_relationships` b on a.mid = b.mid "
 					+ "where a.type = ? group by a.mid order by count desc, a.mid desc limit ?";
 			return activeRecord.list(MetaDto.class, sql, type, limit);
 		}
