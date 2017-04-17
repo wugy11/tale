@@ -1,4 +1,4 @@
-7var mditor, htmlEditor;
+var mditor, htmlEditor;
 var tale = new $.tale();
 var attach_url = $('#attach_url').val();
 // 每60秒自动保存一次草稿
@@ -7,7 +7,7 @@ var refreshIntervalId = setInterval("autoSave()", 60 * 1000);
 $(document).ready(function () {
 
 	// window.mditor =
-    mditor = Mditor.fromTextarea(document.getElementById('md-editor'));
+    mditor = window.mditor = Mditor.fromTextarea(document.getElementById('md-editor'));
     
     mditor.on('ready', function() {
     	//更改按钮行为
