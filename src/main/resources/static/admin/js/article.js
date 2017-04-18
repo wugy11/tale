@@ -16,17 +16,18 @@ $(document).ready(function () {
     	//替换按钮动作
     	console.log(imgBtn);
     	imgBtn.handler = function(){
+    		// this.editor.html='<form id="fileUpload" method="POST" enctype="multipart/form-data"><label class="icon-upload"><input type="file"/></label></form>',
     		//自定义处理逻辑
     		//this 指向当前 mditor 实例
     		this.editor.wrapSelectText('![alt](', ')');
-    	}; 
+    	};
+    	//还可以替换其它信息
+    	// btn.icon = '...';   //设置按钮图标
+    	// btn.title = '...';  //投置按钮标题
+    	// btn.control = true; //作为控制按钮显示在右侧
+    	// btn.key = 'ctrl+d'; //设置按钮快捷建
+    	
     });
-	
-	//还可以替换其它信息
-	// btn.icon = '...';   //设置按钮图标
-	// btn.title = '...';  //投置按钮标题
-	// btn.control = true; //作为控制按钮显示在右侧
-	// btn.key = 'ctrl+d'; //设置按钮快捷建
 	
     // 富文本编辑器
     htmlEditor = $('.summernote').summernote({
@@ -190,11 +191,10 @@ $(document).ready(function () {
     });
 
 });
-
 /*
  * 自动保存为草稿
  * */
-function  autoSave() {
+function autoSave() {
     var content = $('#fmt_type').val() == 'markdown' ? mditor.value : htmlEditor.summernote('code');
     var title = $('#articleForm input[name=title]').val();
     if (title != '' && content != '') {
