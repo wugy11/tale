@@ -3,7 +3,6 @@ package com.tale.controller.admin;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.DateKit;
 import com.blade.kit.StringKit;
-import com.blade.kit.json.JSONKit;
 import com.blade.mvc.annotation.Controller;
 import com.blade.mvc.annotation.JSON;
 import com.blade.mvc.annotation.QueryParam;
@@ -69,9 +68,10 @@ public class AuthController extends BaseController {
 			temp.setUid(user.getUid());
 			temp.setLogged(DateKit.getCurrentUnixTime());
 			usersService.update(temp);
-			LOGGER.info("登录成功：{}", JSONKit.toJSONString(request.querys()));
+			// JSONKit.toJSONString(request.querys());
+			LOGGER.info("登录成功：{}", username);
 			cache.set("login_error_count", 0);
-			logService.save(LogActions.LOGIN, JSONKit.toJSONString(request.querys()), request.address(), user.getUid());
+			logService.save(LogActions.LOGIN, username, request.address(), user.getUid());
 		} catch (Exception e) {
 			error_count += 1;
 			cache.set("login_error_count", error_count, 10 * 60);
