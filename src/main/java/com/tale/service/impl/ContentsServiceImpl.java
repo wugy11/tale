@@ -14,6 +14,7 @@ import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.init.TaleConst;
 import com.tale.model.Contents;
+import com.tale.model.Users;
 import com.tale.service.ContentsService;
 import com.tale.service.MetasService;
 import com.tale.utils.TaleUtils;
@@ -154,40 +155,36 @@ public class ContentsServiceImpl implements ContentsService {
 
 	@Override
 	public Paginator<Contents> getArticles(Integer mid, int page, int limit) {
-		String countSql = "select count(0) from t_contents a left join t_relationships b on a.cid = b.cid "
-				+ "where b.mid = ? and a.status = 'publish' and a.type = 'post' and a.allow_feed = 1";
-		// Integer uid = -1;
-		// Users loginUser = TaleUtils.getLoginUser();
-		// if (null != loginUser)
-		// uid = loginUser.getUid();
-		// StringBuilder sql = new StringBuilder();
-		// sql.append("select count(0) from t_contents a left join
-		// t_relationships b on a.cid = b.cid")
-		// .append(" where b.mid = ? and a.status = 'publish' and a.type =
-		// 'post'")
-		// .append(" and (a.allow_feed = 1 or a.allow_feed = 0").append(" and
-		// a.author_id = ").append(uid)
-		// .append(")");
+		// String countSql = "select count(0) from t_contents a left join
+		// t_relationships b on a.cid = b.cid "
+		// + "where b.mid = ? and a.status = 'publish' and a.type = 'post' and
+		// (a.allow_feed = 1 or a.allow_feed = 0 and a.author_id = )"
+		// + uid;
+		Integer uid = -1;
+		Users loginUser = TaleUtils.getLoginUser();
+		if (null != loginUser)
+			uid = loginUser.getUid();
+		StringBuilder sql = new StringBuilder();
+		sql.append("select count(0) from t_contents a left join t_relationships b on a.cid = b.cid")
+				.append(" where b.mid = ? and a.status = 'publish' and a.type =	'post'")
+				.append(" and (a.allow_feed = 1 or a.allow_feed = 0 and a.author_id = ").append(uid).append(")");
 
-		int total = activeRecord.one(Integer.class, countSql, mid);
+		int total = activeRecord.one(Integer.class, sql.toString(), mid);
 
 		PageRow pageRow = new PageRow(page, limit);
 		Paginator<Contents> paginator = new Paginator<>(total, pageRow.getPage(), pageRow.getLimit());
-		// sql.setLength(0);
-		// sql.append("select a.* from t_contents a left join t_relationships b
-		// on a.cid = b.cid")
-		// .append(" where b.mid = ? and a.status = 'publish' and a.type =
-		// 'post'")
-		// .append(" and (a.allow_feed = 1 or a.allow_feed = 0").append(" and
-		// a.author_id = ").append(uid)
-		// .append(")").append(" order by a.created desc limit
-		// ").append(pageRow.getOffSet()).append(",")
-		// .append(limit);
-		String sql = "select a.* from t_contents a left join t_relationships b on a.cid = b.cid "
-				+ "where b.mid = ? and a.status = 'publish' and a.type = 'post' and a.allow_feed = 1 order by a.created desc limit "
-				+ pageRow.getOffSet() + "," + limit;
+		sql.setLength(0);
+		sql.append("select a.* from t_contents a left join t_relationships b on a.cid = b.cid")
+				.append(" where b.mid = ? and a.status = 'publish' and a.type = 'post'")
+				.append(" and (a.allow_feed = 1 or a.allow_feed = 0 and a.author_id = ").append(uid)
+				.append(") order by a.created desc limit ").append(pageRow.getOffSet()).append(",").append(limit);
+		// String sql = "select a.* from t_contents a left join t_relationships
+		// b on a.cid = b.cid "
+		// + "where b.mid = ? and a.status = 'publish' and a.type = 'post' and
+		// a.allow_feed = 1 order by a.created desc limit "
+		// + pageRow.getOffSet() + "," + limit;
 
-		List<Contents> list = activeRecord.list(Contents.class, sql, mid);
+		List<Contents> list = activeRecord.list(Contents.class, sql.toString(), mid);
 		if (null != list) {
 			paginator.setList(list);
 		}
