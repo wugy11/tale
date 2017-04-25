@@ -94,7 +94,7 @@ public class WebContext implements BeanProcessor, WebContextListener {
 		}
 
 		String db_rewrite = TaleConst.OPTIONS.get("rewrite_url", "");
-		if (db_rewrite.length() > 0) {
+		if (StringKit.isNotEmpty(db_rewrite)) {
 			RewriteUtils.rewrite(db_rewrite);
 		}
 

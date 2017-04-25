@@ -37,9 +37,6 @@ import com.tale.utils.QiniuUtils;
 @Controller("admin/article")
 public class ArticleController extends BaseController {
 
-	// private static final Logger LOGGER =
-	// LoggerFactory.getLogger(ArticleController.class);
-
 	@Inject
 	private ContentsService contentsService;
 
@@ -160,18 +157,6 @@ public class ArticleController extends BaseController {
 
 	/**
 	 * 修改文章操作
-	 *
-	 * @param cid
-	 * @param title
-	 * @param content
-	 * @param tags
-	 * @param categories
-	 * @param status
-	 * @param slug
-	 * @param allow_comment
-	 * @param allow_ping
-	 * @param allow_feed
-	 * @return
 	 */
 	@Route(value = "modify", method = HttpMethod.POST)
 	@JSON

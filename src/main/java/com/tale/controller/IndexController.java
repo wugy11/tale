@@ -289,18 +289,19 @@ public class IndexController extends BaseController {
 	/**
 	 * feed页
 	 */
-	@Route(values = { "feed", "feed.xml" }, method = HttpMethod.GET)
-	public void feed(Response response) {
-		Paginator<Contents> contentsPaginator = contentsService
-				.getArticles(new Take(Contents.class).eq("type", Types.ARTICLE).eq("status", Types.PUBLISH)
-						.eq("allow_feed", true).page(1, TaleConst.MAX_POSTS, "created desc"));
-		try {
-			String xml = TaleUtils.getRssXml(contentsPaginator.getList());
-			response.xml(xml);
-		} catch (Exception e) {
-			LOGGER.error("生成RSS失败", e);
-		}
-	}
+	// @Route(values = { "feed", "feed.xml" }, method = HttpMethod.GET)
+	// public void feed(Response response) {
+	// Paginator<Contents> contentsPaginator = contentsService
+	// .getArticles(new Take(Contents.class).eq("type",
+	// Types.ARTICLE).eq("status", Types.PUBLISH)
+	// .eq("allow_feed", true).page(1, TaleConst.MAX_POSTS, "created desc"));
+	// try {
+	// String xml = TaleUtils.getRssXml(contentsPaginator.getList());
+	// response.xml(xml);
+	// } catch (Exception e) {
+	// LOGGER.error("生成RSS失败", e);
+	// }
+	// }
 
 	/**
 	 * 注销

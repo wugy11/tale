@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.text.Normalizer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -32,16 +31,9 @@ import com.blade.kit.base.Config;
 import com.blade.mvc.http.Request;
 import com.blade.mvc.http.Response;
 import com.blade.mvc.http.wrapper.Session;
-import com.sun.syndication.feed.rss.Channel;
-import com.sun.syndication.feed.rss.Content;
-import com.sun.syndication.feed.rss.Item;
-import com.sun.syndication.io.FeedException;
-import com.sun.syndication.io.WireFeedOutput;
 import com.tale.ext.Commons;
-import com.tale.ext.Theme;
 import com.tale.init.TaleConst;
 import com.tale.init.TaleLoader;
-import com.tale.model.Contents;
 import com.tale.model.Users;
 
 /**
@@ -246,27 +238,28 @@ public class TaleUtils {
 	 * @return
 	 * @throws FeedException
 	 */
-	public static String getRssXml(java.util.List<Contents> articles) throws FeedException {
-		Channel channel = new Channel("rss_2.0");
-		channel.setTitle(TaleConst.OPTIONS.get("site_title"));
-		channel.setLink(Commons.site_url());
-		channel.setDescription(TaleConst.OPTIONS.get("site_description"));
-		channel.setLanguage("zh-CN");
-		java.util.List<Item> items = new ArrayList<>();
-		articles.forEach(post -> {
-			Item item = new Item();
-			item.setTitle(post.getTitle());
-			Content content = new Content();
-			content.setValue(Theme.article(post.getContent()));
-			item.setContent(content);
-			item.setLink(Theme.permalink(post.getCid(), post.getSlug()));
-			item.setPubDate(DateKit.getDateByUnixTime(post.getCreated()));
-			items.add(item);
-		});
-		channel.setItems(items);
-		WireFeedOutput out = new WireFeedOutput();
-		return out.outputString(channel);
-	}
+	// public static String getRssXml(java.util.List<Contents> articles) throws
+	// FeedException {
+	// Channel channel = new Channel("rss_2.0");
+	// channel.setTitle(TaleConst.OPTIONS.get("site_title"));
+	// channel.setLink(Commons.site_url());
+	// channel.setDescription(TaleConst.OPTIONS.get("site_description"));
+	// channel.setLanguage("zh-CN");
+	// java.util.List<Item> items = new ArrayList<>();
+	// articles.forEach(post -> {
+	// Item item = new Item();
+	// item.setTitle(post.getTitle());
+	// Content content = new Content();
+	// content.setValue(Theme.article(post.getContent()));
+	// item.setContent(content);
+	// item.setLink(Theme.permalink(post.getCid(), post.getSlug()));
+	// item.setPubDate(DateKit.getDateByUnixTime(post.getCreated()));
+	// items.add(item);
+	// });
+	// channel.setItems(items);
+	// WireFeedOutput out = new WireFeedOutput();
+	// return out.outputString(channel);
+	// }
 
 	/**
 	 * 替换HTML脚本
