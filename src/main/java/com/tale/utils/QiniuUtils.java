@@ -1,7 +1,5 @@
 package com.tale.utils;
 
-import static com.blade.Blade.$;
-
 import java.io.File;
 
 import com.blade.kit.base.Config;
@@ -23,7 +21,7 @@ public abstract class QiniuUtils {
 	public static final String bucket;
 
 	static {
-		Config config = getCfg();
+		Config config = TaleUtils.getCfg();
 		accessKey = config.get("qiniu.accessKey");
 		secretKey = config.get("qiniu.secretKey");
 		domain = config.get("qiniu.domain");
@@ -51,7 +49,4 @@ public abstract class QiniuUtils {
 		return "";
 	}
 
-	public static Config getCfg() {
-		return $().bConfig().config();
-	}
 }

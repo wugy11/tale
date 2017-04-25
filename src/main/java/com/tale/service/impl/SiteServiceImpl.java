@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.blade.Const;
 import com.blade.ioc.annotation.Inject;
 import com.blade.ioc.annotation.Service;
 import com.blade.jdbc.ar.SampleActiveRecord;
@@ -76,7 +77,7 @@ public class SiteServiceImpl implements SiteService {
 
 		try {
 			String cp = SiteServiceImpl.class.getClassLoader().getResource("").getPath();
-			File lock = new File(cp + "install.lock");
+			File lock = new File(cp + Const.INSTALLED);
 			lock.createNewFile();
 			TaleConst.INSTALL = Boolean.TRUE;
 			logService.save(LogActions.INIT_SITE, null, "", uid.intValue());

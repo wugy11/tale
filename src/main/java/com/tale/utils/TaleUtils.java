@@ -1,5 +1,7 @@
 package com.tale.utils;
 
+import static com.blade.Blade.$;
+
 import java.awt.Image;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,6 +28,7 @@ import com.blade.kit.DateKit;
 import com.blade.kit.FileKit;
 import com.blade.kit.StringKit;
 import com.blade.kit.Tools;
+import com.blade.kit.base.Config;
 import com.blade.mvc.http.Request;
 import com.blade.mvc.http.Response;
 import com.blade.mvc.http.wrapper.Session;
@@ -416,4 +419,7 @@ public class TaleUtils {
 		return prefix + "/" + com.blade.kit.UUID.UU32() + "." + FileKit.getExtension(name);
 	}
 
+	public static Config getCfg() {
+		return $().bConfig().config();
+	}
 }

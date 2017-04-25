@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
+import com.blade.Const;
 import com.blade.config.BConfig;
 import com.blade.context.WebContextListener;
 import com.blade.ioc.BeanProcessor;
@@ -18,6 +19,7 @@ import com.blade.jdbc.ActiveRecord;
 import com.blade.jdbc.ar.SampleActiveRecord;
 import com.blade.kit.FileKit;
 import com.blade.kit.StringKit;
+import com.blade.kit.base.Config;
 import com.blade.mvc.view.ViewSettings;
 import com.blade.mvc.view.template.JetbrickTemplateEngine;
 import com.tale.dto.Types;
@@ -74,19 +76,20 @@ public class WebContext implements BeanProcessor, WebContextListener {
 		resolver.registerTags(JetTag.class);
 
 		JetGlobalContext context = templateEngine.getGlobalContext();
-		context.set("version", bConfig.config().get("app.version", "v1.0"));
+		Config config = bConfig.config();
+		context.set("version", config.get("app.version", "v1.0"));
 
 		ViewSettings.$().templateEngine(templateEngine);
 
-		TaleConst.MAX_FILE_SIZE = bConfig.config().getInt("app.max-file-size", 20480);
+		TaleConst.MAX_FILE_SIZE = config.getInt("app.max-file-size", 20480);
 
-		TaleConst.AES_SALT = bConfig.config().get("app.salt", "012c456789abcdef");
+		TaleConst.AES_SALT = config.get("app.salt", "012c456789abcdef");
 		TaleConst.OPTIONS.addAll(optionsService.getOptions());
 		String ips = TaleConst.OPTIONS.get(Types.BLOCK_IPS, "");
 		if (StringKit.isNotBlank(ips)) {
 			TaleConst.BLOCK_IPS.addAll(Arrays.asList(StringKit.split(ips, ",")));
 		}
-		if (FileKit.exist(TaleLoader.CLASSPATH + "install.lock")) {
+		if (config.getBoolean("app.installed", false) || FileKit.exist(TaleLoader.CLASSPATH + Const.INSTALLED)) {
 			TaleConst.INSTALL = Boolean.TRUE;
 		}
 
@@ -97,7 +100,7 @@ public class WebContext implements BeanProcessor, WebContextListener {
 
 		Theme.THEME = "themes/" + Commons.site_option("site_theme");
 
-		TaleConst.BCONF = bConfig.config();
+		TaleConst.BCONF = config;
 	}
 
 	@Override

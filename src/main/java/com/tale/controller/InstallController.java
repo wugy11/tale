@@ -1,5 +1,6 @@
 package com.tale.controller;
 
+import com.blade.Const;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.FileKit;
 import com.blade.kit.StringKit;
@@ -38,7 +39,8 @@ public class InstallController extends BaseController {
 	 */
 	@Route(value = "/", method = HttpMethod.GET)
 	public String index(Request request) {
-		boolean existInstall = FileKit.exist(TaleLoader.CLASSPATH + "install.lock");
+		boolean existInstall = TaleUtils.getCfg().getBoolean("app.installed", false)
+				|| FileKit.exist(TaleLoader.CLASSPATH + Const.INSTALLED);
 		int allow_reinstall = TaleConst.OPTIONS.getInt("allow_install", 0);
 
 		if (allow_reinstall == 1) {
@@ -53,7 +55,8 @@ public class InstallController extends BaseController {
 	@JSON
 	public RestResponse<?> doInstall(@QueryParam String site_title, @QueryParam String site_url,
 			@QueryParam String admin_user, @QueryParam String admin_email, @QueryParam String admin_pwd) {
-		if (FileKit.exist(TaleLoader.CLASSPATH + "install.lock") && TaleConst.OPTIONS.getInt("allow_install", 0) != 1) {
+		if (FileKit.exist(TaleLoader.CLASSPATH + Const.INSTALLED)
+				&& TaleConst.OPTIONS.getInt("allow_install", 0) != 1) {
 			return RestResponse.fail("请勿重复安装");
 		}
 		try {
