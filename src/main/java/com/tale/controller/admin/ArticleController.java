@@ -8,6 +8,7 @@ import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.Paginator;
 import com.blade.kit.StringKit;
 import com.blade.mvc.annotation.Controller;
+import com.blade.mvc.annotation.EntityObj;
 import com.blade.mvc.annotation.JSON;
 import com.blade.mvc.annotation.PathParam;
 import com.blade.mvc.annotation.QueryParam;
@@ -109,32 +110,13 @@ public class ArticleController extends BaseController {
 	 */
 	@Route(value = "publish", method = HttpMethod.POST)
 	@JSON
-	public RestResponse<?> publishArticle(@QueryParam String title, @QueryParam String content, @QueryParam String tags,
-			@QueryParam String categories, @QueryParam String status, @QueryParam String slug,
-			@QueryParam String fmt_type, @QueryParam String thumb_img, @QueryParam Boolean allow_comment,
-			@QueryParam Boolean allow_ping, @QueryParam Boolean allow_feed) {
+	public RestResponse<?> publishArticle(@EntityObj Contents contents) {
 
 		Users users = this.user();
 
-		Contents contents = new Contents();
-		contents.setTitle(title);
-		contents.setContent(content);
-		contents.setStatus(status);
-		contents.setSlug(slug);
 		contents.setType(Types.ARTICLE);
-		contents.setThumb_img(thumb_img);
-		contents.setFmt_type(fmt_type);
-		if (null != allow_comment) {
-			contents.setAllow_comment(allow_comment);
-		}
-		if (null != allow_ping) {
-			contents.setAllow_ping(allow_ping);
-		}
-		if (null != allow_feed) {
-			contents.setAllow_feed(allow_feed);
-		}
 		contents.setAuthor_id(users.getUid());
-		contents.setTags(tags);
+		String categories = contents.getCategories();
 		if (StringKit.isBlank(categories)) {
 			categories = "默认分类";
 		}
@@ -160,35 +142,13 @@ public class ArticleController extends BaseController {
 	 */
 	@Route(value = "modify", method = HttpMethod.POST)
 	@JSON
-	public RestResponse<?> modifyArticle(@QueryParam Integer cid, @QueryParam String title, @QueryParam String content,
-			@QueryParam String fmt_type, @QueryParam String tags, @QueryParam String categories,
-			@QueryParam String status, @QueryParam String slug, @QueryParam String thumb_img,
-			@QueryParam Boolean allow_comment, @QueryParam Boolean allow_ping, @QueryParam Boolean allow_feed) {
+	public RestResponse<?> modifyArticle(@EntityObj Contents contents) {
 
 		Users users = this.user();
-		Contents contents = new Contents();
-		contents.setCid(cid);
-		contents.setTitle(title);
-		contents.setContent(content);
-		contents.setStatus(status);
-		contents.setFmt_type(fmt_type);
-		contents.setSlug(slug);
-		contents.setThumb_img(thumb_img);
-		if (null != allow_comment) {
-			contents.setAllow_comment(allow_comment);
-		}
-		if (null != allow_ping) {
-			contents.setAllow_ping(allow_ping);
-		}
-		if (null != allow_feed) {
-			contents.setAllow_feed(allow_feed);
-		}
 		contents.setAuthor_id(users.getUid());
-		contents.setTags(tags);
-		contents.setCategories(categories);
 		try {
 			contentsService.updateArticle(contents);
-			return RestResponse.ok(cid);
+			return RestResponse.ok(contents.getCid());
 		} catch (Exception e) {
 			String msg = "文章编辑失败";
 			if (e instanceof TipException) {
