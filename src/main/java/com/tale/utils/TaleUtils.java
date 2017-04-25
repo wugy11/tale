@@ -416,15 +416,4 @@ public class TaleUtils {
 		return prefix + "/" + com.blade.kit.UUID.UU32() + "." + FileKit.getExtension(name);
 	}
 
-	/**
-	 * 获取可查看的文章列表
-	 */
-//	public static List<Contents> getViewableList(List<Contents> contentsList) {
-//		// Users loginUser = getLoginUser();
-//		// List<Contents> viewableList = CollectionKit.newArrayList();
-//		// 若文章关闭了订阅，则用户只能看到自己发布的文章
-//		// || (!contents.getAllow_feed() && null != loginUser &&
-//		// loginUser.getUid() == contents.getAuthor_id())
-//		return contentsList.stream().filter(contents -> contents.getAllow_feed()).collect(Collectors.toList());
-//	}
 }

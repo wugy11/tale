@@ -1,6 +1,7 @@
 package com.tale.controller.admin;
 
 import java.util.List;
+import java.util.Map;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.jdbc.core.Take;
@@ -13,12 +14,14 @@ import com.blade.mvc.annotation.QueryParam;
 import com.blade.mvc.annotation.Route;
 import com.blade.mvc.http.HttpMethod;
 import com.blade.mvc.http.Request;
+import com.blade.mvc.multipart.FileItem;
 import com.blade.mvc.view.RestResponse;
 import com.tale.controller.BaseController;
 import com.tale.dto.LogActions;
 import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
+import com.tale.init.TaleConst;
 import com.tale.model.Contents;
 import com.tale.model.Metas;
 import com.tale.model.Users;
@@ -26,6 +29,7 @@ import com.tale.service.ContentsService;
 import com.tale.service.LogService;
 import com.tale.service.MetasService;
 import com.tale.service.SiteService;
+import com.tale.utils.QiniuUtils;
 
 /**
  * 文章管理控制器 Created by biezhi on 2017/2/21.
@@ -50,11 +54,6 @@ public class ArticleController extends BaseController {
 
 	/**
 	 * 文章管理首页
-	 * 
-	 * @param page
-	 * @param limit
-	 * @param request
-	 * @return
 	 */
 	@Route(value = "", method = HttpMethod.GET)
 	public String index(@QueryParam(value = "page", defaultValue = "1") int page,
@@ -68,9 +67,6 @@ public class ArticleController extends BaseController {
 
 	/**
 	 * 文章发布页面
-	 * 
-	 * @param request
-	 * @return
 	 */
 	@Route(value = "publish", method = HttpMethod.GET)
 	public String newArticle(Request request) {
@@ -82,10 +78,6 @@ public class ArticleController extends BaseController {
 
 	/**
 	 * 文章编辑页面
-	 * 
-	 * @param cid
-	 * @param request
-	 * @return
 	 */
 	@Route(value = "/:cid", method = HttpMethod.GET)
 	public String editArticle(@PathParam String cid, Request request) {
@@ -99,18 +91,24 @@ public class ArticleController extends BaseController {
 	}
 
 	/**
+	 * 图片上传到七牛服务器
+	 */
+	@Route(value = "uploadToQiniu", method = HttpMethod.POST)
+	@JSON
+	public String uploadImg(Request request) {
+		Map<String, FileItem> fileItemMap = request.fileItems();
+		for (Map.Entry<String, FileItem> entry : fileItemMap.entrySet()) {
+			FileItem f = entry.getValue();
+			String fname = f.fileName();
+			if (f.file().length() / 1024 <= TaleConst.MAX_FILE_SIZE) {
+				return QiniuUtils.uploadFile(f.file(), fname);
+			}
+		}
+		return "";
+	}
+
+	/**
 	 * 发布文章操作
-	 *
-	 * @param title
-	 * @param content
-	 * @param tags
-	 * @param categories
-	 * @param status
-	 * @param slug
-	 * @param allow_comment
-	 * @param allow_ping
-	 * @param allow_feed
-	 * @return
 	 */
 	@Route(value = "publish", method = HttpMethod.POST)
 	@JSON

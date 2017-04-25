@@ -10,23 +10,67 @@ $(document).ready(function () {
     mditor = window.mditor = Mditor.fromTextarea(document.getElementById('md-editor'));
     
     mditor.on('ready', function() {
-    	//更改按钮行为
-    	//示例，更改「图片」按钮配置，其它按钮是同样的方法
-    	let imgBtn = mditor.toolbar.getItem('image');
-    	//替换按钮动作
-    	console.log(imgBtn);
-    	imgBtn.handler = function(){
-    		// this.editor.html='<form id="fileUpload" method="POST" enctype="multipart/form-data"><label class="icon-upload"><input type="file"/></label></form>',
-    		//自定义处理逻辑
-    		//this 指向当前 mditor 实例
-    		this.editor.wrapSelectText('![alt](', ')');
-    	};
-    	//还可以替换其它信息
-    	// btn.icon = '...';   //设置按钮图标
-    	// btn.title = '...';  //投置按钮标题
-    	// btn.control = true; //作为控制按钮显示在右侧
-    	// btn.key = 'ctrl+d'; //设置按钮快捷建
+    	var upload = function(file) {
+    		if (null == file)
+    			return;
+    		var name = file.name || 'screenshot.png';
+    		name = name.replace(/\.(?:jpg|gif|png)$/i, ''); // clear ext
+	        name = name.replace(/\W+/g, '_'); // clear unvalid chars
+	        file.name = name;
+	        var data = new FormData();
+	        data.append('fileToUpload', file);
+	        $.ajax('/admin/article/uploadToQiniu', {
+	        	data : data,
+	        	type : 'POST',
+	        	processData : false,
+	        	contentType : false
+	        })
+	        .done (function(res) {
+	        	mditor.editor.insertBeforeText('![alt](' + res + ")\n");
+	        })
+	        .fail(function ($xhr) {
+                if ($xhr.responseText) {
+                    $.alert($xhr.responseText);
+                }
+            });
+    	}
     	
+    	//示例，更改「图片」按钮配置，其它按钮是同样的方法
+    	var imgBtn = mditor.toolbar.getItem('image');
+    	//替换按钮动作
+    	imgBtn.handler = function(){
+    		//自定义处理逻辑 this 指向当前 mditor 实例
+    		// this.editor.wrapSelectText('![alt](', ')');
+    		var accept = {
+				image : 'image/png,image.gif,image/jpg,image/jpeg'
+    		};
+    		var $file = $('<input type="file" accept="' + accept.image + '">');
+    		$file.click();
+    		$file.on('change', function() {
+    			var file = this.files[0];
+    			upload(file);
+    		});
+    	};
+    	
+    	// 粘贴上传
+    	mditor.editor.on('paste', function(evt) {
+    		var data = clipboardData;
+    		if (typeof data !== 'object')
+    			return;
+    		return $.each(data.items, function(i, item) {
+    			if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+    				var blob = file.getAsFile();
+    				upload(blob);
+    			}
+    		});
+    	});
+    	// 拖拽上传
+    	mditor.editor.on('drop', function(evt) {
+    		evt.preventDefault();
+    		return $.each(evt.dataTransfer.files, function(i, file) {
+    			return upload(file);
+    		});
+    	});
     });
 	
     // 富文本编辑器
@@ -281,7 +325,6 @@ function allow_ping(obj) {
         $('#allow_ping').val('true');
     }
 }
-
 
 function allow_feed(obj) {
     var this_ = $(obj);
