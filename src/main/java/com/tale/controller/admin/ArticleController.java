@@ -70,6 +70,9 @@ public class ArticleController extends BaseController {
 	public String newArticle(Request request) {
 		List<Metas> categories = metasService.getMetas(Types.CATEGORY);
 		request.attribute("categories", categories);
+		
+		List<Metas> tags = metasService.getMetas(Types.TAG);
+		request.attribute("tags", tags);
 		request.attribute(Types.ATTACH_URL, Commons.site_option(Types.ATTACH_URL, Commons.site_url()));
 		return "admin/article_edit";
 	}
@@ -81,8 +84,12 @@ public class ArticleController extends BaseController {
 	public String editArticle(@PathParam String cid, Request request) {
 		Contents contents = contentsService.getContents(cid);
 		request.attribute("contents", contents);
+		
 		List<Metas> categories = metasService.getMetas(Types.CATEGORY);
 		request.attribute("categories", categories);
+		List<Metas> tags = metasService.getMetas(Types.TAG);
+		request.attribute("tags", tags);
+		
 		request.attribute("active", "article");
 		request.attribute(Types.ATTACH_URL, Commons.site_option(Types.ATTACH_URL, Commons.site_url()));
 		return "admin/article_edit";
