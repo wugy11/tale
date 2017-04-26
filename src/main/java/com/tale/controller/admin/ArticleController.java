@@ -55,12 +55,24 @@ public class ArticleController extends BaseController {
 	 */
 	@Route(value = "", method = HttpMethod.GET)
 	public String index(@QueryParam(value = "page", defaultValue = "1") int page,
-			@QueryParam(value = "limit", defaultValue = "15") int limit, Request request) {
-
+			@QueryParam(value = "limit", defaultValue = "10") int limit, Request request) {
 		Paginator<Contents> contentsPaginator = contentsService
 				.getArticles(new Take(Contents.class).eq("type", Types.ARTICLE).page(page, limit, "created desc"));
 		request.attribute("articles", contentsPaginator);
 		return "admin/article_list";
+	}
+
+	/**
+	 * 文章管理排序类型查询
+	 */
+	@Route(value = "/orderByList", method = HttpMethod.POST)
+	@JSON
+	public RestResponse<?> orderByList(@QueryParam(value = "page", defaultValue = "1") int page,
+			@QueryParam(value = "limit", defaultValue = "10") int limit,
+			@QueryParam(value = "orderBy") String orderBy) {
+		Take take = new Take(Contents.class).eq("type", Types.ARTICLE).asc(orderBy).desc("created");
+		List<Contents> articlesList = contentsService.getArticlesList(take);
+		return RestResponse.ok(articlesList);
 	}
 
 	/**
@@ -70,7 +82,7 @@ public class ArticleController extends BaseController {
 	public String newArticle(Request request) {
 		List<Metas> categories = metasService.getMetas(Types.CATEGORY);
 		request.attribute("categories", categories);
-		
+
 		List<Metas> tags = metasService.getMetas(Types.TAG);
 		request.attribute("tags", tags);
 		request.attribute(Types.ATTACH_URL, Commons.site_option(Types.ATTACH_URL, Commons.site_url()));
@@ -84,12 +96,12 @@ public class ArticleController extends BaseController {
 	public String editArticle(@PathParam String cid, Request request) {
 		Contents contents = contentsService.getContents(cid);
 		request.attribute("contents", contents);
-		
+
 		List<Metas> categories = metasService.getMetas(Types.CATEGORY);
 		request.attribute("categories", categories);
 		List<Metas> tags = metasService.getMetas(Types.TAG);
 		request.attribute("tags", tags);
-		
+
 		request.attribute("active", "article");
 		request.attribute(Types.ATTACH_URL, Commons.site_option(Types.ATTACH_URL, Commons.site_url()));
 		return "admin/article_edit";

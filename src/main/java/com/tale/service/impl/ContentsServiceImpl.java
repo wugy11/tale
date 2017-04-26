@@ -191,4 +191,9 @@ public class ContentsServiceImpl implements ContentsService {
 		return paginator;
 	}
 
+	@Override
+	public List<Contents> getArticlesList(Take take) {
+		return activeRecord.list(take);
+	}
+
 }

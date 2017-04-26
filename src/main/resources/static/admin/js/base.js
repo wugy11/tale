@@ -1,13 +1,13 @@
 /**
- *  Tale全局函数对象   var tale = new $.tale();
+ * Tale全局函数对象 var tale = new $.tale();
  */
 $.extend({
     tale: function () {
     },
-    constant:function(){ //常量池
+    constant:function(){ // 常量池
         return{
-            ///-------文件常量----------
-            MAX_FILES:10,//一次队列最大文件数
+            // /-------文件常量----------
+            MAX_FILES:10,// 一次队列最大文件数
         }
     }
 
@@ -15,6 +15,7 @@ $.extend({
 
 /**
  * 成功弹框
+ * 
  * @param options
  */
 $.tale.prototype.alertOk = function (options) {
@@ -29,6 +30,7 @@ $.tale.prototype.alertOk = function (options) {
 
 /**
  * 弹出成功，并在500毫秒后刷新页面
+ * 
  * @param text
  */
 $.tale.prototype.alertOkAndReload = function (text) {
@@ -41,6 +43,7 @@ $.tale.prototype.alertOkAndReload = function (text) {
 
 /**
  * 警告弹框
+ * 
  * @param options
  */
 $.tale.prototype.alertWarn = function (options) {
@@ -54,6 +57,7 @@ $.tale.prototype.alertWarn = function (options) {
 
 /**
  * 询问确认弹框，这里会传入then函数进来
+ * 
  * @param options
  */
 $.tale.prototype.alertConfirm = function (options) {
@@ -67,6 +71,7 @@ $.tale.prototype.alertConfirm = function (options) {
 
 /**
  * 错误提示
+ * 
  * @param options
  */
 $.tale.prototype.alertError = function (options) {
@@ -79,6 +84,7 @@ $.tale.prototype.alertError = function (options) {
 
 /**
  * 公共弹框
+ * 
  * @param options
  */
 $.tale.prototype.alertBox = function (options) {
@@ -101,8 +107,9 @@ $.tale.prototype.alertBox = function (options) {
 
 /**
  * 全局post函数
- *
- * @param options   参数
+ * 
+ * @param options
+ *            参数
  */
 $.tale.prototype.post = function (options) {
     var self = this;
@@ -139,3 +146,21 @@ $.tale.prototype.hideLoading = function () {
     $('#tale-loading') && $('#tale-loading').hide();
 };
 
+Date.prototype.Format = function(fmt) {   
+	var o = {   
+		"M+" : this.getMonth()+1,                 // 月份
+		"d+" : this.getDate(),                    // 日
+		"H+" : this.getHours(), 				  // 24小时制
+		"h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12,   // 小时
+		"m+" : this.getMinutes(),                 // 分
+		"s+" : this.getSeconds(),                 // 秒
+		"q+" : Math.floor((this.getMonth()+3)/3), // 季度
+		"S"  : this.getMilliseconds()             // 毫秒
+	};   
+	if(/(y+)/.test(fmt))   
+		fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));   
+	for(var k in o)   
+		if(new RegExp("("+ k +")").test(fmt))   
+	fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
+	return fmt;   
+}  
