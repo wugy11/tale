@@ -11,7 +11,7 @@
 <link href="//cdn.bootcss.com/dropzone/4.3.0/min/dropzone.min.css" rel="stylesheet">
 
 <style rel="stylesheet">
-    #tags_tagsinput {
+    /* #tags_tagsinput {
         background-color: #fafafa;
         border: 1px solid #eeeeee;
     }
@@ -22,7 +22,7 @@
 
     #tags_addTag {
         margin-top: -5px;
-    }
+    } */
 
     .mditor .editor{
         font-size: 14px;
@@ -86,6 +86,7 @@
 
         <form id="articleForm" role="form" novalidate="novalidate">
             <input type="hidden" name="categories" id="categories"/>
+            <input type="hidden" name="tags" id="tags"/>
             <input type="hidden" name="cid" value="${contents.cid ?! ''}" id="cid"/>
             <input type="hidden" name="status" value="${contents.status ?! 'publish'}" id="status"/>
             <input type="hidden" name="allow_comment" value="${contents.allow_comment ?! true}" id="allow_comment"/>
@@ -105,8 +106,6 @@
             </div>
 
             <div class="form-group col-md-6" style="padding: 0 10px 0 0;">
-                <!-- <input name="tags" id="tags" type="text" class="form-control" placeholder="请填写文章标签"
-                       value="${contents.tags ?! ''}"/> -->
                 <select id="multiple-selTag" class="select2 form-control" multiple="multiple" data-placeholder="请填写文章标签">
                    #if(null != tags)
 	                   #for(c : tags)

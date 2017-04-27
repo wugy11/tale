@@ -148,11 +148,11 @@ $(document).ready(function () {
         }
     });
     // Tags Input
-    $('#tags').tagsInput({
+    /*$('#tags').tagsInput({
         width: '100%',
         height: '35px',
         defaultText: '请输入文章标签'
-    });
+    });*/
 
     $('.toggle').toggles({
         on: true,
@@ -280,6 +280,7 @@ function subArticle(status) {
     $('#content-editor').val(content);
     $("#articleForm #status").val(status);
     $("#articleForm #categories").val($('#multiple-sel').val());
+    $("#articleForm #tags").val($('#multiple-selTag').val());
     var params = $("#articleForm").serialize();
     var url = $('#articleForm #cid').val() != '' ? '/admin/article/modify' : '/admin/article/publish';
     tale.post({
