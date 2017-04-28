@@ -1,11 +1,11 @@
 package com.tale.controller.admin;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.jdbc.core.Take;
-import com.blade.jdbc.model.Paginator;
 import com.blade.kit.StringKit;
 import com.blade.mvc.annotation.Controller;
 import com.blade.mvc.annotation.EntityObj;
@@ -53,26 +53,27 @@ public class ArticleController extends BaseController {
 	/**
 	 * 文章管理首页
 	 */
-	@Route(value = "", method = HttpMethod.GET)
+	@Route(value = "")
 	public String index(@QueryParam(value = "page", defaultValue = "1") int page,
 			@QueryParam(value = "limit", defaultValue = "10") int limit, Request request) {
-		Paginator<Contents> contentsPaginator = contentsService
-				.getArticles(new Take(Contents.class).eq("type", Types.ARTICLE).page(page, limit, "created desc"));
-		request.attribute("articles", contentsPaginator);
+		List<Metas> categories = metasService.getMetas(Types.CATEGORY);
+		request.attribute("categories", categories);
 		return "admin/article_list";
 	}
 
-	/**
-	 * 文章管理排序类型查询
-	 */
-	@Route(value = "/orderByList", method = HttpMethod.POST)
+	@Route(value = "/selectArticleList", method = HttpMethod.POST)
 	@JSON
-	public RestResponse<?> orderByList(@QueryParam(value = "page", defaultValue = "1") int page,
+	public List<Contents> articleList(@QueryParam(value = "page", defaultValue = "1") int page,
 			@QueryParam(value = "limit", defaultValue = "10") int limit,
-			@QueryParam(value = "orderBy") String orderBy) {
-		Take take = new Take(Contents.class).eq("type", Types.ARTICLE).asc(orderBy).desc("created");
-		List<Contents> articlesList = contentsService.getArticlesList(take);
-		return RestResponse.ok(articlesList);
+			@QueryParam(value = "categorys") String categorys, @QueryParam(value = "title") String title,
+			Request request) {
+		Take take = new Take(Contents.class).eq("type", Types.ARTICLE).page(page, limit, "created desc");
+		if (!StringKit.isEmpty(categorys))
+			take.in("categories", Arrays.asList(categorys.split(",")));
+		if (!StringKit.isEmpty(title))
+			take.like("title", title);
+		List<Contents> articleList = contentsService.getArticlesList(take);
+		return articleList;
 	}
 
 	/**
