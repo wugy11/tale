@@ -45,7 +45,7 @@ var ArticleTable = function() {
 			}, {
 				field : 'title', title : '文章标题', width : '25%', 
 				formatter : function(value, row, index) {
-					return '<a href="/admin/article/'+row.cid+'">'+value+'</a>';
+					return '<a target="_blank" href="/article/'+row.cid+'">'+value+'</a>';
 				}
 			}, {
 				field : 'created', title : '发布时间', width : '15%',
@@ -77,10 +77,6 @@ var ArticleTable = function() {
 	                return oper.join(" ");     
 				}
 			}, ],
-			onClickRow: function (row) {
-				window.open("/article/" + row.cid);
-				//window.location.href = "/article/" + row.cid;
-			},
 		});
 	};
 	
