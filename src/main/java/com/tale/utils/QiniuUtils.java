@@ -42,7 +42,7 @@ public abstract class QiniuUtils {
 		try {
 			res = uploadManager.put(file, key, auth.uploadToken(bucket));
 			if (res.isOK())
-				String.format("http://%s/%s", domain, key);
+				return String.format("http://%s/%s", domain, key);
 		} catch (QiniuException e) {
 			e.printStackTrace();
 		}
