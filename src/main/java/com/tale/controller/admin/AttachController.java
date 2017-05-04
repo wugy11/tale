@@ -2,7 +2,6 @@ package com.tale.controller.admin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +9,7 @@ import java.util.Map;
 import com.blade.ioc.annotation.Inject;
 import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.Paginator;
+import com.blade.kit.CollectionKit;
 import com.blade.kit.FileKit;
 import com.blade.kit.Tools;
 import com.blade.mvc.annotation.Controller;
@@ -56,11 +56,6 @@ public class AttachController extends BaseController {
 
 	/**
 	 * 附件页面
-	 *
-	 * @param request
-	 * @param page
-	 * @param limit
-	 * @return
 	 */
 	@Route(value = "", method = HttpMethod.GET)
 	public String index(Request request, @QueryParam(value = "page", defaultValue = "1") int page,
@@ -92,21 +87,22 @@ public class AttachController extends BaseController {
 		Integer uid = users.getUid();
 		Map<String, FileItem> fileItemMap = request.fileItems();
 		Collection<FileItem> fileItems = fileItemMap.values();
-		List<Attach> errorFiles = new ArrayList<>();
-		List<Attach> urls = new ArrayList<>();
+		List<Attach> errorFiles = CollectionKit.newArrayList();
+		List<Attach> urls = CollectionKit.newArrayList();
 		try {
 			fileItems.forEach((FileItem f) -> {
 				String fname = f.fileName();
 
-				if (f.file().length() / 1024 <= TaleConst.MAX_FILE_SIZE) {
+				File upFile = f.file();
+				if (upFile.length() / 1024 <= TaleConst.MAX_FILE_SIZE) {
 					String fkey = TaleUtils.getFileKey(fname);
-					String ftype = TaleUtils.isImage(f.file()) ? Types.IMAGE : Types.FILE;
+					String ftype = TaleUtils.isImage(upFile) ? Types.IMAGE : Types.FILE;
 					String filePath = TaleUtils.upDir + fkey;
 
 					File file = new File(filePath);
 					try {
-						Tools.copyFileUsingFileChannels(f.file(), file);
-						f.file().delete();
+						Tools.copyFileUsingFileChannels(upFile, file);
+						upFile.delete();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}

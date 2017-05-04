@@ -1,11 +1,19 @@
 package com.tale.controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.List;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.Paginator;
+import com.blade.kit.CollectionKit;
 import com.blade.kit.IPKit;
 import com.blade.kit.PatternKit;
 import com.blade.kit.StringKit;
@@ -26,10 +34,12 @@ import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
 import com.tale.init.TaleConst;
+import com.tale.model.Attach;
 import com.tale.model.Comments;
 import com.tale.model.Contents;
 import com.tale.model.Metas;
 import com.tale.model.Users;
+import com.tale.service.AttachService;
 import com.tale.service.CommentsService;
 import com.tale.service.ContentsService;
 import com.tale.service.MetasService;
@@ -51,6 +61,8 @@ public class IndexController extends BaseController {
 
 	@Inject
 	private SiteService siteService;
+	@Inject
+	private AttachService attachService;
 
 	/**
 	 * 首页
@@ -394,6 +406,39 @@ public class IndexController extends BaseController {
 				LOGGER.error(msg, e);
 			}
 			return RestResponse.fail(msg);
+		}
+	}
+
+	/**
+	 * 简历预览
+	 */
+	@Route(value = "/viewResume", method = HttpMethod.GET)
+	public void viewResume(Request request, Response response) {
+		Take take = new Take(Attach.class).like("fname", "简历").page(1, 1);
+		Paginator<Attach> attachs = attachService.getAttachs(take);
+		if (null == attachs || CollectionKit.isEmpty(attachs.getList()))
+			return;
+		Attach resume = attachs.getList().get(0);
+
+		HttpServletResponse raw = response.raw();
+		raw.setContentType("application/pdf");
+		try {
+			InputStream inStream = new FileInputStream(TaleUtils.upDir + resume.getFkey()); // 读入原文件
+			BufferedInputStream bis = new BufferedInputStream(inStream);
+			ServletOutputStream outStream = raw.getOutputStream();
+			BufferedOutputStream bos = new BufferedOutputStream(outStream);
+			byte[] buffer = new byte[2048];
+			int byteread = 0;
+			while ((byteread = bis.read(buffer)) != -1) {
+				bos.write(buffer, 0, byteread);
+			}
+			bis.close();
+			bos.close();
+			inStream.close();
+			outStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error("读取简历文件失败：" + e);
 		}
 	}
 }
