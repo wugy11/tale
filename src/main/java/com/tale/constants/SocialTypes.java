@@ -1,4 +1,4 @@
-package com.tale.dto;
+package com.tale.constants;
 
 public enum SocialTypes {
 

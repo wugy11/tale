@@ -17,12 +17,12 @@ import com.blade.mvc.http.HttpMethod;
 import com.blade.mvc.http.Request;
 import com.blade.mvc.multipart.FileItem;
 import com.blade.mvc.view.RestResponse;
+import com.tale.constants.TaleConst;
 import com.tale.controller.BaseController;
 import com.tale.dto.LogActions;
 import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
-import com.tale.init.TaleConst;
 import com.tale.model.Contents;
 import com.tale.model.Metas;
 import com.tale.model.Users;
@@ -54,8 +54,7 @@ public class ArticleController extends BaseController {
 	 * 文章管理首页
 	 */
 	@Route(value = "")
-	public String index(@QueryParam(value = "page", defaultValue = "1") int page,
-			@QueryParam(value = "limit", defaultValue = "10") int limit, Request request) {
+	public String index(Request request) {
 		List<Metas> categories = metasService.getMetas(Types.CATEGORY);
 		request.attribute("categories", categories);
 		return "admin/article_list";
@@ -182,10 +181,6 @@ public class ArticleController extends BaseController {
 
 	/**
 	 * 删除文章操作
-	 *
-	 * @param cid
-	 * @param request
-	 * @return
 	 */
 	@Route(value = "delete")
 	@JSON

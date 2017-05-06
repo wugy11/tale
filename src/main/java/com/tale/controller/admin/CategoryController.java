@@ -10,11 +10,11 @@ import com.blade.mvc.annotation.Route;
 import com.blade.mvc.http.HttpMethod;
 import com.blade.mvc.http.Request;
 import com.blade.mvc.view.RestResponse;
+import com.tale.constants.TaleConst;
 import com.tale.controller.BaseController;
 import com.tale.dto.MetaDto;
 import com.tale.dto.Types;
 import com.tale.exception.TipException;
-import com.tale.init.TaleConst;
 import com.tale.service.MetasService;
 import com.tale.service.SiteService;
 

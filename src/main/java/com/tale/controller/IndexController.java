@@ -27,13 +27,14 @@ import com.blade.mvc.http.Request;
 import com.blade.mvc.http.Response;
 import com.blade.mvc.http.wrapper.Session;
 import com.blade.mvc.view.RestResponse;
+import com.tale.constants.Constant;
+import com.tale.constants.TaleConst;
 import com.tale.dto.Archive;
 import com.tale.dto.ErrorCode;
 import com.tale.dto.MetaDto;
 import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
-import com.tale.init.TaleConst;
 import com.tale.model.Attach;
 import com.tale.model.Comments;
 import com.tale.model.Contents;
@@ -414,7 +415,7 @@ public class IndexController extends BaseController {
 	 */
 	@Route(value = "/viewResume", method = HttpMethod.GET)
 	public void viewResume(Request request, Response response) {
-		Take take = new Take(Attach.class).like("fname", "简历").page(1, 1);
+		Take take = new Take(Attach.class).like("fname", Constant.resume).page(1, 1);
 		Paginator<Attach> attachs = attachService.getAttachs(take);
 		if (null == attachs || CollectionKit.isEmpty(attachs.getList()))
 			return;

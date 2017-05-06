@@ -10,7 +10,7 @@ import com.blade.kit.DateKit;
 import com.blade.kit.StringKit;
 import com.blade.kit.Tools;
 import com.blade.kit.UUID;
-import com.tale.init.TaleConst;
+import com.tale.constants.TaleConst;
 import com.tale.service.SiteService;
 import com.tale.utils.TaleUtils;
 import com.vdurmont.emoji.EmojiParser;

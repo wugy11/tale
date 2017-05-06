@@ -128,7 +128,32 @@ $.tale.prototype.post = function (options) {
         }
     });
 };
-
+/**
+ * 处理form请求参数
+ */
+$.tale.prototype.getParams =  function(formId) {
+	var params = $("#" + formId).serializeArray();
+	var data = {};
+	$.each(params, function (i, param) {
+		data[param.name] = param.value;
+	});
+	return data;
+}
+/**
+ * 自动填充表单
+ */
+$.tale.prototype.autoFillForm = function(formId, data) {
+	var form = $("#" + formId)[0];
+	$.each(form, function(i, elem) {
+		var name = elem.name;
+		var value = data[name];
+		if (elem.tagName == 'INPUT') {
+			$(this).val(value);
+		} else if (elem.tagName == 'SELECT') {
+			$(this).val(value);
+		}
+	});
+}
 /**
  * 显示动画
  */

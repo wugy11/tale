@@ -1,4 +1,4 @@
-package com.tale.init;
+package com.tale.constants;
 
 import java.util.List;
 import java.util.Set;

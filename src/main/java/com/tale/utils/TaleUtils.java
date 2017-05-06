@@ -31,8 +31,8 @@ import com.blade.kit.base.Config;
 import com.blade.mvc.http.Request;
 import com.blade.mvc.http.Response;
 import com.blade.mvc.http.wrapper.Session;
+import com.tale.constants.TaleConst;
 import com.tale.ext.Commons;
-import com.tale.init.TaleConst;
 import com.tale.init.TaleLoader;
 import com.tale.model.Users;
 
