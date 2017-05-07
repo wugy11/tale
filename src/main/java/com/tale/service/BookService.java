@@ -20,11 +20,11 @@ public class BookService {
 	public void saveBook(Book book) {
 		Integer id = book.getId();
 		if (null == id) {
-			book.setBegin_time(DateKit.getCurrentUnixTime());
+			book.setBegin_time(DateKit.getUnixTimeByDate(book.getBeginTime()));
 			activeRecord.insert(book);
 		} else {
-			if (Constant.readed.equals(book.getStatus())) {
-				book.setEnd_time(DateKit.getCurrentUnixTime());
+			if (Constant.readed.getDesc().equals(book.getStatus())) {
+				book.setEnd_time(DateKit.getUnixTimeByDate(book.getEndTime()));
 			}
 			activeRecord.update(book);
 		}

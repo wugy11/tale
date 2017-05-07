@@ -1,13 +1,19 @@
 package com.tale.constants;
 
-public interface Constant {
+public enum Constant {
 
-	// 首页链接名称
-	String resume = "简历";
-	String book = "书单";
+	resume("简历"), book("书单"), thinking("所想"), travel("游记"), network("网摘"),
 
 	// 书单状态
-	String reading = "在读";
-	String readed = "已读";
-	String readable = "计划读";
+	reading("在读"), readed("已读"), readable("想读"),;
+
+	private String desc;
+
+	private Constant(String desc) {
+		this.desc = desc;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
 }

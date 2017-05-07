@@ -415,7 +415,7 @@ public class IndexController extends BaseController {
 	 */
 	@Route(value = "/viewResume", method = HttpMethod.GET)
 	public void viewResume(Request request, Response response) {
-		Take take = new Take(Attach.class).like("fname", Constant.resume).page(1, 1);
+		Take take = new Take(Attach.class).like("fname", Constant.resume.getDesc()).page(1, 1);
 		Paginator<Attach> attachs = attachService.getAttachs(take);
 		if (null == attachs || CollectionKit.isEmpty(attachs.getList()))
 			return;
@@ -442,4 +442,5 @@ public class IndexController extends BaseController {
 			LOGGER.error("读取简历文件失败：" + e);
 		}
 	}
+
 }
