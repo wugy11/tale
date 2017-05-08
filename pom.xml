@@ -12,7 +12,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sqlite.version>3.15.1</sqlite.version>
 		<blade-core.version>1.7.2-beta</blade-core.version>
-		<!-- <blade-kit.version>1.4.1-beta</blade-kit.version> -->
+		<blade-kit.version>1.4.1-beta</blade-kit.version>
 		<blade-jdbc.version>0.1.7</blade-jdbc.version>
 		<blade-tpl.verion>0.0.9</blade-tpl.verion>
 		<blade-embed-jetty.version>0.1.3</blade-embed-jetty.version>
@@ -27,11 +27,11 @@
 			<artifactId>blade-core</artifactId>
 			<version>${blade-core.version}</version>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.bladejava</groupId>
 			<artifactId>blade-kit</artifactId>
 			<version>${blade-kit.version}</version>
-		</dependency> -->
+		</dependency>
 
 		<!-- 数据库操作 -->
 		<dependency>
