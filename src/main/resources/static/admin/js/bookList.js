@@ -13,7 +13,12 @@ $(function() {
 			return;
 		}
 		$("#bookModal").modal();
-		tale.autoFillForm('bookForm', selectList[0]);
+		var data = selectList[0];
+		tale.autoFillForm('bookForm', data);
+		if (data.begin_time)
+			$("#beginTime").val(new Date(data.begin_time * 1000).Format('yyyy-MM-dd HH:mm:ss'));
+		if (data.end_time)
+			$("#endTime").val(new Date(data.end_time * 1000).Format('yyyy-MM-dd HH:mm:ss'));
 	});
 	$("#deleteBookBtn").click(function() {
 		var selectList = bookListTable.getSelections();
@@ -65,7 +70,7 @@ var BookListTable = function() {
 			dataType : 'json',
 			striped : true, // 是否显示行间隔色
 			pagination : true, 
-//			queryParams : table.queryParams,
+			queryParams : table.queryParams,
 			pageNumber : 1, 
 			pageSize : 10, 
 			pageList : [ 10, 20, 50], 
@@ -115,6 +120,9 @@ var BookListTable = function() {
 	}
 	table.getSelections = function() {
 		return $("#bookListTable").bootstrapTable('getSelections');
+	}
+	table.queryParams = function (params) {
+		return {};
 	}
 	return table;
 }
