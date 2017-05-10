@@ -2,7 +2,7 @@
 <div class="main-content common-page clearfix">
     <div class="categorys-item">
         <div class="common-title">
-           	书单名：${bookName}
+           	书单名：<font color='red'>${book.name}(${fmtdate(book.begin_time,'yyyy/MM/dd HH:mm')}~${fmtdate(book.end_time,'yyyy/MM/dd HH:mm')})</font>
         </div>
         #if(is_empty(articles))
         <div>

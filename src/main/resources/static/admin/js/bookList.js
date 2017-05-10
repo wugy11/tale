@@ -107,6 +107,13 @@ var BookListTable = function() {
 						return '<span class="label label-success">'+value+'</span>';
 					return '<span class="label label-default">'+value+'</span>';
 				}
+			}, {
+				field : 'oper', title : '书摘', width : '10%',
+				formatter : function(value, row, index) {
+					var oper = [];
+					oper.push('<a class="btn btn-warning btn-sm waves-effect waves-light m-b-5" href="/books/'+row.id+'" target="_blank"><i class="fa fa-rocket"></i> <span>查看</span></a>');
+	                return oper.join(" ");     
+				}
 			}, ],
 			toolbar : '#operateToolbar',
 		});

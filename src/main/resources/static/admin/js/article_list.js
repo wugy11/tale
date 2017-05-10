@@ -1,7 +1,7 @@
 var tale = new $.tale();
 $(function() {
 	$(".select2").select2({
-		width : '60%'
+		width : '90%'
 	});
 	
 	var articleTable = new ArticleTable();

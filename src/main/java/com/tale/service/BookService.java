@@ -30,6 +30,10 @@ public class BookService {
 		}
 	}
 
+	public Book byId(Integer id) {
+		return activeRecord.byId(Book.class, id);
+	}
+
 	public void deleteBook(String ids) {
 		Take take = new Take(Book.class).in("id", Arrays.asList(ids.split(",")));
 		activeRecord.delete(take);

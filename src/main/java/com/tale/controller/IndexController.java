@@ -457,13 +457,15 @@ public class IndexController extends BaseController {
 	/**
 	 * 首页书单下对应文章页
 	 */
-	@Route(value = "/books/:id/:bookName", method = HttpMethod.GET)
-	public String bookContentsView(Request request, @PathParam String id, @PathParam String bookName,
-			@PathParam int page, @QueryParam(value = "limit", defaultValue = "12") int limit) {
+	@Route(value = "/books/:id", method = HttpMethod.GET)
+	public String bookContentsView(Request request, @PathParam Integer id, @PathParam int page,
+			@QueryParam(value = "limit", defaultValue = "12") int limit) {
 		Take take = Take.create(Contents.class).eq("book_id", id).page(page, limit, "created desc");
 		Paginator<Contents> articles = contentsService.getArticles(take);
 		request.attribute("articles", articles);
-		request.attribute("bookName", bookName);
+
+		Book book = bookService.byId(id);
+		request.attribute("book", book);
 		return render("book_contents");
 	}
 

@@ -7,8 +7,11 @@
 
 <style rel="stylesheet">
 	@media(min-width: 500px) {
-		.col-md-6 {
-			width: 40%
+		.col-md {
+			position: relative;
+    		min-height: 1px;
+    		float: left;
+			width: 40%;
 		} 
 	}
 </style>
@@ -18,7 +21,7 @@
     </div>
     <form id="selectArticleForm">
     	<div class="col-md-12">
-	       	<div class="form-group col-md-6">
+	       	<div class="form-group col-md">
 	        	<select id="categorySelect" class="select2 form-control" multiple="multiple" data-placeholder="请输入所属分类">
 	                #if(null == categories)
 	                	<option value="默认分类" selected>默认分类</option>
@@ -29,8 +32,8 @@
 	                #end
 	            </select>
 	    	</div>
-	    	<div class="form-group col-md-6">
-                <input id="articleTitle" type="text" class="form-control" placeholder="请输入文章标题" name="title" style="width: 40%;"/>
+	    	<div class="form-group col-md">
+                <input id="articleTitle" type="text" class="form-control" placeholder="请输入文章标题" name="title" style="width: 60%;"/>
             </div>
 			<button type="button" class="btn btn-primary waves-effect waves-light" style="float: right;"
 				id="selectArticleBtn">查询</button>

@@ -3,7 +3,7 @@
 	<div id="post-content" class="post-content">
 		<ul class="flinks">
 			#for(book : books)
-			<li>🔒 <a href="/books/${book.id}/${book.name}" 
+			<li>🔒 <a href="/books/${book.id}" 
 					title="${fmtdate(book.begin_time,'yyyy/MM/dd HH:mm')}~${fmtdate(book.end_time,'yyyy/MM/dd HH:mm')}">${book.name}</a>
 			</li> 
 			#end
