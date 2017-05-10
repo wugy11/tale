@@ -36,11 +36,13 @@ import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
 import com.tale.model.Attach;
+import com.tale.model.Book;
 import com.tale.model.Comments;
 import com.tale.model.Contents;
 import com.tale.model.Metas;
 import com.tale.model.Users;
 import com.tale.service.AttachService;
+import com.tale.service.BookService;
 import com.tale.service.CommentsService;
 import com.tale.service.ContentsService;
 import com.tale.service.MetasService;
@@ -53,17 +55,16 @@ public class IndexController extends BaseController {
 
 	@Inject
 	private ContentsService contentsService;
-
 	@Inject
 	private MetasService metasService;
-
 	@Inject
 	private CommentsService commentsService;
-
 	@Inject
 	private SiteService siteService;
 	@Inject
 	private AttachService attachService;
+	@Inject
+	private BookService bookService;
 
 	/**
 	 * 首页
@@ -441,6 +442,29 @@ public class IndexController extends BaseController {
 			e.printStackTrace();
 			LOGGER.error("读取简历文件失败：" + e);
 		}
+	}
+
+	/**
+	 * 首页书单页
+	 */
+	@Route(value = "/books", method = HttpMethod.GET)
+	public String booksView(Request request) {
+		List<Book> books = bookService.selectBookList();
+		request.attribute("books", books);
+		return render("books");
+	}
+
+	/**
+	 * 首页书单下对应文章页
+	 */
+	@Route(value = "/books/:id/:bookName", method = HttpMethod.GET)
+	public String bookContentsView(Request request, @PathParam String id, @PathParam String bookName,
+			@PathParam int page, @QueryParam(value = "limit", defaultValue = "12") int limit) {
+		Take take = Take.create(Contents.class).eq("book_id", id).page(page, limit, "created desc");
+		Paginator<Contents> articles = contentsService.getArticles(take);
+		request.attribute("articles", articles);
+		request.attribute("bookName", bookName);
+		return render("book_contents");
 	}
 
 }

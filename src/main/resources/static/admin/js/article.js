@@ -281,6 +281,7 @@ function subArticle(status) {
     $("#articleForm #status").val(status);
     $("#articleForm #categories").val($('#multiple-sel').val());
     $("#articleForm #tags").val($('#multiple-selTag').val());
+    $("#articleForm #book_id").val($('#multiple-selBook').val());
     var params = $("#articleForm").serialize();
     var url = $('#articleForm #cid').val() != '' ? '/admin/article/modify' : '/admin/article/publish';
     tale.post({
@@ -312,18 +313,6 @@ function allow_comment(obj) {
     } else {
         this_.attr('on', 'true');
         $('#allow_comment').val('true');
-    }
-}
-
-function allow_ping(obj) {
-    var this_ = $(obj);
-    var on = this_.attr('on');
-    if (on == 'true') {
-        this_.attr('on', 'false');
-        $('#allow_ping').val('false');
-    } else {
-        this_.attr('on', 'true');
-        $('#allow_ping').val('true');
     }
 }
 

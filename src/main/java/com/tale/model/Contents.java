@@ -58,10 +58,10 @@ public class Contents implements Serializable {
 	// 是否允许评论
 	private Boolean allow_comment;
 
-	// 是否允许ping
-	private Boolean allow_ping;
+	// 所属书单
+	private Integer book_id;
 
-	// 允许出现在聚合中
+	// 允许出现在聚合中 // allow_feed代表隐藏/显示(这里主要用于首页是否展示文章)：1表示显示，0表示隐藏，隐藏的文章只能作者本人看到
 	private Boolean allow_feed;
 
 	public Contents() {
@@ -171,12 +171,12 @@ public class Contents implements Serializable {
 		this.allow_comment = allow_comment;
 	}
 
-	public Boolean getAllow_ping() {
-		return allow_ping;
+	public Integer getBook_id() {
+		return book_id;
 	}
 
-	public void setAllow_ping(Boolean allow_ping) {
-		this.allow_ping = allow_ping;
+	public void setBook_id(Integer book_id) {
+		this.book_id = book_id;
 	}
 
 	public Boolean getAllow_feed() {

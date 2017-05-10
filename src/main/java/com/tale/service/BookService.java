@@ -35,6 +35,11 @@ public class BookService {
 		activeRecord.delete(take);
 	}
 
+	public List<Book> selectBookList() {
+		Take take = Take.create(Book.class);
+		return activeRecord.list(take);
+	}
+
 	public List<Book> selectBookList(Take take) {
 		return activeRecord.list(take);
 	}

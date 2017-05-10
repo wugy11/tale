@@ -82,7 +82,6 @@ public class PageController extends BaseController {
 		contents.setFmt_type(fmt_type);
 		contents.setType(Types.PAGE);
 		contents.setAllow_comment(allow_comment);
-		contents.setAllow_ping(true);
 		contents.setAuthor_id(users.getUid());
 
 		try {
@@ -117,7 +116,6 @@ public class PageController extends BaseController {
 		contents.setSlug(slug);
 		contents.setType(Types.PAGE);
 		contents.setAllow_comment(allow_comment);
-		contents.setAllow_ping(true);
 		contents.setAuthor_id(users.getUid());
 		try {
 			contentsService.updateArticle(contents);

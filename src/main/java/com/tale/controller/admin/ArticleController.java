@@ -23,9 +23,11 @@ import com.tale.dto.LogActions;
 import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
+import com.tale.model.Book;
 import com.tale.model.Contents;
 import com.tale.model.Metas;
 import com.tale.model.Users;
+import com.tale.service.BookService;
 import com.tale.service.ContentsService;
 import com.tale.service.LogService;
 import com.tale.service.MetasService;
@@ -40,15 +42,14 @@ public class ArticleController extends BaseController {
 
 	@Inject
 	private ContentsService contentsService;
-
 	@Inject
 	private MetasService metasService;
-
 	@Inject
 	private LogService logService;
-
 	@Inject
 	private SiteService siteService;
+	@Inject
+	private BookService bookService;
 
 	/**
 	 * 文章管理首页
@@ -85,6 +86,9 @@ public class ArticleController extends BaseController {
 
 		List<Metas> tags = metasService.getMetas(Types.TAG);
 		request.attribute("tags", tags);
+
+		List<Book> books = bookService.selectBookList();
+		request.attribute("books", books);
 		request.attribute(Types.ATTACH_URL, Commons.site_option(Types.ATTACH_URL, Commons.site_url()));
 		return "admin/article_edit";
 	}
@@ -101,6 +105,8 @@ public class ArticleController extends BaseController {
 		request.attribute("categories", categories);
 		List<Metas> tags = metasService.getMetas(Types.TAG);
 		request.attribute("tags", tags);
+		List<Book> books = bookService.selectBookList();
+		request.attribute("books", books);
 
 		request.attribute("active", "article");
 		request.attribute(Types.ATTACH_URL, Commons.site_option(Types.ATTACH_URL, Commons.site_url()));
