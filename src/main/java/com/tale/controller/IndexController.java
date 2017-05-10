@@ -77,7 +77,7 @@ public class IndexController extends BaseController {
 	/**
 	 * 自定义页面
 	 */
-	@Route(values = { "/:cid", "/:cid.html" }, method = HttpMethod.GET)
+	@Route(value = { "/:cid", "/:cid.html" }, method = HttpMethod.GET)
 	public String page(@PathParam String cid, Request request) {
 		Contents contents = contentsService.getContents(cid);
 		if (null == contents) {
@@ -101,7 +101,7 @@ public class IndexController extends BaseController {
 	/**
 	 * 首页分页
 	 */
-	@Route(values = { "page/:page", "page/:page.html" }, method = HttpMethod.GET)
+	@Route(value = { "page/:page", "page/:page.html" }, method = HttpMethod.GET)
 	public String index(Request request, @PathParam int page,
 			@QueryParam(value = "limit", defaultValue = "12") int limit) {
 		page = page < 0 || page > TaleConst.MAX_PAGE ? 1 : page;
@@ -126,7 +126,7 @@ public class IndexController extends BaseController {
 	/**
 	 * 文章页
 	 */
-	@Route(values = { "article/:cid", "article/:cid.html" }, method = HttpMethod.GET)
+	@Route(value = { "article/:cid", "article/:cid.html" }, method = HttpMethod.GET)
 	public String post(Request request, @PathParam String cid) {
 		Contents contents = contentsService.getContents(cid);
 		if (null == contents || Types.DRAFT.equals(contents.getStatus())) {
@@ -159,13 +159,13 @@ public class IndexController extends BaseController {
 	/**
 	 * 分类页
 	 */
-	@Route(values = { "category/:keyword", "category/:keyword.html" }, method = HttpMethod.GET)
+	@Route(value = { "category/:keyword", "category/:keyword.html" }, method = HttpMethod.GET)
 	public String categories(Request request, @PathParam String keyword,
 			@QueryParam(value = "limit", defaultValue = "12") int limit) {
 		return this.categories(request, keyword, 1, limit);
 	}
 
-	@Route(values = { "category/:keyword/:page", "category/:keyword/:page.html" }, method = HttpMethod.GET)
+	@Route(value = { "category/:keyword/:page", "category/:keyword/:page.html" }, method = HttpMethod.GET)
 	public String categories(Request request, @PathParam String keyword, @PathParam int page,
 			@QueryParam(value = "limit", defaultValue = "12") int limit) {
 		return renderByType(Types.CATEGORY, request, keyword, page, limit);
@@ -174,7 +174,7 @@ public class IndexController extends BaseController {
 	/**
 	 * 标签页
 	 */
-	@Route(values = { "tag/:name", "tag/:name.html" }, method = HttpMethod.GET)
+	@Route(value = { "tag/:name", "tag/:name.html" }, method = HttpMethod.GET)
 	public String tags(Request request, @PathParam String name,
 			@QueryParam(value = "limit", defaultValue = "12") int limit) {
 		return this.tags(request, name, 1, limit);
@@ -183,7 +183,7 @@ public class IndexController extends BaseController {
 	/**
 	 * 标签分页
 	 */
-	@Route(values = { "tag/:name/:page", "tag/:name/:page.html" }, method = HttpMethod.GET)
+	@Route(value = { "tag/:name/:page", "tag/:name/:page.html" }, method = HttpMethod.GET)
 	public String tags(Request request, @PathParam String name, @PathParam int page,
 			@QueryParam(value = "limit", defaultValue = "12") int limit) {
 		return renderByType(Types.TAG, request, name, page, limit);
@@ -213,19 +213,19 @@ public class IndexController extends BaseController {
 	 * @param keyword
 	 * @return
 	 */
-	@Route(values = { "search/:keyword", "search/:keyword.html" }, method = HttpMethod.GET)
+	@Route(value = { "search/:keyword", "search/:keyword.html" }, method = HttpMethod.GET)
 	public String search(Request request, @PathParam String keyword,
 			@QueryParam(value = "limit", defaultValue = "12") int limit) {
 		return this.search(request, keyword, 1, limit);
 	}
 
-	@Route(values = { "search", "search.html" })
+	@Route(value = { "search", "search.html" })
 	public String search(Request request, @QueryParam(value = "limit", defaultValue = "12") int limit) {
 		String keyword = request.query("s");
 		return this.search(request, keyword, 1, limit);
 	}
 
-	@Route(values = { "search/:keyword/:page", "search/:keyword/:page.html" }, method = HttpMethod.GET)
+	@Route(value = { "search/:keyword/:page", "search/:keyword/:page.html" }, method = HttpMethod.GET)
 	public String search(Request request, @PathParam String keyword, @PathParam int page,
 			@QueryParam(value = "limit", defaultValue = "12") int limit) {
 
@@ -245,7 +245,7 @@ public class IndexController extends BaseController {
 	/**
 	 * 归档页
 	 */
-	@Route(values = { "archives", "archives.html" }, method = HttpMethod.GET)
+	@Route(value = { "archives", "archives.html" }, method = HttpMethod.GET)
 	public String archives(Request request) {
 		List<Archive> archives = siteService.getArchives();
 		request.attribute("archives", archives);
@@ -256,7 +256,7 @@ public class IndexController extends BaseController {
 	/**
 	 * 总分类页
 	 */
-	@Route(values = { "categories", "categories.html" }, method = HttpMethod.GET)
+	@Route(value = { "categories", "categories.html" }, method = HttpMethod.GET)
 	public String categories(Request request) throws Exception {
 		List<MetaDto> categories = getMetas(Types.CATEGORY);
 		request.attribute("categories_tags", categories);
@@ -267,7 +267,7 @@ public class IndexController extends BaseController {
 	/**
 	 * 总标签页
 	 */
-	@Route(values = { "tags", "tags.html" }, method = HttpMethod.GET)
+	@Route(value = { "tags", "tags.html" }, method = HttpMethod.GET)
 	public String tags(Request request) throws Exception {
 		List<MetaDto> tags = getMetas(Types.TAG);
 		request.attribute("categories_tags", tags);
@@ -293,7 +293,7 @@ public class IndexController extends BaseController {
 	/**
 	 * 友链页
 	 */
-	@Route(values = { "links", "links.html" }, method = HttpMethod.GET)
+	@Route(value = { "links", "links.html" }, method = HttpMethod.GET)
 	public String links(Request request) {
 		List<Metas> links = metasService.getMetas(Types.LINK);
 		request.attribute("links", links);
@@ -303,7 +303,7 @@ public class IndexController extends BaseController {
 	/**
 	 * feed页
 	 */
-	// @Route(values = { "feed", "feed.xml" }, method = HttpMethod.GET)
+	// @Route(value = { "feed", "feed.xml" }, method = HttpMethod.GET)
 	// public void feed(Response response) {
 	// Paginator<Contents> contentsPaginator = contentsService
 	// .getArticles(new Take(Contents.class).eq("type",
