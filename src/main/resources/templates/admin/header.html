@@ -76,12 +76,12 @@
                     <li #if(active=='book') class="active" #end>
                         <a href="/admin/book" class="waves-effect #if(active=='book') active #end"><i class="fa fa-book" aria-hidden="true"></i><span> 书单管理 </span></a>
                     </li>
+                    <li #if(active=='finance') class="active" #end>
+                        <a href="/admin/finance" class="waves-effect #if(active=='finance') active #end"><i class="fa fa-cny" aria-hidden="true"></i><span>财务管理 </span></a>
+                    </li>
 
                     <li #if(active=='attach') class="active" #end>
                         <a href="/admin/attach" class="waves-effect #if(active=='attach') active #end"><i class="fa fa-cloud-upload" aria-hidden="true"></i><span> 文件管理 </span></a>
-                    </li>
-                    <li #if(active=='links') class="active" #end>
-                        <a href="/admin/links" class="waves-effect #if(active=='links') active #end"><i class="fa fa-link" aria-hidden="true"></i><span> 友链管理 </span></a>
                     </li>
 
                     <li class="has_sub">
@@ -96,7 +96,10 @@
                             <li #if(active=='category') class="active" #end>
                                 <a href="/admin/category" class="waves-effect #if(active=='category') active #end"><i class="fa fa-tags" aria-hidden="true"></i><span> 分类/标签 </span></a>
                             </li>
-                             <li #if(active=='themes') class="active" #end>
+                            <li #if(active=='links') class="active" #end>
+		                        <a href="/admin/links" class="waves-effect #if(active=='links') active #end"><i class="fa fa-link" aria-hidden="true"></i><span> 友链管理 </span></a>
+		                    </li>
+                            <li #if(active=='themes') class="active" #end>
 		                        <a href="/admin/themes" class="waves-effect #if(active=='themes') active #end"><i class="fa fa-diamond" aria-hidden="true"></i><span> 主题 </span></a>
 		                    </li>
                         </ul>
