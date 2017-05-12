@@ -12,18 +12,16 @@
 		<h4 class="page-title">书单管理</h4>
 	</div>
 	<div id="operateToolbar" class="btn-group">
-		<button type="button" class="btn btn-primary waves-effect waves-light"
-			id="addBookBtn" style="margin-right: 10px" data-toggle="modal"
-			data-target="#bookModal">
-			<span class="glyphicon glyphicon-plus" aria-hidden="true" />新增
+		<button type="button" class="btn btn-primary waves-effect waves-light" id="addBookBtn"
+			style="margin-right: 10px" data-toggle="modal" data-target="#bookModal">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true">新增</span>
 		</button>
-		<button type="button" class="btn btn-primary waves-effect waves-light"
-			id="updateBookBtn" style="margin-right: 10px" data-toggle="modal">
-			<span class="glyphicon glyphicon-pencil" aria-hidden="true" />修改
+		<button type="button" class="btn btn-primary waves-effect waves-light" id="updateBookBtn" 
+			style="margin-right: 10px" data-toggle="modal">
+			<span class="glyphicon glyphicon-pencil" aria-hidden="true">修改</span>
 		</button>
-		<button type="button" class="btn btn-primary waves-effect waves-light"
-			id="deleteBookBtn">
-			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+		<button type="button" class="btn btn-primary waves-effect waves-light" id="deleteBookBtn">
+			<span class="glyphicon glyphicon-remove" aria-hidden="true"><删除</span>
 		</button>
 	</div>
 	<div class="col-md-12">
@@ -31,44 +29,39 @@
 		</table>
 	</div>
 
-	<div class="modal fade" id="bookModal" tabindex="-1" role="dialog"
-		aria-hidden="true" data-backdrop="static">
+	<div class="modal fade" id="bookModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-body">
 					<form id="bookForm">
 						<div class="form-group">
-							<input type="hidden" id="id" name="id"> <label
-								for="bookName" class="control-label">书名:</label> <input
-								type="text" class="form-control" id="bookName" name="name">
+							<input type="hidden" id="id" name="id"> 
+							<label for="bookName" class="control-label">书名:</label>
+						 	<input type="text" class="form-control" id="bookName" name="name">
 						</div>
 						<div class="form-group">
-							<label for="status" class="control-label">状态:</label> <select
-								class="selectpicker show-tick form-control" id="status"
-								name="status">
-								<option value="在读">在读</option>
-								<option value="已读">已读</option>
-								<option value="想读">想读</option>
-							</select>
+							<label for="status" class="control-label">状态:</label> 
+							<select id="status" name="status" class="select2 form-control">
+								#for(status : bookStatus())
+								<option value="${status}">${status}</option> 
+								#end
+							</select> 
 						</div>
 						<div class="form-group">
-							<label for="beginTime" class="control-label">开始时间:</label> <input
-								type="text" id="beginTime" name="beginTime"
-								onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+							<label for="beginTime" class="control-label">开始时间:</label> 
+							<input type="text" id="beginTime" name="beginTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
 								class="form-control" readonly="readonly" />
 						</div>
 						<div class="form-group">
-							<label for="endTime" class="control-label">结束时间:</label> <input
-								type="text" id="endTime" name="endTime"
-								onfocus="WdatePicker({minDate:'#F{$dp.$D(\'beginTime\')}',dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+							<label for="endTime" class="control-label">结束时间:</label>
+							<input type="text" id="endTime" name="endTime" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'beginTime\')}',dateFmt:'yyyy-MM-dd HH:mm:ss'})"
 								class="form-control" readonly="readonly" />
 						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal"
-						id="saveBtn">确定</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" id="saveBtn">确定</button>
 				</div>
 			</div>
 		</div>

@@ -1,8 +1,11 @@
 package com.tale.ext;
 
+import java.util.List;
+
 import com.blade.kit.CollectionKit;
 import com.blade.kit.StringKit;
 import com.blade.kit.Tools;
+import com.tale.constants.Constant;
 import com.tale.model.Book;
 import com.tale.model.Metas;
 
@@ -43,6 +46,18 @@ public final class AdminCommons {
 	public static String rand_color() {
 		int r = Tools.rand(0, COLORS.length - 1);
 		return COLORS[r];
+	}
+
+	public static List<String> bookStatus() {
+		List<String> bookStatus = CollectionKit.createLinkedList();
+		Constant.bookStatus().forEach(status -> bookStatus.add(status.getDesc()));
+		return bookStatus;
+	}
+
+	public static List<String> financeType() {
+		List<String> financeTypes = CollectionKit.createLinkedList();
+		Constant.financeTypes().forEach(type -> financeTypes.add(type.getDesc()));
+		return financeTypes;
 	}
 
 }
