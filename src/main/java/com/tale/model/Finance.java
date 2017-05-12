@@ -17,6 +17,8 @@ public class Finance implements Serializable {
 	private String type;
 	private Integer expense_time;
 	private Integer create_time;
+	private Integer uid;
+	private String remark;
 
 	@DateFormat
 	@Column(ignore = true)
@@ -68,6 +70,22 @@ public class Finance implements Serializable {
 
 	public void setExpenseTime(Date expenseTime) {
 		this.expenseTime = expenseTime;
+	}
+
+	public Integer getUid() {
+		return uid;
+	}
+
+	public void setUid(Integer uid) {
+		this.uid = uid;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 }

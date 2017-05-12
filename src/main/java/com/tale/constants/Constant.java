@@ -11,7 +11,7 @@ public enum Constant {
 	reading("在读"), readed("已读"), readable("想读"),
 
 	// 财务类型
-	salary("工资"), shopping("购物"), breakfast("早餐"), lunch("午餐"), dinner("晚餐"), traffic("交通")
+	salary("工资"), shopping("购物"), breakfast("早餐"), lunch("午餐"), dinner("晚餐"), traffic("交通"), donation("捐款"),
 
 	//
 	;
@@ -31,6 +31,6 @@ public enum Constant {
 	}
 
 	public static List<Constant> financeTypes() {
-		return Arrays.asList(new Constant[] { salary, shopping, breakfast, lunch, dinner, traffic });
+		return Arrays.asList(new Constant[] { salary, shopping, breakfast, lunch, dinner, traffic, donation });
 	}
 }

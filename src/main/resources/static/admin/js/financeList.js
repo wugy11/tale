@@ -78,24 +78,21 @@ var FinanceListTable = function() {
 			}, {
 				title : '序号', checkbox : true
 			}, {
-				field : 'name', title : '金额', width : '15%', 
+				field : 'money', title : '金额', width : '15%', 
 				formatter : function(value, row, index) {
 					return '<a target="#">'+value+'</a>';
 				}
 			}, {
 				field : 'type', title : '类型', width : '15%',
-				formatter : function(value, row, index) {
-					return new Date(value * 1000).Format('yyyy-MM-dd HH:mm:ss');
-				}
 			}, {
-				field : 'expense_time', title : '时间', width : '25%',
+				field : 'expense_time', title : '时间', width : '20%',
 				formatter : function(value, row, index) {
 					if (value)
 						return new Date(value * 1000).Format('yyyy-MM-dd HH:mm:ss');
 					return '';
 				}
 			}, {
-				field : 'create_time', title : '创建时间', width : '25%',
+				field : 'create_time', title : '创建时间', width : '20%',
 				formatter : function(value, row, index) {
 					if (value)
 						return new Date(value * 1000).Format('yyyy-MM-dd HH:mm:ss');
