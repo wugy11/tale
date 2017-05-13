@@ -85,7 +85,7 @@ var FinanceListTable = function() {
 			}, {
 				field : 'type', title : '类型', width : '15%',
 			}, {
-				field : 'expense_time', title : '时间', width : '20%',
+				field : 'expense_time', title : '账务时间', width : '20%',
 				formatter : function(value, row, index) {
 					if (value)
 						return new Date(value * 1000).Format('yyyy-MM-dd HH:mm:ss');

@@ -1,20 +1,44 @@
 #include('./header.html',{has_sub:'finance', active:'financeStatistics', title:'财务统计'})
-
-<div class="row">
+<style type="text/css">
+.expenseTime {
+    border: 1px solid #eee;
+	padding:6px 12px 6px 12px;
+	height : 34px ; 
+	width: 20%;
+}
+</style>
+<div>
 	<div class="col-sm-12">
-		<h4 class="page-title">财务管理</h4>
+		<h4 class="page-title">财务统计</h4>
 	</div>
-	<div id="operateToolbar" class="btn-group">
+	<ul id="statisticsTab" class="nav nav-tabs">
+		<li class="active">
+			<a href="#dayChartTab" data-toggle="tab">每天</a>
+		</li>
+		<li><a href="#monthChartTab" data-toggle="tab">每月</a></li>
+	</ul>
+	<div id="myTabContent" class="tab-content">
+		<div class="tab-pane fade in active" id="dayChartTab">
+			<div class="form-group">
+		    	<label for="beginTime" style="margin-left: 10px">账务日期:</label> 
+				<input type="text" name="expenseTime" class="expenseTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+					readonly="readonly"/>
+				<button type="button" class="btn btn-primary waves-effect waves-light" style="margin-left: 100px"
+					id="selectArticleBtn">查询</button>
+		    </div>
+		    <div id="dayChart" style="width: 45%;height:600px;"></div>
+		</div>
+		<div class="tab-pane fade" id="monthChartTab">
+			<div id="monthChart" style="height:800px;"></div>
+		</div>
+	</div>
 	
-	</div>
-	<div class="col-md-12">
-	</div>
-
 </div>
 
 #include('./footer.html')
-<script src="/static/admin/js/echarts.min.js" type="text/javascript"></script>
+<script src="//cdn.bootcss.com/echarts/3.5.4/echarts.min.js"></script>
 <script src="/static/admin/js/financeStatistics.js?v=${version}" type="text/javascript"></script>
+<script src="/static/admin/plugins/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
 	
 </body>
 </html>

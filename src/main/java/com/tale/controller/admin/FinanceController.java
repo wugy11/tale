@@ -67,13 +67,42 @@ public class FinanceController extends BaseController {
 	@JSON
 	public List<Finance> selectFinanceList(@QueryParam(value = "page", defaultValue = "1") int page,
 			@QueryParam(value = "limit", defaultValue = "10") int limit, Request request) {
-		Take take = new Take(Finance.class).page(page, limit, "id desc");
+		Take take = new Take(Finance.class).page(page, limit).desc("expense_time");
 		List<Finance> financeList = financeService.selectFinanceList(take);
 		return financeList;
 	}
 
-	@Route(value = "statistics")
+	@Route(value = "/statistics", method = HttpMethod.GET)
 	public String statistics() {
+//		String[] dates = {};
+//		Finance finance = null;
+//		for (String d : dates) {
+//			Date date = DateKit.dateFormat(d);
+//			for (int i = 1; i <= 30; i++) {
+//				finance = new Finance();
+//				finance.setMoney(1 + "");
+//				finance.setRemark("测试" + i);
+//				if (i == 1) {
+//					finance.setExpense_time(DateKit.getUnixTimeByDate(date));
+//				} else {
+//					finance.setExpense_time(DateKit.getUnixTimeByDate(DateKit.dateAdd(DateKit.INTERVAL_DAY, date, i)));
+//				}
+//				if (i <= 5)
+//					finance.setType(Constant.shopping.getDesc());
+//				else if (i > 5 && i <= 10)
+//					finance.setType(Constant.breakfast.getDesc());
+//				else if (i > 10 && i <= 15)
+//					finance.setType(Constant.lunch.getDesc());
+//				else if (i > 15 && i <= 20)
+//					finance.setType(Constant.dinner.getDesc());
+//				else if (i > 20 && i <= 25)
+//					finance.setType(Constant.traffic.getDesc());
+//				else
+//					finance.setType(Constant.donation.getDesc());
+//				financeService.saveFinance(finance);
+//			}
+//		}
 		return "admin/financeStatistics";
 	}
+
 }
