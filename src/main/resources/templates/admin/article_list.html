@@ -4,6 +4,7 @@
 
 <link href="//cdn.bootcss.com/multi-select/0.9.12/css/multi-select.css" rel="stylesheet"/>
 <link href="//cdn.bootcss.com/select2/3.4.8/select2.min.css" rel="stylesheet"/>
+<!-- <link href="//cdn.bootcss.com/select2/4.0.3/css/select2.min.css" rel="stylesheet"> -->
 
 <style rel="stylesheet">
 	@media(min-width: 500px) {
@@ -22,7 +23,7 @@
     <form id="selectArticleForm">
     	<div class="col-md-12">
 	       	<div class="form-group col-md">
-	        	<select id="categorySelect" class="select2 form-control" multiple="multiple" data-placeholder="请输入所属分类">
+	        	<select id="categorySelect" class="select2 form-control" multiple="multiple" data-placeholder="所属分类">
 	                #if(null == categories)
 	                	<option value="默认分类" selected>默认分类</option>
 	                #else
@@ -33,7 +34,7 @@
 	            </select>
 	    	</div>
 	    	<div class="form-group col-md">
-                <input id="articleTitle" type="text" class="form-control" placeholder="请输入文章标题" name="title" style="width: 60%;"/>
+                <input id="articleTitle" type="text" class="form-control" placeholder="文章标题" name="title" style="width: 60%;"/>
             </div>
 			<button type="button" class="btn btn-primary waves-effect waves-light" style="float: right;"
 				id="selectArticleBtn">查询</button>
@@ -58,6 +59,7 @@
 
 <script src="//cdn.bootcss.com/multi-select/0.9.12/js/jquery.multi-select.min.js"></script>
 <script src="//cdn.bootcss.com/select2/3.4.8/select2.min.js"></script>
+<!-- <script src="//cdn.bootcss.com/select2/4.0.3/js/select2.min.js"></script> -->
 
 <script src="/static/admin/js/article_list.js?v=${version}" type="text/javascript"></script>
 </body>

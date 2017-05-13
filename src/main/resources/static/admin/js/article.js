@@ -165,6 +165,12 @@ $(document).ready(function () {
     $(".select2").select2({
         width: '100%'
     });
+    
+    $(".multiple-selTag").select2({
+    	width: '100%',
+    	tags: true,
+    	tokenSeparators: [',', ' ']
+    });
 
     $('div.allow-false').toggles({
         off: true,
