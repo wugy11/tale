@@ -3,6 +3,10 @@ $(function() {
 	var bookListTable = new BookListTable();
 	bookListTable.init();
 	
+	$("#addBookBtn")..click(function() {
+		tale.clearForm("bookForm");
+		$("#bookModal").modal();
+	});
 	$("#updateBookBtn").click(function() {
 		var selectList = bookListTable.getSelections();
 		var len = selectList.length;

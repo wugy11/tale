@@ -155,6 +155,19 @@ $.tale.prototype.autoFillForm = function(formId, data) {
 	});
 }
 /**
+ * 清空表单
+ */
+$.tale.prototype.clearForm = function (formId) {
+	var form = $("#" + formId)[0];
+	$.each(form, function(i, elem) {
+		var tagName = this.tagName.toLowerCase(), type = this.type;
+		if (type == 'text' || type == 'password' || tagName == 'textarea')
+            $(this).val("");
+		else if (tagName == 'select')
+			this.selectedIndex = 0;
+	});
+}
+/**
  * 显示动画
  */
 $.tale.prototype.showLoading = function () {

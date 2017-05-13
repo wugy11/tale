@@ -3,6 +3,11 @@ $(function() {
 	var financeListTable = new FinanceListTable();
 	financeListTable.init();
 	
+	$("#addFinanceBtn").click(function() {
+		tale.clearForm("financeForm");
+		$("#modalTitle").text("新增");
+		$("#financeModal").modal();
+	});
 	$("#updateFinanceBtn").click(function() {
 		var selectList = financeListTable.getSelections();
 		var len = selectList.length;
@@ -14,7 +19,7 @@ $(function() {
 		var data = selectList[0];
 		tale.autoFillForm('financeForm', data);
 		if (data.expense_time)
-			$("#expenseTime").val(new Date(data.expense_time * 1000).Format('yyyy-MM-dd HH:mm:ss'));
+			$("#expenseTime").val(new Date(data.expense_time * 1000).Format('yyyy-MM-dd'));
 	});
 	$("#deleteFinanceBtn").click(function() {
 		var selectList = financeListTable.getSelections();
@@ -88,7 +93,7 @@ var FinanceListTable = function() {
 				field : 'expense_time', title : '账务时间', width : '20%',
 				formatter : function(value, row, index) {
 					if (value)
-						return new Date(value * 1000).Format('yyyy-MM-dd HH:mm:ss');
+						return new Date(value * 1000).Format('yyyy-MM-dd');
 					return '';
 				}
 			}, {
