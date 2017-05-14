@@ -5,6 +5,7 @@ $(function() {
 	
 	$("#addFinanceBtn").click(function() {
 		tale.clearForm("financeForm");
+		$("#expenseTime").val(new Date().Format("yyyy-MM-dd HH:mm:ss"));
 		$("#modalTitle").text("新增");
 		$("#financeModal").modal();
 	});
@@ -83,7 +84,7 @@ var FinanceListTable = function() {
 			}, {
 				title : '序号', checkbox : true
 			}, {
-				field : 'money', title : '金额', width : '15%', 
+				field : 'money', title : '金额(元)', width : '15%', 
 				formatter : function(value, row, index) {
 					return '<a target="#">'+value+'</a>';
 				}

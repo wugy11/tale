@@ -3,7 +3,7 @@ $(function() {
 	var bookListTable = new BookListTable();
 	bookListTable.init();
 	
-	$("#addBookBtn")..click(function() {
+	$("#addBookBtn").click(function() {
 		tale.clearForm("bookForm");
 		$("#bookModal").modal();
 	});
