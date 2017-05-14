@@ -3,15 +3,16 @@
 <!-- <link href="/static/admin/plugins/select2/dist/css/select2-bootstrap.css" rel="stylesheet"> -->
 <!-- <link href="//cdn.bootcss.com/select2-bootstrap-css/1.4.6/select2-bootstrap.min.css" rel="stylesheet"> -->
 <link href="/static/admin/plugins/toggles/toggles.css" rel="stylesheet">
+<link href="/static/admin/plugins/mditor/css/mditor.min.css" rel="stylesheet">
 
 <link href="//cdn.bootcss.com/multi-select/0.9.12/css/multi-select.css" rel="stylesheet"/>
 <link href="//cdn.bootcss.com/select2/4.0.3/css/select2.min.css" rel="stylesheet">
-<link href="//unpkg.com/mditor@1.0.8/dist/css/mditor.min.css" rel="stylesheet"/>
+<!-- <link href="//unpkg.com/mditor@1.0.8/dist/css/mditor.min.css" rel="stylesheet"/> -->
 
 <link href="//cdn.bootcss.com/summernote/0.8.2/summernote.css" rel="stylesheet">
 <link href="//cdn.bootcss.com/dropzone/4.3.0/min/dropzone.min.css" rel="stylesheet">
 
-<style rel="stylesheet">
+<style type="text/css">
     /* #tags_tagsinput {
         background-color: #fafafa;
         border: 1px solid #eeeeee;
@@ -24,7 +25,10 @@
     #tags_addTag {
         margin-top: -5px;
     } */
-
+	.select2-container--default .select2-selection--multiple {
+        border: 0px solid #eeeeee;
+        border-radius: 0px;
+	}
     .mditor .editor{
         font-size: 14px;
         font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -212,7 +216,6 @@
 <script src="/static/admin/plugins/tagsinput/jquery.tagsinput.min.js"></script>
 <script src="/static/admin/plugins/jquery-multi-select/jquery.quicksearch.js"></script>
 
-<!-- <script src="//unpkg.com/mditor@1.0.8/dist/js/mditor.min.js"></script> -->
 <script src="/static/admin/plugins/mditor/mditor.min.js"></script>
 <!-- <script src="/static/admin/js/mditor.js"></script> -->
 <script src="//cdn.bootcss.com/wysihtml5/0.3.0/wysihtml5.min.js"></script>

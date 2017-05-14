@@ -19,7 +19,7 @@ $(function() {
 		var data = selectList[0];
 		tale.autoFillForm('financeForm', data);
 		if (data.expense_time)
-			$("#expenseTime").val(new Date(data.expense_time * 1000).Format('yyyy-MM-dd'));
+			$("#expenseTime").val(new Date(data.expense_time * 1000).Format('yyyy-MM-dd HH:mm:ss'));
 	});
 	$("#deleteFinanceBtn").click(function() {
 		var selectList = financeListTable.getSelections();
@@ -93,7 +93,7 @@ var FinanceListTable = function() {
 				field : 'expense_time', title : '账务时间', width : '20%',
 				formatter : function(value, row, index) {
 					if (value)
-						return new Date(value * 1000).Format('yyyy-MM-dd');
+						return new Date(value * 1000).Format('yyyy-MM-dd HH:mm:ss');
 					return '';
 				}
 			}, {

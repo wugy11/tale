@@ -1,34 +1,37 @@
-!function ($) {
-    "use strict";
-    //$.MoltranApp.init();
-}(window.jQuery);
-
 $(function() {
+	$("#expenseDay").val(new Date().Format("yyyy-MM-dd"));
 	var dayChart = echarts.init(document.getElementById('dayChart'));
-	// 指定图表的配置项和数据
-	var option = {
-	    title: {
-	        text: 'ECharts 入门示例'
-	    },
-	    tooltip: {},
-	    legend: {
-	        data:['销量']
-	    },
-	    xAxis: {
-	        data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-	    },
-	    yAxis: {},
-	    series: [{
-	        name: '销量',
-	        type: 'bar',
-	        data: [5, 20, 36, 10, 10, 20]
-	    }]
-	};
-
-	// 使用刚指定的配置项和数据显示图表。
-	dayChart.setOption(option);
+	loadDayChart(dayChart);
+	// 异步加载指定图表的配置项和数据
+	$("#selectDayBtn").click(function() {
+		loadDayChart(dayChart);
+	});
 	
 });
+
+var loadDayChart = function($chart) {
+	$.post({
+		url : "/admin/finance/statisticByDay",
+		data : {"day" : $("#expenseDay").val()},
+	}).done(function(data) {
+		$chart.setOption({
+			tooltip: {},
+		    legend: {
+		        data:['金额(元)']
+		    },
+		    xAxis: {
+		        data: data.types
+		    },
+		    yAxis: {},
+		    series: [{
+		        name: '金额(元)',
+		        type: 'bar',
+		        data: data.datas
+		    }]
+		});
+	});
+}
+
 var monthChart = echarts.init(document.getElementById("monthChart"));
 var app = {};
 option = null;

@@ -1,6 +1,7 @@
 package com.tale.controller.admin;
 
 import java.util.List;
+import java.util.Map;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.jdbc.core.Take;
@@ -67,7 +68,7 @@ public class FinanceController extends BaseController {
 	@JSON
 	public List<Finance> selectFinanceList(@QueryParam(value = "page", defaultValue = "1") int page,
 			@QueryParam(value = "limit", defaultValue = "10") int limit, Request request) {
-		Take take = new Take(Finance.class).page(page, limit).desc("expense_time");
+		Take take = new Take(Finance.class).page(page, limit).desc("expense_time").desc("id");
 		List<Finance> financeList = financeService.selectFinanceList(take);
 		return financeList;
 	}
@@ -75,6 +76,12 @@ public class FinanceController extends BaseController {
 	@Route(value = "/statistics", method = HttpMethod.GET)
 	public String statistics() {
 		return "admin/financeStatistics";
+	}
+
+	@Route(value = "/statisticByDay", method = HttpMethod.POST)
+	@JSON
+	public Map<String, Object> statisticByDay(@QueryParam String day) {
+		return financeService.statisticByDay(day);
 	}
 
 }
