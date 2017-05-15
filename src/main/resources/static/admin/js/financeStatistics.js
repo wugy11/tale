@@ -1,35 +1,58 @@
 $(function() {
 	$("#expenseDay").val(new Date().Format("yyyy-MM-dd"));
 	var dayChart = echarts.init(document.getElementById('dayChart'));
-	loadDayChart(dayChart);
+	
+	var loadChart = new LoadChart();
+	loadChart.loadDayChart(dayChart);
 	// 异步加载指定图表的配置项和数据
 	$("#selectDayBtn").click(function() {
-		loadDayChart(dayChart);
+		loadChart.loadDayChart(dayChart);
 	});
 	
 });
 
-var loadDayChart = function($chart) {
-	$.post({
-		url : "/admin/finance/statisticByDay",
-		data : {"day" : $("#expenseDay").val()},
-	}).done(function(data) {
-		$chart.setOption({
-			tooltip: {},
-		    legend: {
-		        data:['金额(元)']
-		    },
-		    xAxis: {
-		        data: data.types
-		    },
-		    yAxis: {},
-		    series: [{
-		        name: '金额(元)',
-		        type: 'bar',
-		        data: data.datas
-		    }]
+var LoadChart = function() {
+	var chart = new Object();
+	
+	chart.loadDayChart = function($chart) {
+		var expenseDay = $("#expenseDay").val();
+		$.post({
+			url : "/admin/finance/statisticByDay",
+			data : {"day" : expenseDay},
+		}).done(function(data) {
+			$chart.setOption({
+				title : {
+			        text: '资金变动情况',
+			        subtext: expenseDay,
+			        x: 'center'
+			    },
+			    tooltip : {
+			        trigger: 'item',
+			        formatter: "{a} <br/>{b} : {c} ({d}%)"
+			    },
+			    legend : {
+			        orient: 'vertical',
+			        left: 'left',
+			        data: data.types
+			    },
+			    series : [ {
+		            name: '资金变动',
+		            type: 'pie',
+		            radius : '60%',
+		            center: ['50%', '60%'],
+		            data: data.datas,
+		            itemStyle: {
+		                emphasis: {
+		                    shadowBlur: 10,
+		                    shadowOffsetX: 0,
+		                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+		                }
+		            }
+		        }]
+			});
 		});
-	});
+	}
+	return chart;
 }
 
 var monthChart = echarts.init(document.getElementById("monthChart"));

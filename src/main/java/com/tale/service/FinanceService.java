@@ -55,10 +55,15 @@ public class FinanceService {
 				.append("from t_finance where date_str = ? ").append("group by date_str,type order by date_str desc");
 		List<Map<String, Object>> listMap = activeRecord.listMap(sql.toString(), day);
 		List<String> types = CollectionKit.createLinkedList();
-		List<String> datas = CollectionKit.createLinkedList();
+		List<Map<String, String>> datas = CollectionKit.createLinkedList();
 		listMap.forEach(map -> {
-			types.add(String.valueOf(map.get("type")));
-			datas.add(String.valueOf(map.get("sum_money")));
+			String type = String.valueOf(map.get("type"));
+			types.add(type);
+
+			Map<String, String> dataMap = CollectionKit.newHashMap();
+			dataMap.put("name", type);
+			dataMap.put("value", String.valueOf(map.get("sum_money")));
+			datas.add(dataMap);
 		});
 		Map<String, Object> resMap = CollectionKit.newHashMap(2);
 		resMap.put("types", types);
