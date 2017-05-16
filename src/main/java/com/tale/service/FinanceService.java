@@ -25,6 +25,7 @@ public class FinanceService {
 	public void saveFinance(Finance finance) {
 		Integer id = finance.getId();
 		Date expenseTime = finance.getExpenseTime();
+		finance.setCategory(Constant.getFinanceCategory(finance.getType()));
 		if (null != expenseTime)
 			finance.setExpense_time(DateKit.getUnixTimeByDate(finance.getExpenseTime()));
 		if (null == id) {
@@ -48,7 +49,7 @@ public class FinanceService {
 		return activeRecord.list(take);
 	}
 
-	public Map<String, Object> statisticByMonth(String month) {
+	public Map<String, Object> statisticPieData(String month) {
 		if (StringKit.isEmpty(month))
 			month = DateKit.getToday("yyyy-MM");
 		StringBuilder sql = new StringBuilder();
@@ -83,6 +84,44 @@ public class FinanceService {
 		});
 		resMap.put("legendDatas", financeAllTypes);
 		resMap.put("pieDatas", datas);
+		return resMap;
+	}
+
+	public Map<String, Object> statisticLineData() {
+		StringBuilder sql = new StringBuilder();
+		sql.append("select strftime('%Y-%m', datetime(expense_time,'unixepoch','localtime')) month_str, ")
+				.append("sum(money) sum_money, category ").append("from t_finance ")
+				.append("group by category order by month_str");
+		List<Map<String, Object>> listMap = activeRecord.listMap(sql.toString());
+
+		Set<String> xAxisDataList = CollectionKit.newHashSet();
+		listMap.forEach(map -> {
+			xAxisDataList.add(String.valueOf(map.get("month_str")));
+		});
+
+		Map<String, Object> resMap = CollectionKit.newHashMap();
+		resMap.put("xAxisData", CollectionKit.createArrayList(xAxisDataList));
+
+		List<String> legendData = CollectionKit.newArrayList();
+		legendData.add(Constant.income.getDesc());
+		legendData.add(Constant.expense.getDesc());
+		resMap.put("legendData", legendData);
+
+		List<Map<String, Object>> seriesDataList = CollectionKit.newArrayList();
+		legendData.forEach(legend -> {
+			Map<String, Object> dataMap = CollectionKit.newHashMap();
+			dataMap.put("type", "line");
+			dataMap.put("name", legend);
+			List<Object> lineData = CollectionKit.newArrayList();
+			listMap.forEach(map -> {
+				if (legend.equals(map.get("category"))) {
+					lineData.add(map.get("sum_money"));
+				}
+			});
+			dataMap.put("data", lineData);
+			seriesDataList.add(dataMap);
+		});
+		resMap.put("seriesData", seriesDataList);
 		return resMap;
 	}
 }

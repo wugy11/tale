@@ -2,13 +2,17 @@ $(function() {
 	
 	$("#expenseMonth").val(new Date().Format("yyyy-MM"));
 	// 异步加载指定图表的配置项和数据
-	var $pieChart = echarts.init(document.getElementById("monthChart"));
+	var $pieChart = echarts.init(document.getElementById("pieChart"));
 	var financeChart = new FinanceChart();
 	financeChart.queryPieChart($pieChart);
 	
 	$("#selectMonthBtn").click(function() {
 		financeChart.queryPieChart($pieChart);
 	});
+	
+	var $lineChart = echarts.init(document.getElementById("lineChart"));
+	financeChart.loadLineChart($lineChart);
+	
 });
 
 var FinanceChart = function() {
@@ -35,7 +39,7 @@ var FinanceChart = function() {
 	    }).done(function (data) {
 	    	$pieChart.setOption({
 		    	title : {
-		            text: '资金变动情况',
+		            text: '资金变动饼图',
 		            subtext: month,
 		            x:'center'
 		        },
@@ -90,6 +94,44 @@ var FinanceChart = function() {
 	            series: getPieSeries(scatterData, $pieChart, data.pieDatas)
 	        });
 	    });
+	}
+	
+	this.loadLineChart = function ($lineChart) {
+		$.post({
+			url: '/admin/finance/statisticLineData'
+		}).done(function(data) {
+			$lineChart.setOption({
+			    title: {
+			        text: '资金变动折线图',
+			    },
+			    tooltip: {
+			        trigger: 'axis'
+			    },
+			    legend: {
+			        data: data.legendData
+			    },
+			    grid: {
+			        left: '25%',
+			        right: '25%',
+			        bottom: '3%',
+			        containLabel: true
+			    },
+			    toolbox: {
+			        feature: {
+			            saveAsImage: {}
+			        }
+			    },
+			    xAxis: {
+			        type: 'category',
+			        boundaryGap: false,
+			        data: data.xAxisData
+			    },
+			    yAxis: {
+			        type: 'value'
+			    },
+			    series: data.seriesData
+			});
+		});
 	}
 	
 	getPieSeries = function(scatterData, chart, pieDatas) {

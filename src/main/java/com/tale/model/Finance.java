@@ -19,6 +19,7 @@ public class Finance implements Serializable {
 	private Integer create_time;
 	private Integer uid;
 	private String remark;
+	private String category;
 
 	@DateFormat
 	@Column(ignore = true)
@@ -86,6 +87,14 @@ public class Finance implements Serializable {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 }

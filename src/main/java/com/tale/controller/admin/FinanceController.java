@@ -81,7 +81,13 @@ public class FinanceController extends BaseController {
 	@Route(value = "/statisticPieData", method = HttpMethod.POST)
 	@JSON
 	public Map<String, Object> statisticByDay(@QueryParam String month) {
-		return financeService.statisticByMonth(month);
+		return financeService.statisticPieData(month);
+	}
+	
+	@Route(value = "/statisticLineData", method = HttpMethod.POST)
+	@JSON
+	public Map<String, Object> statisticLineData() {
+		return financeService.statisticLineData();
 	}
 
 }
