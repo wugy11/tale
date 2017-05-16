@@ -90,9 +90,9 @@ public class FinanceService {
 	public Map<String, Object> statisticLineData() {
 		StringBuilder sql = new StringBuilder();
 		sql.append("select strftime('%Y-%m', datetime(expense_time,'unixepoch','localtime')) month_str, ")
-				.append("sum(money) sum_money, category ").append("from t_finance ")
+				.append("sum(money) sum_money, category ").append("from t_finance ").append("where type <> ? ")
 				.append("group by category order by month_str");
-		List<Map<String, Object>> listMap = activeRecord.listMap(sql.toString());
+		List<Map<String, Object>> listMap = activeRecord.listMap(sql.toString(), Constant.inverst.getDesc());
 
 		Set<String> xAxisDataList = CollectionKit.newHashSet();
 		listMap.forEach(map -> {
