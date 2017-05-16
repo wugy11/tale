@@ -11,25 +11,19 @@
 	<div class="col-sm-12">
 		<h4 class="page-title">财务统计</h4>
 	</div>
-	<ul id="statisticsTab" class="nav nav-tabs">
-		<li class="active">
-			<a href="#dayChartTab" data-toggle="tab">每天</a>
-		</li>
-		<li><a href="#monthChartTab" data-toggle="tab">每月</a></li>
-	</ul>
-	<div id="myTabContent" class="tab-content">
-		<div class="tab-pane fade in active" id="dayChartTab">
+	<div>
+		<div id="monthChartTab">
 			<div class="form-group">
-		    	<label for="beginTime" style="margin-left: 10px">账务日期：</label> 
-				<input type="text" id="expenseDay" class="expenseTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+		    	<label for="expenseMonth" style="margin-left: 10px">账务日期：</label> 
+				<input type="text" id="expenseMonth" class="expenseTime" onfocus="WdatePicker({dateFmt:'yyyy-MM'})"
 					readonly="readonly"/>
 				<button type="button" class="btn btn-primary waves-effect waves-light" style="margin-left: 100px"
-					id="selectDayBtn">查询</button>
+					id="selectMonthBtn">查询</button>
 		    </div>
-		    <div id="dayChart" style="width: 50%;height:600px;padding-top: 30px"></div>
-		</div>
-		<div class="tab-pane fade" id="monthChartTab">
 			<div id="monthChart" style="height:800px;"></div>
+		</div>
+		<div>
+			<div id="yearChart" style="height:800px;"></div>
 		</div>
 	</div>
 	

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.ioc.annotation.Service;
@@ -12,6 +13,7 @@ import com.blade.jdbc.core.Take;
 import com.blade.kit.CollectionKit;
 import com.blade.kit.DateKit;
 import com.blade.kit.StringKit;
+import com.tale.constants.Constant;
 import com.tale.model.Finance;
 
 @Service
@@ -46,28 +48,41 @@ public class FinanceService {
 		return activeRecord.list(take);
 	}
 
-	public Map<String, Object> statisticByDay(String day) {
-		if (StringKit.isEmpty(day))
-			day = DateKit.getToday("yyyy-MM-dd");
+	public Map<String, Object> statisticByMonth(String month) {
+		if (StringKit.isEmpty(month))
+			month = DateKit.getToday("yyyy-MM");
 		StringBuilder sql = new StringBuilder();
-		sql.append(
-				"select strftime('%Y-%m-%d', datetime(expense_time, 'unixepoch', 'localtime') ) date_str, type, sum(money) sum_money ")
-				.append("from t_finance where date_str = ? ").append("group by date_str,type order by date_str desc");
-		List<Map<String, Object>> listMap = activeRecord.listMap(sql.toString(), day);
-		List<String> types = CollectionKit.createLinkedList();
-		List<Map<String, String>> datas = CollectionKit.createLinkedList();
-		listMap.forEach(map -> {
-			String type = String.valueOf(map.get("type"));
-			types.add(type);
+		sql.append("select strftime('%Y-%m', datetime(expense_time, 'unixepoch', 'localtime')) month_str,")
+				.append("strftime('%Y-%m-%d', datetime(expense_time, 'unixepoch', 'localtime')) date_str, type, sum(money) sum_money ")
+				.append("from t_finance where month_str = ? ").append("group by date_str,type order by date_str desc");
+		List<Map<String, Object>> listMap = activeRecord.listMap(sql.toString(), month);
 
-			Map<String, String> dataMap = CollectionKit.newHashMap();
-			dataMap.put("name", type);
-			dataMap.put("value", String.valueOf(map.get("sum_money")));
-			datas.add(dataMap);
+		Set<String> dateSet = CollectionKit.newHashSet();
+		listMap.forEach(map -> {
+			dateSet.add(String.valueOf(map.get("date_str")));
 		});
-		Map<String, Object> resMap = CollectionKit.newHashMap(2);
-		resMap.put("types", types);
-		resMap.put("datas", datas);
+
+		Map<String, List<Map<String, Object>>> datas = CollectionKit.newHashMap();
+		dateSet.forEach(date -> {
+			List<Map<String, Object>> dayMapData = CollectionKit.newArrayList();
+			listMap.forEach(map -> {
+				if (date.equals(map.get("date_str"))) {
+					Map<String, Object> dataMap = CollectionKit.newHashMap();
+					dataMap.put("name", map.get("type"));
+					dataMap.put("value", map.get("sum_money"));
+					dayMapData.add(dataMap);
+				}
+			});
+			datas.put(date, dayMapData);
+		});
+
+		Map<String, Object> resMap = CollectionKit.newHashMap();
+		List<String> financeAllTypes = CollectionKit.newArrayList();
+		Constant.financeTypes().forEach(financeType -> {
+			financeAllTypes.add(financeType.getDesc());
+		});
+		resMap.put("legendDatas", financeAllTypes);
+		resMap.put("pieDatas", datas);
 		return resMap;
 	}
 }
