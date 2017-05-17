@@ -1,28 +1,45 @@
 package com.tale.service;
 
+import com.blade.ioc.annotation.Inject;
+import com.blade.ioc.annotation.Service;
+import com.blade.jdbc.ActiveRecord;
+import com.blade.jdbc.core.Take;
+import com.blade.jdbc.model.Paginator;
+import com.blade.kit.DateKit;
+import com.tale.constants.TaleConst;
 import com.tale.model.Logs;
+import com.tale.service.LogService;
 
 import java.util.List;
 
 /**
  * Created by biezhi on 2017/2/26.
  */
-public interface LogService {
+@Service
+public class LogService {
 
-    /**
-     * 记录日志
-     * @param action
-     * @param data
-     * @param ip
-     * @param author_id
-     */
-    void save(String action, String data, String ip, Integer author_id);
+	@Inject
+	private ActiveRecord activeRecord;
 
-    /**
-     * 读取日志
-     * @param page
-     * @param limit
-     * @return
-     */
-    List<Logs> getLogs(int page, int limit);
+	public void save(String action, String data, String ip, Integer author_id) {
+		Logs logs = new Logs();
+		logs.setAction(action);
+		logs.setData(data);
+		logs.setIp(ip);
+		logs.setAuthor_id(author_id);
+		logs.setCreated(DateKit.getCurrentUnixTime());
+		activeRecord.insert(logs);
+	}
+
+	public List<Logs> getLogs(int page, int limit) {
+		if (page <= 0) {
+			page = 1;
+		}
+
+		if (limit < 1 || limit > TaleConst.MAX_POSTS) {
+			limit = 10;
+		}
+		Paginator<Logs> logsPaginator = activeRecord.page(new Take(Logs.class).page(page, limit, "id desc"));
+		return logsPaginator.getList();
+	}
 }

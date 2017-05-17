@@ -1,41 +1,50 @@
 package com.tale.service;
 
+import com.blade.ioc.annotation.Inject;
+import com.blade.ioc.annotation.Service;
+import com.blade.jdbc.ActiveRecord;
 import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.Paginator;
+import com.blade.kit.DateKit;
 import com.tale.model.Attach;
 
 /**
  * Created by biezhi on 2017/2/23.
  */
-public interface AttachService {
+@Service
+public class AttachService {
 
-    /**
-     * 保存附件
-     *
-     * @param fname
-     * @param fkey
-     * @param ftype
-     * @param author
-     */
-    Attach save(String fname, String fkey, String ftype, Integer author);
+	@Inject
+	private ActiveRecord activeRecord;
 
-    /**
-     * 删除附件
-     * @param id
-     */
-    void delete(Integer id);
+	public Attach save(String fname, String fkey, String ftype, Integer author) {
+		Attach attach = new Attach();
+		attach.setFname(fname);
+		attach.setAuthor_id(author);
+		attach.setFkey(fkey);
+		attach.setFtype(ftype);
+		attach.setCreated(DateKit.getCurrentUnixTime());
+		activeRecord.insert(attach);
+		return attach;
+	}
 
-    /**
-     * 分页查询附件
-     * @param take
-     * @return
-     */
-    Paginator<Attach> getAttachs(Take take);
+	public Attach byId(Integer id) {
+		if (null != id) {
+			return activeRecord.byId(Attach.class, id);
+		}
+		return null;
+	}
 
-    /**
-     * 根据附件id查询附件
-     * @param id
-     * @return
-     */
-    Attach byId(Integer id);
+	public void delete(Integer id) {
+		if (null != id) {
+			activeRecord.delete(Attach.class, id);
+		}
+	}
+
+	public Paginator<Attach> getAttachs(Take take) {
+		if (null != take) {
+			return activeRecord.page(take);
+		}
+		return null;
+	}
 }
