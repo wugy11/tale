@@ -1,5 +1,7 @@
 package com.tale.controller.admin;
 
+import java.util.Map;
+
 import com.blade.ioc.annotation.Inject;
 import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.Paginator;
@@ -142,6 +144,12 @@ public class CommentController extends BaseController {
 			}
 			return RestResponse.fail(msg);
 		}
+	}
+	
+	@Route(value = "/statisticPieData", method = HttpMethod.POST)
+	@JSON
+	public Map<String, Object> statisticPieData(@QueryParam String month) {
+		return commentsService.statisticPieData(month);
 	}
 
 }

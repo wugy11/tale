@@ -1,7 +1,18 @@
 #include('./header.html',{active:'home', title:'管理中心'})
+<style type="text/css">
+.publishDate {
+    border: 1px solid #eee;
+	padding:6px 12px 6px 12px;
+	height: 34px ; 
+	width: 40%;
+}
+.articlePieChart {
+	width: 65%
+}
+</style>
 <div class="row">
     <div class="col-sm-12">
-        <h4 class="page-title">Tale仪表盘</h4>
+        <h4 class="page-title">仪表盘</h4>
     </div>
 
     <div class="row">
@@ -42,7 +53,21 @@
     </div>
 
     <div class="row">
-        <div class="col-md-4">
+    	<div class="col-md-4 articlePieChart">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                	<div class="form-group">
+				    	<label for="publishDate" style="margin-left: 10px">发布日期：</label> 
+						<input type="text" id="publishDate" class="publishDate" onfocus="WdatePicker({dateFmt:'yyyy-MM'})"
+							readonly="readonly"/>
+						<button type="button" class="btn btn-primary waves-effect waves-light" style="float: right;"
+							id="selectPublishBtn">查询</button>
+				    </div>
+					<div id="articlePieChart" style="height: 700px"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4" >
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">最新文章</h4>
@@ -60,7 +85,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">最新留言</h4>
@@ -86,7 +111,7 @@
                     #end
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -106,5 +131,8 @@
     </div>
 </div>
 #include('./footer.html')
+<script src="//cdn.bootcss.com/echarts/3.5.4/echarts.min.js"></script>
+<script src="/static/admin/js/index.js?v=${version}" type="text/javascript"></script>
+<script src="/static/admin/plugins/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
 </body>
 </html>

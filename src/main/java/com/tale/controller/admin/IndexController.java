@@ -26,7 +26,6 @@ import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
 import com.tale.init.TaleLoader;
-import com.tale.model.Comments;
 import com.tale.model.Contents;
 import com.tale.model.Users;
 import com.tale.service.OptionsService;
@@ -58,13 +57,13 @@ public class IndexController extends BaseController {
 	 */
 	@Route(value = { "/", "index" }, method = HttpMethod.GET)
 	public String index(Request request) {
-		List<Comments> comments = siteService.recentComments(10);
+		// List<Comments> comments = siteService.recentComments(10);
 		List<Contents> contents = siteService.getContens(Types.RECENT_ARTICLE, 10);
 		Statistics statistics = siteService.getStatistics();
 		// 取最新的20条日志
 		// List<Logs> logs = logService.getLogs(1, 20);
 
-		request.attribute("comments", comments);
+		// request.attribute("comments", comments);
 		request.attribute("articles", contents);
 		request.attribute("statistics", statistics);
 		// request.attribute("logs", logs);
