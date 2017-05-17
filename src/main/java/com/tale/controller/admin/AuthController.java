@@ -14,10 +14,8 @@ import com.blade.mvc.http.wrapper.Session;
 import com.blade.mvc.view.RestResponse;
 import com.tale.constants.TaleConst;
 import com.tale.controller.BaseController;
-import com.tale.dto.LogActions;
 import com.tale.exception.TipException;
 import com.tale.model.Users;
-import com.tale.service.LogService;
 import com.tale.service.UsersService;
 import com.tale.utils.TaleUtils;
 
@@ -33,8 +31,8 @@ public class AuthController extends BaseController {
 	@Inject
 	private UsersService usersService;
 
-	@Inject
-	private LogService logService;
+	// @Inject
+	// private LogService logService;
 
 	@Route(value = "login", method = HttpMethod.GET)
 	public String login(Response response) {
@@ -71,7 +69,8 @@ public class AuthController extends BaseController {
 			// JSONKit.toJSONString(request.querys());
 			LOGGER.info("登录成功：{}", username);
 			cache.set("login_error_count", 0);
-			logService.save(LogActions.LOGIN, username, request.address(), user.getUid());
+			// logService.save(LogActions.LOGIN, username, request.address(),
+			// user.getUid());
 		} catch (Exception e) {
 			error_count += 1;
 			cache.set("login_error_count", error_count, 10 * 60);

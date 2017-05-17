@@ -23,7 +23,6 @@ import com.tale.constants.TaleConst;
 import com.tale.dto.Archive;
 import com.tale.dto.BackResponse;
 import com.tale.dto.Comment;
-import com.tale.dto.LogActions;
 import com.tale.dto.MetaDto;
 import com.tale.dto.Statistics;
 import com.tale.dto.Types;
@@ -36,7 +35,6 @@ import com.tale.model.Contents;
 import com.tale.model.Metas;
 import com.tale.model.Users;
 import com.tale.service.CommentsService;
-import com.tale.service.LogService;
 import com.tale.service.MetasService;
 import com.tale.service.OptionsService;
 import com.tale.service.SiteService;
@@ -56,8 +54,8 @@ public class SiteServiceImpl implements SiteService {
 	@Inject
 	private OptionsService optionsService;
 
-	@Inject
-	private LogService logService;
+	// @Inject
+	// private LogService logService;
 
 	@Inject
 	private MetasService metasService;
@@ -73,14 +71,14 @@ public class SiteServiceImpl implements SiteService {
 		users.setPassword(pwd);
 		users.setScreen_name(users.getUsername());
 		users.setCreated(DateKit.getCurrentUnixTime());
-		Integer uid = activeRecord.insert(users);
+		// Integer uid = activeRecord.insert(users);
 
 		try {
 			String cp = SiteServiceImpl.class.getClassLoader().getResource("").getPath();
 			File lock = new File(cp + Const.INSTALLED);
 			lock.createNewFile();
 			TaleConst.INSTALL = Boolean.TRUE;
-			logService.save(LogActions.INIT_SITE, null, "", uid.intValue());
+			// logService.save(LogActions.INIT_SITE, null, "", uid.intValue());
 		} catch (Exception e) {
 			throw new TipException("初始化站点失败");
 		}

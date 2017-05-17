@@ -22,7 +22,6 @@ import com.blade.mvc.multipart.FileItem;
 import com.blade.mvc.view.RestResponse;
 import com.tale.constants.TaleConst;
 import com.tale.controller.BaseController;
-import com.tale.dto.LogActions;
 import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
@@ -30,7 +29,6 @@ import com.tale.init.TaleLoader;
 import com.tale.model.Attach;
 import com.tale.model.Users;
 import com.tale.service.AttachService;
-import com.tale.service.LogService;
 import com.tale.service.SiteService;
 import com.tale.utils.TaleUtils;
 
@@ -48,8 +46,8 @@ public class AttachController extends BaseController {
 	@Inject
 	private AttachService attachService;
 
-	@Inject
-	private LogService logService;
+	// @Inject
+	// private LogService logService;
 
 	@Inject
 	private SiteService siteService;
@@ -143,7 +141,8 @@ public class AttachController extends BaseController {
 			siteService.cleanCache(Types.C_STATISTICS);
 			String upDir = TaleLoader.CLASSPATH.substring(0, TaleLoader.CLASSPATH.length() - 1);
 			FileKit.delete(upDir + attach.getFkey());
-			logService.save(LogActions.DEL_ATTACH, attach.getFkey(), request.address(), this.getUid());
+			// logService.save(LogActions.DEL_ATTACH, attach.getFkey(),
+			// request.address(), this.getUid());
 		} catch (Exception e) {
 			String msg = "附件删除失败";
 			if (e instanceof TipException)

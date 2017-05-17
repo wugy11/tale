@@ -9,7 +9,6 @@ import com.blade.Blade;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.FileKit;
 import com.blade.kit.base.Config;
-import com.blade.kit.json.JSONKit;
 import com.blade.mvc.annotation.Controller;
 import com.blade.mvc.annotation.JSON;
 import com.blade.mvc.annotation.QueryParam;
@@ -19,13 +18,11 @@ import com.blade.mvc.http.Request;
 import com.blade.mvc.view.RestResponse;
 import com.tale.constants.TaleConst;
 import com.tale.controller.BaseController;
-import com.tale.dto.LogActions;
 import com.tale.dto.ThemeDto;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
 import com.tale.ext.Theme;
 import com.tale.init.TaleLoader;
-import com.tale.service.LogService;
 import com.tale.service.OptionsService;
 
 /**
@@ -40,8 +37,8 @@ public class ThemeController extends BaseController {
 	@Inject
 	private OptionsService optionsService;
 
-	@Inject
-	private LogService logService;
+	// @Inject
+	// private LogService logService;
 
 	@Route(value = "", method = HttpMethod.GET)
 	public String index(Request request) {
@@ -98,7 +95,8 @@ public class ThemeController extends BaseController {
 			config.addAll(optionsService.getOptions());
 			TaleConst.OPTIONS = config;
 
-			logService.save(LogActions.THEME_SETTING, JSONKit.toJSONString(querys), request.address(), this.getUid());
+			// logService.save(LogActions.THEME_SETTING,
+			// JSONKit.toJSONString(querys), request.address(), this.getUid());
 			return RestResponse.ok();
 		} catch (Exception e) {
 			String msg = "主题设置失败";
@@ -134,7 +132,8 @@ public class ThemeController extends BaseController {
 				TaleLoader.loadTheme(themePath);
 			} catch (Exception e) {
 			}
-			logService.save(LogActions.THEME_SETTING, site_theme, request.address(), this.getUid());
+			// logService.save(LogActions.THEME_SETTING, site_theme,
+			// request.address(), this.getUid());
 			return RestResponse.ok();
 		} catch (Exception e) {
 			String msg = "主题启用失败";

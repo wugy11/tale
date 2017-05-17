@@ -13,14 +13,12 @@ import com.blade.mvc.http.Request;
 import com.blade.mvc.view.RestResponse;
 import com.tale.constants.TaleConst;
 import com.tale.controller.BaseController;
-import com.tale.dto.LogActions;
 import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
 import com.tale.model.Contents;
 import com.tale.model.Users;
 import com.tale.service.ContentsService;
-import com.tale.service.LogService;
 import com.tale.service.MetasService;
 import com.tale.service.SiteService;
 
@@ -39,8 +37,8 @@ public class PageController extends BaseController {
 	@Inject
 	private MetasService metasService;
 
-	@Inject
-	private LogService logService;
+	// @Inject
+	// private LogService logService;
 
 	@Inject
 	private SiteService siteService;
@@ -138,7 +136,8 @@ public class PageController extends BaseController {
 		try {
 			contentsService.delete(cid);
 			siteService.cleanCache(Types.C_STATISTICS);
-			logService.save(LogActions.DEL_PAGE, cid + "", request.address(), this.getUid());
+			// logService.save(LogActions.DEL_PAGE, cid + "", request.address(),
+			// this.getUid());
 		} catch (Exception e) {
 			String msg = "页面删除失败";
 			if (e instanceof TipException) {

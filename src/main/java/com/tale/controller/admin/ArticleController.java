@@ -19,7 +19,6 @@ import com.blade.mvc.multipart.FileItem;
 import com.blade.mvc.view.RestResponse;
 import com.tale.constants.TaleConst;
 import com.tale.controller.BaseController;
-import com.tale.dto.LogActions;
 import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
@@ -29,7 +28,6 @@ import com.tale.model.Metas;
 import com.tale.model.Users;
 import com.tale.service.BookService;
 import com.tale.service.ContentsService;
-import com.tale.service.LogService;
 import com.tale.service.MetasService;
 import com.tale.service.SiteService;
 import com.tale.utils.QiniuUtils;
@@ -44,8 +42,8 @@ public class ArticleController extends BaseController {
 	private ContentsService contentsService;
 	@Inject
 	private MetasService metasService;
-	@Inject
-	private LogService logService;
+	// @Inject
+	// private LogService logService;
 	@Inject
 	private SiteService siteService;
 	@Inject
@@ -194,7 +192,8 @@ public class ArticleController extends BaseController {
 		try {
 			contentsService.delete(cid);
 			siteService.cleanCache(Types.C_STATISTICS);
-			logService.save(LogActions.DEL_ARTICLE, cid + "", request.address(), this.getUid());
+			// logService.save(LogActions.DEL_ARTICLE, cid + "",
+			// request.address(), this.getUid());
 		} catch (Exception e) {
 			String msg = "文章删除失败";
 			if (e instanceof TipException) {
