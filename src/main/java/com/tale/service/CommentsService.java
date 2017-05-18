@@ -2,7 +2,6 @@ package com.tale.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.ioc.annotation.Service;
@@ -146,7 +145,4 @@ public class CommentsService {
 		}
 	}
 
-	public Map<String, Object> statisticPieData(String month) {
-		return null;
-	}
 }

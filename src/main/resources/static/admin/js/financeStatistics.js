@@ -37,8 +37,8 @@ var FinanceChart = function() {
 	    	url: '/admin/finance/statisticPieData',
 	    	data: {"month": month},
 	    }).done(function (data) {
-	    	$pieChart.setOption({
-		    	title : {
+	    	var pieChartOption = {
+    			title : {
 		            text: '资金变动饼图',
 		            subtext: month,
 		            x:'center'
@@ -89,7 +89,8 @@ var FinanceChart = function() {
 		            },
 		            data: scatterData
 		        }]
-		    });
+	    	};
+	    	$pieChart.setOption(pieChartOption);
 		    $pieChart.setOption({
 	            series: getPieSeries(scatterData, $pieChart, data.pieDatas)
 	        });
@@ -100,8 +101,8 @@ var FinanceChart = function() {
 		$.post({
 			url: '/admin/finance/statisticLineData'
 		}).done(function(data) {
-			$lineChart.setOption({
-			    title: {
+			var lineChartOption = {
+				title: {
 			        text: '资金变动折线图',
 			    },
 			    tooltip: {
@@ -129,8 +130,9 @@ var FinanceChart = function() {
 			    yAxis: {
 			        type: 'value'
 			    },
-			    series: data.seriesData
-			});
+			    series: data.seriesData	
+			};
+			$lineChart.setOption(lineChartOption);
 		});
 	}
 	

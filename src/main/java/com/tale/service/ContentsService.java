@@ -1,6 +1,7 @@
 package com.tale.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.ioc.annotation.Service;
@@ -8,6 +9,7 @@ import com.blade.jdbc.ActiveRecord;
 import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.PageRow;
 import com.blade.jdbc.model.Paginator;
+import com.blade.kit.CollectionKit;
 import com.blade.kit.DateKit;
 import com.blade.kit.StringKit;
 import com.tale.constants.TaleConst;
@@ -186,6 +188,29 @@ public class ContentsService {
 
 	public List<Contents> getArticlesList(Take take) {
 		return activeRecord.list(take);
+	}
+
+	public Map<String, Object> statisticPieData(String month) {
+		if (StringKit.isEmpty(month))
+			month = DateKit.getToday("yyyy-MM");
+		StringBuilder sql = new StringBuilder();
+		sql.append("select strftime('%Y-%m', datetime(created, 'unixepoch', 'localtime')) month_str,")
+				.append("strftime('%Y-%m-%d', datetime(created, 'unixepoch', 'localtime')) date_str,")
+				.append("count(cid) count from t_contents ").append("where month_str = ? ")
+				.append("group by date_str order by date_str");
+		List<Map<String, Object>> listMap = activeRecord.listMap(sql.toString(), month);
+
+		List<List<Object>> datas = CollectionKit.newArrayList();
+		listMap.forEach(map -> {
+			List<Object> data = CollectionKit.newArrayList();
+			data.add(map.get("date_str"));
+			data.add(map.get("count"));
+			datas.add(data);
+		});
+
+		Map<String, Object> resMap = CollectionKit.newHashMap();
+		resMap.put("datas", datas);
+		return resMap;
 	}
 
 }

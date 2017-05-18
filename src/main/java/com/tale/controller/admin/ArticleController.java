@@ -205,4 +205,10 @@ public class ArticleController extends BaseController {
 		}
 		return RestResponse.ok();
 	}
+
+	@Route(value = "/statisticPieData", method = HttpMethod.POST)
+	@JSON
+	public Map<String, Object> statisticPieData(@QueryParam String month) {
+		return contentsService.statisticPieData(month);
+	}
 }
