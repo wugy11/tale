@@ -11,6 +11,7 @@ import com.blade.jdbc.model.Paginator;
 import com.blade.kit.CollectionKit;
 import com.blade.kit.DateKit;
 import com.blade.kit.StringKit;
+import com.tale.constants.Constant;
 import com.tale.dto.Comment;
 import com.tale.exception.TipException;
 import com.tale.model.Comments;
@@ -143,6 +144,11 @@ public class CommentsService {
 		if (null != comments && null != comments.getCoid()) {
 			activeRecord.update(comments);
 		}
+	}
+
+	public int getUnreadCommentCount() {
+		Take take = Take.create(Comments.class).eq("status", Constant.unread.getDesc());
+		return activeRecord.count(take);
 	}
 
 }

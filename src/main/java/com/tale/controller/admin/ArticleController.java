@@ -56,7 +56,7 @@ public class ArticleController extends BaseController {
 	public String index(Request request) {
 		List<Metas> categories = metasService.getMetas(Types.CATEGORY);
 		request.attribute("categories", categories);
-		return "admin/article_list";
+		return "admin/articleList";
 	}
 
 	@Route(value = "/selectArticleList", method = HttpMethod.POST)
@@ -108,7 +108,7 @@ public class ArticleController extends BaseController {
 
 		request.attribute("active", "article");
 		request.attribute(Types.ATTACH_URL, Commons.site_option(Types.ATTACH_URL, Commons.site_url()));
-		return "admin/article_edit";
+		return "admin/articleEdit";
 	}
 
 	/**

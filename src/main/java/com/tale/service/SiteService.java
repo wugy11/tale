@@ -258,13 +258,15 @@ public class SiteService {
 	}
 
 	public Contents getNhContent(String type, Integer cid) {
-		if (Types.NEXT.equals(type)) {
+		switch (type) {
+		case Types.NEXT:
 			return activeRecord
 					.one(new Take(Contents.class).eq("type", Types.ARTICLE).eq("status", Types.PUBLISH).gt("cid", cid));
-		}
-		if (Types.PREV.equals(type)) {
+		case Types.PREV:
 			return activeRecord
 					.one(new Take(Contents.class).eq("type", Types.ARTICLE).eq("status", Types.PUBLISH).lt("cid", cid));
+		default:
+			break;
 		}
 		return null;
 	}
@@ -281,5 +283,9 @@ public class SiteService {
 				mapCache.del(key);
 			}
 		}
+	}
+
+	public int getUnreadCommentCount() {
+		return commentsService.getUnreadCommentCount();
 	}
 }

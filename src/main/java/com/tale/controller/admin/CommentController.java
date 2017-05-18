@@ -1,8 +1,12 @@
 package com.tale.controller.admin;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.blade.ioc.annotation.Inject;
 import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.Paginator;
+import com.blade.kit.CollectionKit;
 import com.blade.kit.StringKit;
 import com.blade.mvc.annotation.Controller;
 import com.blade.mvc.annotation.JSON;
@@ -11,6 +15,7 @@ import com.blade.mvc.annotation.Route;
 import com.blade.mvc.http.HttpMethod;
 import com.blade.mvc.http.Request;
 import com.blade.mvc.view.RestResponse;
+import com.tale.constants.Constant;
 import com.tale.controller.BaseController;
 import com.tale.dto.Types;
 import com.tale.exception.TipException;
@@ -37,13 +42,13 @@ public class CommentController extends BaseController {
 	private SiteService siteService;
 
 	@Route(value = "", method = HttpMethod.GET)
-	public String index(@QueryParam(value = "page", defaultValue = "1") int page,
-			@QueryParam(value = "limit", defaultValue = "15") int limit, Request request) {
-		Users users = this.user();
-		Paginator<Comments> commentsPaginator = commentsService.getComments(
-				new Take(Comments.class).notEq("author_id", users.getUid()).page(page, limit, "coid desc"));
-		request.attribute("comments", commentsPaginator);
-		return "admin/comment_list";
+	public String index(Request request) {
+		List<String> status = CollectionKit.newArrayList();
+		status.add(Constant.unread.getDesc());
+		status.add(Constant.readed.getDesc());
+		status.add(Constant.replyed.getDesc());
+		request.attribute("statusList", status);
+		return "admin/commentList";
 	}
 
 	/**
@@ -132,6 +137,11 @@ public class CommentController extends BaseController {
 		try {
 			commentsService.saveComment(comments);
 			siteService.cleanCache(Types.C_STATISTICS);
+
+			comments = new Comments();
+			comments.setCoid(coid);
+			comments.setStatus(Constant.replyed.getDesc());
+			commentsService.update(comments);
 			return RestResponse.ok();
 		} catch (Exception e) {
 			String msg = "回复失败";
@@ -143,5 +153,16 @@ public class CommentController extends BaseController {
 			return RestResponse.fail(msg);
 		}
 	}
-	
+
+	@Route(value = "/selectCommentList", method = HttpMethod.POST)
+	@JSON
+	public List<Comments> selectCommentList(@QueryParam(value = "page", defaultValue = "1") int page,
+			@QueryParam(value = "limit", defaultValue = "15") int limit, @QueryParam String status) {
+		Users users = this.user();
+		Take take = new Take(Comments.class).notEq("author_id", users.getUid()).page(page, limit, "coid desc");
+		if (StringKit.isNotEmpty(status))
+			take.in("status", Arrays.asList(status.split(",")));
+		Paginator<Comments> commentsPaginator = commentsService.getComments(take);
+		return commentsPaginator.getList();
+	}
 }

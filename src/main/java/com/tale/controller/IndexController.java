@@ -388,6 +388,7 @@ public class IndexController extends BaseController {
 		comments.setContent(text);
 		comments.setMail(mail);
 		comments.setParent(coid);
+		comments.setStatus(Constant.unread.getDesc());
 		try {
 			commentsService.saveComment(comments);
 			response.cookie("tale_remember_author", URLEncoder.encode(author, "UTF-8"), 7 * 24 * 60 * 60);

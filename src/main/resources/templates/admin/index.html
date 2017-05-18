@@ -32,16 +32,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- <div class="col-sm-6 col-lg-3">
-            <div class="mini-stat clearfix bg-success bx-shadow">
-                <span class="mini-stat-icon"><i class="fa fa-cloud-upload" aria-hidden="true"></i></span>
-                <div class="mini-stat-info text-right">
-                   	上传了<span class="counter">${statistics.attachs}</span>个附件
-                </div>
-            </div>
-        </div> -->
-
         <div class="col-sm-6 col-lg-3" style="width: 32%">
             <div class="mini-stat clearfix bg-primary bx-shadow">
                 <span class="mini-stat-icon"><i class="fa fa-link" aria-hidden="true"></i></span>
@@ -85,49 +75,6 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">最新留言</h4>
-                </div>
-                <div class="panel-body">
-                    #if(null == comments || comments.size() == 0)
-                    <div class="alert alert-warning">
-                     	还没有收到留言.
-                    </div>
-                    #else
-                    <ul class="list-group">
-                        #for(comment : comments)
-                        <li class="list-group-item">
-                            #if(null != comment.url && comment.url != '')
-                            <a href="${comment.url}" target="_blank">${comment.author}</a>
-                            #else
-                            ${comment.author}
-                            #end
-                            于${fmtdate(comment.created,'MM月dd日HH:mm')} ：<a href="${site_url('/article/')}${comment.cid}#comments" target="_blank">${article(comment.content)}</a>
-                        </li>
-                        #end
-                    </ul>
-                    #end
-                </div>
-            </div>
-        </div> -->
-        <!-- <div class="col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">系统日志</h4>
-                </div>
-                <div class="panel-body">
-                    <ul class="list-group">
-                        #for(log : logs)
-                        <li class="list-group-item">
-                            <span>${fmtdate(log.created, 'yyyy-MM-dd HH:mm:ss')} => ${log.action}</span>
-                        </li>
-                        #end
-                    </ul>
-                </div>
-            </div>
-        </div> -->
     </div>
 </div>
 #include('./footer.html')

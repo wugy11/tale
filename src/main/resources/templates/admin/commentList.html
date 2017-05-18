@@ -1,0 +1,53 @@
+#include('./header.html',{has_sub:'other', active:'comments', title:'评论管理'})
+<style type="text/css">
+	@media(min-width: 500px) {
+		.col-md {
+			position: relative;
+    		min-height: 1px;
+    		float: left;
+			width: 40%;
+		} 
+	}
+	.select2-container--default .select2-selection--multiple {
+        border: 0px solid #eeeeee;
+        border-radius: 0px;
+	}
+</style>
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="page-title">评论管理</h4>
+    </div>
+    <form id="selectCommentsForm">
+    	<div class="col-md-12">
+	       	<div class="form-group col-md">
+	        	<select id="statusSelect" class="select2 form-control" multiple="multiple" data-placeholder="状态">
+	                #for(status : statusList)
+		                <option value="${status}">${status}</option>
+	                #end
+	            </select>
+	    	</div>
+			<button type="button" class="btn btn-primary waves-effect waves-light" style="float: right;"
+				id="selectCommentBtn"><i class="fa fa-search" aria-hidden="true">查询</i></button>
+    	</div>
+    </form>
+       
+    <div class="col-md-12">
+    	<table id="commentTable" class="table table-striped table-bordered"> </table>
+    </div>
+</div>
+
+#include('./footer.html')
+<link href="//cdn.bootcss.com/multi-select/0.9.12/css/multi-select.css" rel="stylesheet"/>
+<!-- <link href="//cdn.bootcss.com/select2/3.4.8/select2.min.css" rel="stylesheet"/> -->
+<link href="//cdn.bootcss.com/select2/4.0.3/css/select2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+
+<script src="//cdn.bootcss.com/multi-select/0.9.12/js/jquery.multi-select.min.js"></script>
+<!-- <script src="//cdn.bootcss.com/select2/3.4.8/select2.min.js"></script> -->
+<script src="//cdn.bootcss.com/select2/4.0.3/js/select2.min.js"></script>
+
+<script src="/static/admin/js/commentList.js?v=${version}" type="text/javascript"></script>
+</body>
+</html>

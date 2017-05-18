@@ -651,4 +651,8 @@ public final class Theme {
 		}
 		return false;
 	}
+
+	public static int unreadCommentCount() {
+		return siteService.getUnreadCommentCount();
+	}
 }
