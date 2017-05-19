@@ -6,10 +6,9 @@
 			<a href="${permalink()}">${title()}</a>
 		</h1>
 		<div class="post-data">
-			<time datetime="${created('yyyy-MM-dd')}" itemprop="datePublished">发布于
-				${created('yyyy-MM-dd')}</time>
-			/ ${show_tags()} / <a href="#comments">${comments_num('没有评论',
-				'%d 条评论')}</a> / ${hits()}浏览
+			<time datetime="${created('yyyy-MM-dd')}" itemprop="datePublished">
+				发布于${created('yyyy-MM-dd')}</time> /
+			<a href="#comments">${comments_num('没有评论','%d 条评论')}</a> / ${hits()}浏览
 		</div>
 	</div>
 	<div id="post-content" class="post-content" itemprop="articleBody">
