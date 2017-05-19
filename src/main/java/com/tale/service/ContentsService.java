@@ -2,6 +2,7 @@ package com.tale.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.ioc.annotation.Service;
@@ -17,7 +18,6 @@ import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.model.Contents;
 import com.tale.model.Users;
-import com.tale.service.ContentsService;
 import com.tale.utils.TaleUtils;
 import com.vdurmont.emoji.EmojiParser;
 
@@ -187,6 +187,9 @@ public class ContentsService {
 		return activeRecord.list(take);
 	}
 
+	/**
+	 * 文章统计：按月查询，显示对应文章数
+	 */
 	public Map<String, Object> statisticPieData(String month) {
 		if (StringKit.isEmpty(month))
 			month = DateKit.getToday("yyyy-MM");
@@ -207,6 +210,46 @@ public class ContentsService {
 
 		Map<String, Object> resMap = CollectionKit.newHashMap();
 		resMap.put("datas", datas);
+		return resMap;
+	}
+
+	/**
+	 * 文章统计：按月查询，按标签分类，显示对应文章数
+	 */
+	public Map<String, Object> articleStatistic(String month, String tags) {
+		if (StringKit.isEmpty(month))
+			month = DateKit.getToday("yyyy-MM");
+		StringBuilder sql = new StringBuilder();
+		sql.append("select strftime('%Y-%m', datetime(created, 'unixepoch', 'localtime')) month_str,")
+				.append("strftime('%Y-%m-%d', datetime(created, 'unixepoch', 'localtime')) date_str,")
+				.append("tags,count(cid) count from t_contents ").append("where month_str = ? ")
+				.append("group by date_str, tags order by date_str");
+		List<Map<String, Object>> listMap = activeRecord.listMap(sql.toString(), month);
+
+		Set<String> dateSet = CollectionKit.newHashSet();
+		listMap.forEach(map -> {
+			dateSet.add(String.valueOf(map.get("date_str")));
+		});
+
+		Map<String, List<Map<String, Object>>> datas = CollectionKit.newHashMap();
+		List<Object> legendDatas = CollectionKit.newArrayList();
+		dateSet.forEach(date -> {
+			List<Map<String, Object>> dayMapData = CollectionKit.newArrayList();
+			listMap.forEach(map -> {
+				if (date.equals(map.get("date_str"))) {
+					Map<String, Object> dataMap = CollectionKit.newHashMap();
+					dataMap.put("name", map.get("tags"));
+					dataMap.put("value", map.get("count"));
+					dayMapData.add(dataMap);
+				}
+				legendDatas.add(map.get("tags"));
+			});
+			datas.put(date, dayMapData);
+		});
+
+		Map<String, Object> resMap = CollectionKit.newHashMap();
+		resMap.put("legendDatas", legendDatas);
+		resMap.put("pieDatas", datas);
 		return resMap;
 	}
 

@@ -275,7 +275,7 @@ public final class Theme {
 			return img;
 		}
 		int cid = contents.getCid();
-		int size = cid % 20;
+		int size = cid % 18;
 		size = size == 0 ? 1 : size;
 		return "/templates/themes/default/static/img/rand/" + size + ".jpg";
 	}

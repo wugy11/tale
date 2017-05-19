@@ -1,0 +1,31 @@
+#include('./header.html',{title:'文章统计'})
+<style type="text/css">
+.publishTime {
+    border: 1px solid #eee;
+	padding:6px 12px 6px 12px;
+	height : 34px ; 
+	width: 20%;
+}
+</style>
+<div>
+	<div>
+    	<div>
+			<div style="margin-top: 100px;text-align: center;">
+		    	<label for="publishMonth" style="margin-left: 10px">发布日期：</label> 
+				<input type="text" id="publishMonth" class="publishTime" onfocus="WdatePicker({dateFmt:'yyyy-MM'})"
+					readonly="readonly" value="${date}"/>
+				<button type="button" style="margin-left: 100px"
+					id="selectMonthBtn">查询</button>
+		    </div>
+			<div id="pieChart" style="height:800px;margin-top: 80px"></div>
+		</div>
+	</div>
+</div>
+
+#include('./footer.html')
+<script src="//cdn.bootcss.com/echarts/3.5.4/echarts.min.js"></script>
+<script src="${theme_url('/static/js/articleStatistic.js')}" type="text/javascript"></script>
+<script src="/static/admin/plugins/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+	
+</body>
+</html>

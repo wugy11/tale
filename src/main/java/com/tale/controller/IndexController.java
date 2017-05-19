@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import com.blade.ioc.annotation.Inject;
 import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.Paginator;
 import com.blade.kit.CollectionKit;
+import com.blade.kit.DateKit;
 import com.blade.kit.IPKit;
 import com.blade.kit.PatternKit;
 import com.blade.kit.StringKit;
@@ -420,6 +422,24 @@ public class IndexController extends BaseController {
 		Book book = bookService.byId(id);
 		request.attribute("book", book);
 		return render("bookContents");
+	}
+
+	/**
+	 * 首页文章统计页面
+	 */
+	@Route(value = "/articleStatistic", method = HttpMethod.GET)
+	public String articleStatistic(Request request) {
+		request.attribute("date", DateKit.getToday("yyyy-MM"));
+		return render("articleStatistic");
+	}
+
+	/**
+	 * 首页文章统计查询：按月份、标签查询
+	 */
+	@Route(value = "/selectArticleStatistic", method = HttpMethod.POST)
+	@JSON
+	public Map<String, Object> selectArticleStatistic(@QueryParam String month, @QueryParam String tags) {
+		return contentsService.articleStatistic(month, tags);
 	}
 
 }
