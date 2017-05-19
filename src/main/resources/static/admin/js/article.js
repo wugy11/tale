@@ -250,7 +250,6 @@ function autoSave() {
     if (title != '' && content != '') {
         $('#content-editor').val(content);
         $("#articleForm #status").val('draft');
-        $("#articleForm #categories").val($('#multiple-sel').val());
         var params = $("#articleForm").serialize();
         var url = $('#articleForm #cid').val() != '' ? '/admin/article/modify' : '/admin/article/publish';
         tale.post({
@@ -285,7 +284,6 @@ function subArticle(status) {
     clearInterval(refreshIntervalId);
     $('#content-editor').val(content);
     $("#articleForm #status").val(status);
-    $("#articleForm #categories").val($('#multiple-sel').val());
     $("#articleForm #tags").val($('#multiple-selTag').val());
     $("#articleForm #book_id").val($('#multiple-selBook').val());
     var params = $("#articleForm").serialize();

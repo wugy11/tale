@@ -26,11 +26,9 @@
     <form id="selectArticleForm">
     	<div class="col-md-12">
 	       	<div class="form-group col-md">
-	        	<select id="categorySelect" class="select2 form-control" multiple="multiple" data-placeholder="所属分类">
-	                #if(null == categories)
-	                	<option value="默认分类" selected>默认分类</option>
-	                #else
-		                #for(c : categories)
+	        	<select id="tagSelect" class="select2 form-control" multiple="multiple" data-placeholder="所属标签">
+	                #if(null != tags)
+		                #for(c : tags)
 			                <option value="${c.name}">${c.name}</option>
 		                #end
 	                #end

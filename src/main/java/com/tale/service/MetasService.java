@@ -92,10 +92,6 @@ public class MetasService {
 						boolean isUpdate = false;
 						Contents temp = new Contents();
 						temp.setCid(r.getCid());
-						if (type.equals(Types.CATEGORY)) {
-							temp.setCategories(reMeta(name, contents.getCategories()));
-							isUpdate = true;
-						}
 						if (type.equals(Types.TAG)) {
 							temp.setTags(reMeta(name, contents.getTags()));
 							isUpdate = true;

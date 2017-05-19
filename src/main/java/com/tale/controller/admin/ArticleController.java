@@ -54,8 +54,8 @@ public class ArticleController extends BaseController {
 	 */
 	@Route(value = "")
 	public String index(Request request) {
-		List<Metas> categories = metasService.getMetas(Types.CATEGORY);
-		request.attribute("categories", categories);
+		List<Metas> tags = metasService.getMetas(Types.TAG);
+		request.attribute("tags", tags);
 		return "admin/articleList";
 	}
 
@@ -63,11 +63,11 @@ public class ArticleController extends BaseController {
 	@JSON
 	public List<Contents> articleList(@QueryParam(value = "page", defaultValue = "1") int page,
 			@QueryParam(value = "limit", defaultValue = "10") int limit,
-			@QueryParam(value = "categorys") String categorys, @QueryParam(value = "title") String title,
+			@QueryParam(value = "tags") String tags, @QueryParam(value = "title") String title,
 			Request request) {
 		Take take = new Take(Contents.class).eq("type", Types.ARTICLE).page(page, limit, "created desc");
-		if (!StringKit.isEmpty(categorys))
-			take.in("categories", Arrays.asList(categorys.split(",")));
+		if (!StringKit.isEmpty(tags))
+			take.in("tags", Arrays.asList(tags.split(",")));
 		if (!StringKit.isEmpty(title))
 			take.like("title", title);
 		List<Contents> articleList = contentsService.getArticlesList(take);
@@ -79,16 +79,13 @@ public class ArticleController extends BaseController {
 	 */
 	@Route(value = "publish", method = HttpMethod.GET)
 	public String newArticle(Request request) {
-		List<Metas> categories = metasService.getMetas(Types.CATEGORY);
-		request.attribute("categories", categories);
-
 		List<Metas> tags = metasService.getMetas(Types.TAG);
 		request.attribute("tags", tags);
 
 		List<Book> books = bookService.selectBookList();
 		request.attribute("books", books);
 		request.attribute(Types.ATTACH_URL, Commons.site_option(Types.ATTACH_URL, Commons.site_url()));
-		return "admin/article_edit";
+		return "admin/articleEdit";
 	}
 
 	/**
@@ -99,8 +96,6 @@ public class ArticleController extends BaseController {
 		Contents contents = contentsService.getContents(cid);
 		request.attribute("contents", contents);
 
-		List<Metas> categories = metasService.getMetas(Types.CATEGORY);
-		request.attribute("categories", categories);
 		List<Metas> tags = metasService.getMetas(Types.TAG);
 		request.attribute("tags", tags);
 		List<Book> books = bookService.selectBookList();
@@ -139,11 +134,6 @@ public class ArticleController extends BaseController {
 
 		contents.setType(Types.ARTICLE);
 		contents.setAuthor_id(users.getUid());
-		String categories = contents.getCategories();
-		if (StringKit.isBlank(categories)) {
-			categories = "默认分类";
-		}
-		contents.setCategories(categories);
 
 		try {
 			Integer cid = contentsService.publish(contents);

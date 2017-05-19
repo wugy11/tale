@@ -157,21 +157,6 @@ public class IndexController extends BaseController {
 	}
 
 	/**
-	 * 分类页
-	 */
-	@Route(value = { "category/:keyword", "category/:keyword.html" }, method = HttpMethod.GET)
-	public String categories(Request request, @PathParam String keyword,
-			@QueryParam(value = "limit", defaultValue = "12") int limit) {
-		return this.categories(request, keyword, 1, limit);
-	}
-
-	@Route(value = { "category/:keyword/:page", "category/:keyword/:page.html" }, method = HttpMethod.GET)
-	public String categories(Request request, @PathParam String keyword, @PathParam int page,
-			@QueryParam(value = "limit", defaultValue = "12") int limit) {
-		return renderByType(Types.CATEGORY, request, keyword, page, limit);
-	}
-
-	/**
 	 * 标签页
 	 */
 	@Route(value = { "tag/:name", "tag/:name.html" }, method = HttpMethod.GET)
@@ -251,17 +236,6 @@ public class IndexController extends BaseController {
 		request.attribute("archives", archives);
 		request.attribute("is_archive", true);
 		return this.render("archives");
-	}
-
-	/**
-	 * 总分类页
-	 */
-	@Route(value = { "categories", "categories.html" }, method = HttpMethod.GET)
-	public String categories(Request request) throws Exception {
-		List<MetaDto> categories = getMetas(Types.CATEGORY);
-		request.attribute("categories_tags", categories);
-		request.attribute("type", "文章分类");
-		return this.render("categories-tags");
 	}
 
 	/**
@@ -470,4 +444,10 @@ public class IndexController extends BaseController {
 		return render("book_contents");
 	}
 
+	// 首页个人总结
+	@Route(value = "/pensonSummary", method = HttpMethod.GET)
+	public String pensonSummaryView(Request request, @PathParam int page,
+			@QueryParam(value = "limit", defaultValue = "12") int limit) {
+		return render("summary");
+	}
 }

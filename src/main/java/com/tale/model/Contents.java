@@ -46,9 +46,6 @@ public class Contents implements Serializable {
 	// 标签列表
 	private String tags;
 
-	// 分类列表
-	private String categories;
-
 	// 内容状态
 	private String status;
 
@@ -137,14 +134,6 @@ public class Contents implements Serializable {
 
 	public void setTags(String tags) {
 		this.tags = tags;
-	}
-
-	public String getCategories() {
-		return categories;
-	}
-
-	public void setCategories(String categories) {
-		this.categories = categories;
 	}
 
 	public String getStatus() {

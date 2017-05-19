@@ -8,12 +8,12 @@ $(function() {
 	articleTable.init();
 	
 	$("#selectArticleBtn").click(function() {
-		var categorys = $("#categorySelect").val();
-		if (categorys)
-			categorys = categorys.join(',');
+		var tags = $("#tagSelect").val();
+		if (tags)
+			tags = tags.join(',');
 		var data = {
 			title : $("#articleTitle").val(),
-			categorys : categorys
+			tags : tags
 		};
 		tale.post({
 			url : '/admin/article/selectArticleList',
@@ -54,8 +54,6 @@ var ArticleTable = function() {
 				}
 			}, {
 				field : 'hits', title : '浏览量'
-			}, {
-				field : 'categories', title : '所属分类'
 			}, {
 				field : 'tags', title : '所属标签'
 			}, {

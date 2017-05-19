@@ -6,7 +6,6 @@ package com.tale.dto;
 public interface Types {
 
     String TAG = "tag";
-    String CATEGORY = "category";
     String ARTICLE = "post";
     String PUBLISH = "publish";
     String PAGE = "page";

@@ -129,7 +129,6 @@ public class SiteService {
 		int attachs = activeRecord.count(new Take(Attach.class));
 		int links = activeRecord.count(new Take(Metas.class).eq("type", Types.LINK));
 		int tags = activeRecord.count(new Take(Metas.class).eq("type", Types.TAG));
-		int categories = activeRecord.count(new Take(Metas.class).eq("type", Types.CATEGORY));
 
 		statistics.setArticles(articles);
 		statistics.setPages(pages);
@@ -137,7 +136,6 @@ public class SiteService {
 		statistics.setAttachs(attachs);
 		statistics.setLinks(links);
 		statistics.setTags(tags);
-		statistics.setCategories(categories);
 
 		mapCache.set(Types.C_STATISTICS, statistics);
 		return statistics;

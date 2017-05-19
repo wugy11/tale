@@ -148,37 +148,6 @@ public final class Theme {
 	}
 
 	/**
-	 * 显示分类
-	 *
-	 * @return
-	 */
-	public static String show_categories() throws UnsupportedEncodingException {
-		Contents contents = current_article();
-		if (null != contents) {
-			return show_categories(contents.getCategories());
-		}
-		return "";
-	}
-
-	/**
-	 * 显示分类
-	 *
-	 * @param categories
-	 * @return
-	 */
-	public static String show_categories(String categories) throws UnsupportedEncodingException {
-		if (StringKit.isNotBlank(categories)) {
-			String[] arr = categories.split(",");
-			StringBuffer sbuf = new StringBuffer();
-			for (String c : arr) {
-				sbuf.append("<a href=\"/category/" + URLEncoder.encode(c, "UTF-8") + "\">" + c + "</a>");
-			}
-			return sbuf.toString();
-		}
-		return show_categories("默认分类");
-	}
-
-	/**
 	 * 显示标签
 	 *
 	 * @param split
@@ -424,40 +393,6 @@ public final class Theme {
 			return Collections.emptyList();
 		}
 		return siteService.recentComments(limit);
-	}
-
-	/**
-	 * 获取分类列表
-	 *
-	 * @return
-	 */
-	public static List<MetaDto> categories(int limit) {
-		if (null == siteService) {
-			return Collections.emptyList();
-		}
-		return siteService.getMetas(Types.RECENT_META, Types.CATEGORY, limit);
-	}
-
-	/**
-	 * 随机获取limit个分类
-	 * 
-	 * @param limit
-	 * @return
-	 */
-	public static List<MetaDto> rand_categories(int limit) {
-		if (null == siteService) {
-			return Collections.emptyList();
-		}
-		return siteService.getMetas(Types.RANDOM_META, Types.CATEGORY, limit);
-	}
-
-	/**
-	 * 获取所有分类
-	 *
-	 * @return
-	 */
-	public static List<MetaDto> categories() {
-		return categories(TaleConst.MAX_POSTS);
 	}
 
 	/**

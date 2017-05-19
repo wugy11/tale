@@ -89,12 +89,10 @@ public class ContentsService {
 		contents.setModified(time);
 
 		String tags = contents.getTags();
-		String categories = contents.getCategories();
 
 		Integer cid = activeRecord.insert(contents);
 
 		metasService.saveMetas(cid, tags, Types.TAG);
-		metasService.saveMetas(cid, categories, Types.CATEGORY);
 
 		return cid;
 	}
@@ -132,7 +130,6 @@ public class ContentsService {
 		}
 
 		metasService.saveMetas(cid, contents.getTags(), Types.TAG);
-		metasService.saveMetas(cid, contents.getCategories(), Types.CATEGORY);
 	}
 
 	public void update(Contents contents) {
