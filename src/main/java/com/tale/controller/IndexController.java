@@ -171,12 +171,8 @@ public class IndexController extends BaseController {
 	@Route(value = { "tag/:name/:page", "tag/:name/:page.html" }, method = HttpMethod.GET)
 	public String tags(Request request, @PathParam String name, @PathParam int page,
 			@QueryParam(value = "limit", defaultValue = "12") int limit) {
-		return renderByType(Types.TAG, request, name, page, limit);
-	}
-
-	private String renderByType(String type, Request request, String name, int page, int limit) {
 		page = page < 0 || page > TaleConst.MAX_PAGE ? 1 : page;
-		MetaDto metaDto = metasService.getMeta(type, name);
+		MetaDto metaDto = metasService.getMeta(Types.TAG, name);
 		if (null == metaDto) {
 			return this.render_404();
 		}
@@ -184,12 +180,11 @@ public class IndexController extends BaseController {
 		Paginator<Contents> contentsPaginator = contentsService.getArticles(metaDto.getMid(), page, limit);
 		request.attribute("articles", contentsPaginator);
 		request.attribute("meta", metaDto);
-		request.attribute("type", Types.TAG.equalsIgnoreCase(type) ? "标签" : "分类");
+		request.attribute("type", "标签");
 		request.attribute("keyword", name);
 		request.attribute("name", name + "(" + contentsPaginator.getList().size() + ")");
-		// request.attribute("is_tag", true);
-		request.attribute("page_prefix", "/" + type + "/" + name);
-		return this.render("page-category");
+		request.attribute("page_prefix", "/" + Types.TAG + "/" + name);
+		return this.render("pageTag");
 	}
 
 	/**
@@ -224,7 +219,7 @@ public class IndexController extends BaseController {
 		request.attribute("type", "搜索");
 		request.attribute("keyword", keyword);
 		request.attribute("page_prefix", "/search/" + keyword);
-		return this.render("page-category");
+		return this.render("pageTag");
 	}
 
 	/**
@@ -244,9 +239,9 @@ public class IndexController extends BaseController {
 	@Route(value = { "tags", "tags.html" }, method = HttpMethod.GET)
 	public String tags(Request request) throws Exception {
 		List<MetaDto> tags = getMetas(Types.TAG);
-		request.attribute("categories_tags", tags);
+		request.attribute("tags", tags);
 		request.attribute("type", "标签");
-		return this.render("categories-tags");
+		return this.render("tags");
 	}
 
 	private List<MetaDto> getMetas(String type) throws Exception {
@@ -273,23 +268,6 @@ public class IndexController extends BaseController {
 		request.attribute("links", links);
 		return this.render("links");
 	}
-
-	/**
-	 * feed页
-	 */
-	// @Route(value = { "feed", "feed.xml" }, method = HttpMethod.GET)
-	// public void feed(Response response) {
-	// Paginator<Contents> contentsPaginator = contentsService
-	// .getArticles(new Take(Contents.class).eq("type",
-	// Types.ARTICLE).eq("status", Types.PUBLISH)
-	// .eq("allow_feed", true).page(1, TaleConst.MAX_POSTS, "created desc"));
-	// try {
-	// String xml = TaleUtils.getRssXml(contentsPaginator.getList());
-	// response.xml(xml);
-	// } catch (Exception e) {
-	// LOGGER.error("生成RSS失败", e);
-	// }
-	// }
 
 	/**
 	 * 注销
@@ -441,7 +419,7 @@ public class IndexController extends BaseController {
 
 		Book book = bookService.byId(id);
 		request.attribute("book", book);
-		return render("book_contents");
+		return render("bookContents");
 	}
 
 	// 首页个人总结
