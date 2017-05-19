@@ -5,7 +5,8 @@ import java.util.List;
 
 public enum Constant {
 
-	resume("简历"), book("书单"), thinking("所想"), travel("游记"), network("网摘"),
+	// 首页特殊链接
+	resume("简历"), book("书单"), thinking("思绪"), travel("游记"), network("网摘"), summary("总结"),
 
 	// 书单状态
 	reading("在读"), readed("已读"), readable("想读"),

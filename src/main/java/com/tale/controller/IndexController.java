@@ -422,10 +422,4 @@ public class IndexController extends BaseController {
 		return render("bookContents");
 	}
 
-	// 首页个人总结
-	@Route(value = "/pensonSummary", method = HttpMethod.GET)
-	public String pensonSummaryView(Request request, @PathParam int page,
-			@QueryParam(value = "limit", defaultValue = "12") int limit) {
-		return render("summary");
-	}
 }

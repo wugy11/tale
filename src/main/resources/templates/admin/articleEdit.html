@@ -74,6 +74,14 @@
         display: block;
         margin-top: 1.4rem;
     }
+    @media(min-width: 500px) {
+		.col-md {
+			position: relative;
+    		min-height: 1px;
+    		float: left;
+			width: 40%;
+		} 
+	}
 </style>
 <div class="row">
     <div class="col-sm-12">
@@ -101,10 +109,16 @@
             <input type="hidden" name="fmt_type" id="fmt_type" value="${contents.fmt_type ?! 'markdown'}"/>
 
             <div class="form-group col-md-6">
-                <input type="text" class="form-control" placeholder="请输入文章标题（必填）" name="title" required
-                       aria-required="true" value="${contents.title ?! ''}"/>
+                <select id="multiple-selTag" class="select2 multiple-selTag" multiple="multiple" data-placeholder="请填写文章标签">
+                   #if(null != tags)
+	                   #for(c : tags)
+	                   <option value="${c.name}" #if(null != contents && exist_cat(c, contents.tags)) selected #end>
+	                       ${c.name}
+	                   </option>
+	                   #end
+                   #end
+               </select>
             </div>
-
             <div class="form-group col-md-6">
                 <select id="multiple-selBook" class="select2" multiple="multiple" data-placeholder="请填写所属书单">
                    #if(null != books)
@@ -116,19 +130,10 @@
                    #end
                </select>
             </div>
-
             <div class="form-group col-md-6">
-                <select id="multiple-selTag" class="select2 multiple-selTag" multiple="multiple" data-placeholder="请填写文章标签">
-                   #if(null != tags)
-	                   #for(c : tags)
-	                   <option value="${c.name}" #if(null != contents && exist_cat(c, contents.tags)) selected #end>
-	                       ${c.name}
-	                   </option>
-	                   #end
-                   #end
-               </select>
+                <input type="text" class="form-control" placeholder="请输入文章标题（必填）" name="title" required
+                       aria-required="true" value="${contents.title ?! ''}"/>
             </div>
-
             <div class="clearfix"></div>
 
             <div class="form-group col-xs-12">

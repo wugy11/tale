@@ -36,48 +36,46 @@
     当前网页 <strong>不支持</strong> 你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank">升级你的浏览器</a>。
 </div>
 <![endif]-->
-	<header id="header" class="header bg-white">
-		<div class="navbar-container">
-			<!-- ${site_url()} -->
-			<a href="${site_url()}" class="navbar-logo" target="_blank"> <img
-				src="${theme_option('logo_url') ?! theme_url('/static/img/long.png')}"
+<header id="header" class="header bg-white">
+	<div class="navbar-container">
+		<!-- ${site_url()} -->
+		<a href="${site_url()}" class="navbar-logo" target="_blank"> 
+			<img src="${theme_option('logo_url') ?! theme_url('/static/img/long.png')}"
 				alt="${site_title()}" />
-			</a>
-			<div class="navbar-menu">
-				<a href="/pensonSummary" target="_blank">个人总结</a>
-				<a href="/viewResume" target="_blank">简历</a>
-				<a href="/books" target="_blank">书单</a>
-				<a href="/category/thinking" target="_blank">所想</a>
-				<a href="/category/network" target="_blank">网摘</a>
-			</div>
-			<div class="navbar-menu">
-				<a href="${site_url('/archives')}">归档</a> <a
-					href="${site_url('/tags')}">标签</a><a href="${site_url('/links')}">友链</a>
-				<a href="${site_url('/about')}">关于</a>
-			</div>
-			<div class="navbar-search" onclick="">
-				<span class="icon-search"></span>
-				<form role="search" onsubmit="return false;">
-					<span class="search-box"> <input type="text" id="search-inp"
-						class="input" placeholder="搜索..." maxlength="30"
-						autocomplete="off">
-					</span>
-				</form>
-			</div>
-			<div class="navbar-menu">
-				#if(null == login_user)
-					<a href="${site_url('/admin/login')}" target="_blank">登录</a>
-				#else
-					<a href="${site_url('/logout')}">注销[${login_user.username}]</a>
-				#end
-			</div>
-			<div class="navbar-mobile-menu" onclick="">
-				<span class="icon-menu cross"><span class="middle"></span></span>
-				<ul>
-					<li><a href="${site_url('/archives')}">归档</a></li>
-					<li><a href="${site_url('/links')}">友链</a></li>
-					<li><a href="${site_url('/about')}">关于</a></li>
-				</ul>
-			</div>
+		</a>
+		<div class="navbar-menu">
+			<a href="/viewResume" target="_blank">简历</a>
+			<a href="/tag/network" target="_blank">网摘</a>
+			<a href="/books" target="_blank">书单</a>
 		</div>
-	</header>
+		<div class="navbar-menu">
+			<a href="${site_url('/archives')}">归档</a> 
+			<a href="${site_url('/tags')}">标签</a>
+			<a href="${site_url('/links')}">友链</a>
+			<a href="${site_url('/about')}">关于</a>
+		</div>
+		<div class="navbar-search" onclick="">
+			<span class="icon-search"></span>
+			<form role="search" onsubmit="return false;">
+				<span class="search-box"> <input type="text" id="search-inp"
+					class="input" placeholder="搜索..." maxlength="30" autocomplete="off">
+				</span>
+			</form>
+		</div>
+		<div class="navbar-menu">
+			#if(null == login_user)
+				<a href="${site_url('/admin/login')}" target="_blank">登录</a>
+			#else
+				<a href="${site_url('/logout')}">注销[${login_user.username}]</a>
+			#end
+		</div>
+		<div class="navbar-mobile-menu" onclick="">
+			<span class="icon-menu cross"><span class="middle"></span></span>
+			<ul>
+				<li><a href="${site_url('/archives')}">归档</a></li>
+				<li><a href="${site_url('/links')}">友链</a></li>
+				<li><a href="${site_url('/about')}">关于</a></li>
+			</ul>
+		</div>
+	</div>
+</header>

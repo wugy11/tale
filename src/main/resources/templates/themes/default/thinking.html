@@ -1,0 +1,24 @@
+#include('./header.html', {title: '思绪' })
+<link rel="stylesheet" href="${theme_url('/static/css/style.min.css')}" >
+<link rel="stylesheet" href="${theme_url('/static/css/thinking.css')}" />
+<script type="text/javascript" src="${theme_url('/static/js/thinking.js')}"></script>
+
+<section id="cd-timeline" class="cd-container">
+	<div class="cd-timeline-block">
+		<div class="cd-timeline-img" id="add">
+		</div>
+	</div>
+	#for(article : articles.list)
+	<div class="cd-timeline-block">
+		<div class="cd-timeline-img">
+		</div>
+
+		<div class="cd-timeline-content">
+			<h4>${article.title}</h4>
+			<p>${intro(75)}...</p>
+			<span class="cd-date"><time datetime="${created('yyyy-MM-dd')}" itemprop="datePublished"> ${created('yyyy-MM-dd')}</time></span>
+		</div>
+	</div>
+	#end
+</section>
+#include('./footer.html')
