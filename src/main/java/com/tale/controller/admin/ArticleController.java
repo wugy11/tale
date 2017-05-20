@@ -30,7 +30,7 @@ import com.tale.service.BookService;
 import com.tale.service.ContentsService;
 import com.tale.service.MetasService;
 import com.tale.service.SiteService;
-import com.tale.utils.QiniuUtils;
+import com.tale.utils.TaleUtils;
 
 /**
  * 文章管理控制器 Created by biezhi on 2017/2/21.
@@ -62,9 +62,8 @@ public class ArticleController extends BaseController {
 	@Route(value = "/selectArticleList", method = HttpMethod.POST)
 	@JSON
 	public List<Contents> articleList(@QueryParam(value = "page", defaultValue = "1") int page,
-			@QueryParam(value = "limit", defaultValue = "10") int limit,
-			@QueryParam(value = "tags") String tags, @QueryParam(value = "title") String title,
-			Request request) {
+			@QueryParam(value = "limit", defaultValue = "10") int limit, @QueryParam(value = "tags") String tags,
+			@QueryParam(value = "title") String title, Request request) {
 		Take take = new Take(Contents.class).eq("type", Types.ARTICLE).page(page, limit, "created desc");
 		if (!StringKit.isEmpty(tags))
 			take.in("tags", Arrays.asList(tags.split(",")));
@@ -117,7 +116,7 @@ public class ArticleController extends BaseController {
 			FileItem f = entry.getValue();
 			String fname = f.fileName();
 			if (f.file().length() / 1024 <= TaleConst.MAX_FILE_SIZE) {
-				return QiniuUtils.uploadFile(f.file(), fname);
+				return TaleUtils.uploadFile(f.file(), fname);
 			}
 		}
 		return "";

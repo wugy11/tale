@@ -31,7 +31,6 @@ import com.tale.ext.JetTag;
 import com.tale.ext.Theme;
 import com.tale.service.OptionsService;
 import com.tale.service.SiteService;
-import com.tale.utils.RewriteUtils;
 
 import jetbrick.template.JetGlobalContext;
 import jetbrick.template.resolver.GlobalResolver;
@@ -94,10 +93,10 @@ public class WebContext implements BeanProcessor, WebContextListener {
 			TaleConst.INSTALL = Boolean.TRUE;
 		}
 
-		String db_rewrite = TaleConst.OPTIONS.get("rewrite_url", "");
-		if (StringKit.isNotEmpty(db_rewrite)) {
-			RewriteUtils.rewrite(db_rewrite);
-		}
+		// String db_rewrite = TaleConst.OPTIONS.get("rewrite_url", "");
+		// if (StringKit.isNotEmpty(db_rewrite)) {
+		// RewriteUtils.rewrite(db_rewrite);
+		// }
 
 		Theme.THEME = "themes/" + Commons.site_option("site_theme");
 

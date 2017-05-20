@@ -17,7 +17,7 @@ import com.blade.kit.DateKit;
 import com.blade.kit.StringKit;
 import com.tale.constants.Constant;
 import com.tale.model.Finance;
-import com.tale.utils.ChartUtils;
+import com.tale.utils.TaleUtils;
 
 @Service
 public class FinanceService {
@@ -89,7 +89,7 @@ public class FinanceService {
 		});
 		resMap.put("legendDatas", financeAllTypes);
 		resMap.put("pieDatas", datas);
-		resMap.put("scatterData", ChartUtils.getPieScatterData(month));
+		resMap.put("scatterData", TaleUtils.getPieScatterData(month));
 		return resMap;
 	}
 
