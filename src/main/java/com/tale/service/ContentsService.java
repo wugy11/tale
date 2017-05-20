@@ -250,6 +250,7 @@ public class ContentsService {
 		Map<String, Object> resMap = CollectionKit.newHashMap();
 		resMap.put("legendDatas", legendDatas);
 		resMap.put("pieDatas", datas);
+		resMap.put("scatterData", TaleUtils.getPieScatterData(month));
 		return resMap;
 	}
 

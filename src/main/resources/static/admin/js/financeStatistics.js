@@ -19,24 +19,14 @@ var FinanceChart = function() {
 	
 	this.queryPieChart = function($pieChart) {
 		
-		var cellSize = [100, 100];
+		var cellSize = [120, 120];
 		var month = $("#expenseMonth").val();
-		var expenseMonth = month + "-01";
 		
-		var scatterData = [];
-		var date = +echarts.number.parseDate(expenseMonth);
-	    var end = +echarts.number.parseDate(getNextMonth(expenseMonth));
-	    var dayTime = 3600 * 24 * 1000;
-	    for (var time = date; time < end; time += dayTime) {
-	    	scatterData.push([
-	            echarts.format.formatTime('yyyy-MM-dd', time),
-	            Math.floor(Math.random() * 10000)
-	        ]);
-	    }
 	    $.post({
 	    	url: '/admin/finance/statisticPieData',
 	    	data: {"month": month},
 	    }).done(function (data) {
+	    	var scatterData = data.scatterData;
 	    	var pieChartOption = {
     			title : {
 		            text: '资金变动饼图',
@@ -149,7 +139,7 @@ var FinanceChart = function() {
 	                    position: 'inside'
 	                }
 	            },
-	            radius: 40,
+	            radius: 50,
 	            data: pieDatas[item[0]]
 	        };
 	    });

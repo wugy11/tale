@@ -1,5 +1,7 @@
 package com.tale.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +17,7 @@ import com.blade.kit.DateKit;
 import com.blade.kit.StringKit;
 import com.tale.constants.Constant;
 import com.tale.model.Finance;
+import com.tale.utils.TaleUtils;
 
 @Service
 public class FinanceService {
@@ -52,6 +55,7 @@ public class FinanceService {
 	public Map<String, Object> statisticPieData(String month) {
 		if (StringKit.isEmpty(month))
 			month = DateKit.getToday("yyyy-MM");
+
 		StringBuilder sql = new StringBuilder();
 		sql.append("select strftime('%Y-%m', datetime(expense_time, 'unixepoch', 'localtime')) month_str,")
 				.append("strftime('%Y-%m-%d', datetime(expense_time, 'unixepoch', 'localtime')) date_str, type, sum(money) sum_money ")
@@ -70,7 +74,8 @@ public class FinanceService {
 				if (date.equals(map.get("date_str"))) {
 					Map<String, Object> dataMap = CollectionKit.newHashMap();
 					dataMap.put("name", map.get("type"));
-					dataMap.put("value", map.get("sum_money"));
+					dataMap.put("value", new BigDecimal(map.get("sum_money").toString())
+							.setScale(2, RoundingMode.HALF_UP).toString());
 					dayMapData.add(dataMap);
 				}
 			});
@@ -84,6 +89,7 @@ public class FinanceService {
 		});
 		resMap.put("legendDatas", financeAllTypes);
 		resMap.put("pieDatas", datas);
+		resMap.put("scatterData", TaleUtils.getPieScatterData(month));
 		return resMap;
 	}
 
@@ -115,7 +121,8 @@ public class FinanceService {
 			List<Object> lineData = CollectionKit.newArrayList();
 			listMap.forEach(map -> {
 				if (legend.equals(map.get("category"))) {
-					lineData.add(map.get("sum_money"));
+					lineData.add(new BigDecimal(map.get("sum_money").toString()).setScale(2, RoundingMode.HALF_UP)
+							.toString());
 				}
 			});
 			dataMap.put("data", lineData);

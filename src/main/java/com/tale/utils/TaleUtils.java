@@ -4,13 +4,10 @@ import static com.blade.Blade.$;
 
 import java.awt.Image;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.text.Normalizer;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +20,8 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
 import com.blade.context.WebContextHolder;
+import com.blade.kit.Assert;
+import com.blade.kit.CollectionKit;
 import com.blade.kit.DateKit;
 import com.blade.kit.FileKit;
 import com.blade.kit.StringKit;
@@ -31,6 +30,9 @@ import com.blade.kit.base.Config;
 import com.blade.mvc.http.Request;
 import com.blade.mvc.http.Response;
 import com.blade.mvc.http.wrapper.Session;
+import com.qiniu.common.QiniuException;
+import com.qiniu.storage.UploadManager;
+import com.qiniu.util.Auth;
 import com.tale.constants.TaleConst;
 import com.tale.ext.Commons;
 import com.tale.init.TaleLoader;
@@ -41,14 +43,72 @@ import com.tale.model.Users;
  * <p>
  * Created by biezhi on 2017/2/21.
  */
-public class TaleUtils {
+abstract public class TaleUtils {
+
+	public static final String accessKey;
+	public static final String secretKey;
+	public static final String domain;
+	public static final String bucket;
+
+	static {
+		Config config = TaleUtils.getCfg();
+		accessKey = config.get("qiniu.accessKey");
+		secretKey = config.get("qiniu.secretKey");
+		domain = config.get("qiniu.domain");
+		bucket = config.get("qiniu.bucket");
+	}
+
+	/**
+	 * 上传图片到七牛云
+	 * 
+	 * @return 返回图片链接
+	 */
+	public static String uploadFile(File file, String key) {
+		Auth auth = Auth.create(accessKey, secretKey);
+		UploadManager uploadManager = new UploadManager();
+		com.qiniu.http.Response res = null;
+		try {
+			res = uploadManager.put(file, key, auth.uploadToken(bucket));
+			if (res.isOK())
+				return String.format("http://%s/%s", domain, key);
+		} catch (QiniuException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	/**
+	 * 获取统计饼图日期数据
+	 */
+	public static List<List<Object>> getPieScatterData(String month) {
+		List<List<Object>> scatterData = CollectionKit.createLinkedList();
+
+		Assert.notBlank(month);
+
+		Calendar calendar = Calendar.getInstance();
+		Date dateStart = DateKit.dateFormat(month + "-01", "yyyy-MM-dd");
+		calendar.setTime(dateStart);
+		int m = calendar.get(Calendar.MONTH);
+		calendar.set(Calendar.MONTH, m + 1);
+		Date dateEnd = calendar.getTime();
+
+		int start = DateKit.getUnixTimeByDate(dateStart);
+		int end = DateKit.getUnixTimeByDate(dateEnd);
+
+		int dayTime = 3600 * 24;
+		for (int time = start; time < end; time += dayTime) {
+			List<Object> dateList = CollectionKit.newArrayList(1);
+			dateList.add(DateKit.dateFormat(DateKit.getDateByUnixTime(time), "yyyy-MM-dd"));
+			dateList.add(Math.floor(Math.random() * 10000));
+			scatterData.add(dateList);
+		}
+		return scatterData;
+	}
 
 	/**
 	 * 一个月
 	 */
 	private static final int one_month = 30 * 24 * 60 * 60;
-
-	private static Random r = new Random();
 
 	/**
 	 * 匹配邮箱正则
@@ -60,9 +120,6 @@ public class TaleUtils {
 
 	/**
 	 * 设置记住密码cookie
-	 *
-	 * @param response
-	 * @param uid
 	 */
 	public static void setCookie(Response response, Integer uid) {
 		try {
@@ -76,8 +133,6 @@ public class TaleUtils {
 
 	/**
 	 * 返回当前登录用户
-	 *
-	 * @return
 	 */
 	public static Users getLoginUser() {
 		Session session = WebContextHolder.session();
@@ -90,9 +145,6 @@ public class TaleUtils {
 
 	/**
 	 * 退出登录状态
-	 *
-	 * @param session
-	 * @param response
 	 */
 	public static void logout(Session session, Response response) {
 		session.removeAttribute(TaleConst.LOGIN_SESSION_KEY);
@@ -102,9 +154,6 @@ public class TaleUtils {
 
 	/**
 	 * 获取cookie中的用户id
-	 *
-	 * @param request
-	 * @return
 	 */
 	public static Integer getCookieUid(Request request) {
 		if (null != request) {
@@ -121,28 +170,7 @@ public class TaleUtils {
 	}
 
 	/**
-	 * 重新拼接字符串
-	 *
-	 * @param arr
-	 * @return
-	 */
-	public static String rejoin(String[] arr) {
-		if (null == arr) {
-			return "";
-		}
-		if (arr.length == 1) {
-			return "'" + arr[0] + "'";
-		}
-		String a = StringKit.join(arr, "','");
-		a = a.substring(2) + "'";
-		return a;
-	}
-
-	/**
 	 * markdown转换为html
-	 *
-	 * @param markdown
-	 * @return
 	 */
 	public static String mdToHtml(String markdown) {
 		if (StringKit.isBlank(markdown)) {
@@ -171,9 +199,6 @@ public class TaleUtils {
 
 	/**
 	 * 提取html中的文字
-	 *
-	 * @param html
-	 * @return
 	 */
 	public static String htmlToText(String html) {
 		if (StringKit.isNotBlank(html)) {
@@ -184,9 +209,6 @@ public class TaleUtils {
 
 	/**
 	 * 判断文件是否是图片类型
-	 *
-	 * @param imageFile
-	 * @return
 	 */
 	public static boolean isImage(File imageFile) {
 		if (!imageFile.exists()) {
@@ -205,9 +227,6 @@ public class TaleUtils {
 
 	/**
 	 * 判断是否是邮箱
-	 *
-	 * @param emailStr
-	 * @return
 	 */
 	public static boolean isEmail(String emailStr) {
 		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
@@ -216,9 +235,6 @@ public class TaleUtils {
 
 	/**
 	 * 判断是否是合法路径
-	 *
-	 * @param slug
-	 * @return
 	 */
 	public static boolean isPath(String slug) {
 		if (StringKit.isNotBlank(slug)) {
@@ -232,40 +248,7 @@ public class TaleUtils {
 	}
 
 	/**
-	 * 获取RSS输出
-	 *
-	 * @param articles
-	 * @return
-	 * @throws FeedException
-	 */
-	// public static String getRssXml(java.util.List<Contents> articles) throws
-	// FeedException {
-	// Channel channel = new Channel("rss_2.0");
-	// channel.setTitle(TaleConst.OPTIONS.get("site_title"));
-	// channel.setLink(Commons.site_url());
-	// channel.setDescription(TaleConst.OPTIONS.get("site_description"));
-	// channel.setLanguage("zh-CN");
-	// java.util.List<Item> items = new ArrayList<>();
-	// articles.forEach(post -> {
-	// Item item = new Item();
-	// item.setTitle(post.getTitle());
-	// Content content = new Content();
-	// content.setValue(Theme.article(post.getContent()));
-	// item.setContent(content);
-	// item.setLink(Theme.permalink(post.getCid(), post.getSlug()));
-	// item.setPubDate(DateKit.getDateByUnixTime(post.getCreated()));
-	// items.add(item);
-	// });
-	// channel.setItems(items);
-	// WireFeedOutput out = new WireFeedOutput();
-	// return out.outputString(channel);
-	// }
-
-	/**
 	 * 替换HTML脚本
-	 *
-	 * @param value
-	 * @return
 	 */
 	public static String cleanXSS(String value) {
 		// You'll need to remove the spaces from the html entities below
@@ -276,115 +259,6 @@ public class TaleUtils {
 		value = value.replaceAll("[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']", "\"\"");
 		value = value.replaceAll("script", "");
 		return value;
-	}
-
-	/**
-	 * 过滤XSS注入
-	 *
-	 * @param value
-	 * @return
-	 */
-	public static String filterXSS(String value) {
-		String cleanValue = null;
-		if (value != null) {
-			cleanValue = Normalizer.normalize(value, Normalizer.Form.NFD);
-			// Avoid null characters
-			cleanValue = cleanValue.replaceAll("\0", "");
-
-			// Avoid anything between script tags
-			Pattern scriptPattern = Pattern.compile("<script>(.*?)</script>", Pattern.CASE_INSENSITIVE);
-			cleanValue = scriptPattern.matcher(cleanValue).replaceAll("");
-
-			// Avoid anything in a src='...' type of expression
-			scriptPattern = Pattern.compile("src[\r\n]*=[\r\n]*\\\'(.*?)\\\'",
-					Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-			cleanValue = scriptPattern.matcher(cleanValue).replaceAll("");
-
-			scriptPattern = Pattern.compile("src[\r\n]*=[\r\n]*\\\"(.*?)\\\"",
-					Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-			cleanValue = scriptPattern.matcher(cleanValue).replaceAll("");
-
-			// Remove any lonesome </script> tag
-			scriptPattern = Pattern.compile("</script>", Pattern.CASE_INSENSITIVE);
-			cleanValue = scriptPattern.matcher(cleanValue).replaceAll("");
-
-			// Remove any lonesome <script ...> tag
-			scriptPattern = Pattern.compile("<script(.*?)>",
-					Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-			cleanValue = scriptPattern.matcher(cleanValue).replaceAll("");
-
-			// Avoid eval(...) expressions
-			scriptPattern = Pattern.compile("eval\\((.*?)\\)",
-					Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-			cleanValue = scriptPattern.matcher(cleanValue).replaceAll("");
-
-			// Avoid expression(...) expressions
-			scriptPattern = Pattern.compile("expression\\((.*?)\\)",
-					Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-			cleanValue = scriptPattern.matcher(cleanValue).replaceAll("");
-
-			// Avoid javascript:... expressions
-			scriptPattern = Pattern.compile("javascript:", Pattern.CASE_INSENSITIVE);
-			cleanValue = scriptPattern.matcher(cleanValue).replaceAll("");
-
-			// Avoid vbscript:... expressions
-			scriptPattern = Pattern.compile("vbscript:", Pattern.CASE_INSENSITIVE);
-			cleanValue = scriptPattern.matcher(cleanValue).replaceAll("");
-
-			// Avoid onload= expressions
-			scriptPattern = Pattern.compile("onload(.*?)=",
-					Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-			cleanValue = scriptPattern.matcher(cleanValue).replaceAll("");
-		}
-		return cleanValue;
-	}
-
-	public static void download(Response response, String filePath) throws Exception {
-
-		response.contentType("application/octet-stream");
-		response.header("Content-Transfer-Encoding", "binary");
-
-		File file = new File(filePath);
-		String fname = file.getName();
-		response.header("Content-Disposition", "attachment; filename=" + fname);
-		OutputStream out = response.outputStream();
-		FileInputStream in = new FileInputStream(file);
-		byte[] buffer = new byte[1024];
-		int len;
-		while ((len = in.read(buffer)) > 0) {
-			out.write(buffer, 0, len);
-		}
-		in.close();
-		out.flush();
-		out.close();
-	}
-
-	/**
-	 * 获取某个范围内的随机数
-	 *
-	 * @param max
-	 *            最大值
-	 * @param len
-	 *            取多少个
-	 * @return
-	 */
-	public static int[] random(int max, int len) {
-		int values[] = new int[max];
-		int temp1, temp2, temp3;
-		for (int i = 0; i < values.length; i++) {
-			values[i] = i + 1;
-		}
-		// 随机交换values.length次
-		for (int i = 0; i < values.length; i++) {
-			temp1 = Math.abs(r.nextInt()) % (values.length - 1); // 随机产生一个位置
-			temp2 = Math.abs(r.nextInt()) % (values.length - 1); // 随机产生另一个位置
-			if (temp1 != temp2) {
-				temp3 = values[temp1];
-				values[temp1] = values[temp2];
-				values[temp2] = temp3;
-			}
-		}
-		return Arrays.copyOf(values, len);
 	}
 
 	/**

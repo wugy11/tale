@@ -9,7 +9,7 @@
 <link href="//cdn.bootcss.com/select2/4.0.3/css/select2.min.css" rel="stylesheet">
 <!-- <link href="//unpkg.com/mditor@1.0.8/dist/css/mditor.min.css" rel="stylesheet"/> -->
 
-<link href="//cdn.bootcss.com/summernote/0.8.2/summernote.css" rel="stylesheet">
+<!-- <link href="//cdn.bootcss.com/summernote/0.8.2/summernote.css" rel="stylesheet"> -->
 <link href="//cdn.bootcss.com/dropzone/4.3.0/min/dropzone.min.css" rel="stylesheet">
 
 <style type="text/css">
@@ -136,7 +136,7 @@
             </div>
             <div class="clearfix"></div>
 
-            <div class="form-group col-xs-12">
+            <!-- <div class="form-group col-xs-12">
                 <div class="pull-right">
                     <a id="switch-btn" href="javascript:void(0)" class="btn btn-purple btn-sm waves-effect waves-light switch-editor">
                     #if(null != contents && contents.fmt_type == 'html') 
@@ -146,7 +146,7 @@
                     #end
                     </a>
                 </div>
-            </div>
+            </div> -->
 
             <div id="md-container" class="form-group col-md-12">
                 <textarea id="md-editor" class="#if(null != contents && contents.fmt_type == 'html') hide #end">${contents.content ?! ''}</textarea>
@@ -207,10 +207,10 @@
 <script src="/static/admin/plugins/jquery-multi-select/jquery.quicksearch.js"></script>
 
 <script src="/static/admin/plugins/mditor/mditor.min.js"></script>
-<!-- <script src="/static/admin/js/mditor.js"></script> -->
 <script src="//cdn.bootcss.com/wysihtml5/0.3.0/wysihtml5.min.js"></script>
-<script src="//cdn.bootcss.com/summernote/0.8.2/summernote.min.js"></script>
-<script src="//cdn.bootcss.com/summernote/0.8.2/lang/summernote-zh-CN.min.js"></script>
+<!-- <script src="/static/admin/js/mditor.js"></script> -->
+<!-- <script src="//cdn.bootcss.com/summernote/0.8.2/summernote.min.js"></script> -->
+<!-- <script src="//cdn.bootcss.com/summernote/0.8.2/lang/summernote-zh-CN.min.js"></script> -->
 
 <script src="//cdn.bootcss.com/multi-select/0.9.12/js/jquery.multi-select.min.js"></script>
 <script src="//cdn.bootcss.com/select2/4.0.3/js/select2.min.js"></script>
