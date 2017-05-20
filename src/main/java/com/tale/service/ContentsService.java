@@ -18,6 +18,7 @@ import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.model.Contents;
 import com.tale.model.Users;
+import com.tale.utils.ChartUtils;
 import com.tale.utils.TaleUtils;
 import com.vdurmont.emoji.EmojiParser;
 
@@ -250,6 +251,7 @@ public class ContentsService {
 		Map<String, Object> resMap = CollectionKit.newHashMap();
 		resMap.put("legendDatas", legendDatas);
 		resMap.put("pieDatas", datas);
+		resMap.put("scatterData", ChartUtils.getPieScatterData(month));
 		return resMap;
 	}
 

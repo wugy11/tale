@@ -5,7 +5,7 @@ $(function() {
 	var articleChart = new ArticleChart();
 	articleChart.queryPieChart($pieChart);
 	
-	$("#selectMonthBtn").click(function() {
+	$("#selectArticleMonthBtn").click(function() {
 		articleChart.queryPieChart($pieChart);
 	});
 	
@@ -17,25 +17,15 @@ var ArticleChart = function() {
 		
 		var cellSize = [120, 120];
 		var month = $("#publishMonth").val();
-		var publishMonth = month + "-01";
 		
-		var scatterData = [];
-		var date = +echarts.number.parseDate(publishMonth);
-	    var end = +echarts.number.parseDate(getNextMonth(publishMonth));
-	    var dayTime = 3600 * 24 * 1000;
-	    for (var time = date; time < end; time += dayTime) {
-	    	scatterData.push([
-	            echarts.format.formatTime('yyyy-MM-dd', time),
-	            Math.floor(Math.random() * 10000)
-	        ]);
-	    }
 	    $.post({
 	    	url: '/selectArticleStatistic',
 	    	data: {"month": month},
 	    }).done(function (data) {
+	    	var scatterData = data.scatterData;
 	    	var pieChartOption = {
     			title : {
-		            text: '文章饼图',
+		            text: '文章统计饼图',
 		            subtext: month,
 		            x:'center'
 		        },
@@ -110,31 +100,5 @@ var ArticleChart = function() {
 	            data: pieDatas[item[0]]
 	        };
 	    });
-	}
-	
-	getNextMonth = function (date) {
-	    var arr = date.split('-');
-	    var year = arr[0]; //获取当前日期的年份
-	    var month = arr[1]; //获取当前日期的月份
-	    var day = arr[2]; //获取当前日期的日
-	    var days = new Date(year, month, 0);
-	    days = days.getDate(); //获取当前日期中的月的天数
-	    var year2 = year;
-	    var month2 = parseInt(month) + 1;
-	    if (month2 == 13) {
-	        year2 = parseInt(year2) + 1;
-	        month2 = 1;
-	    }
-	    var day2 = day;
-	    var days2 = new Date(year2, month2, 0);
-	    days2 = days2.getDate();
-	    if (day2 > days2) {
-	        day2 = days2;
-	    }
-	    if (month2 < 10) {
-	        month2 = '0' + month2;
-	    }
-	    var t2 = year2 + '-' + month2 + '-' + day2;
-	    return t2;
 	}
 }
