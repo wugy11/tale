@@ -53,9 +53,9 @@ var ArticleTable = function() {
 					return new Date(value * 1000).Format('yyyy-MM-dd HH:mm:ss');
 				}
 			}, {
-				field : 'hits', title : '浏览量'
+				field : 'hits', title : '浏览量', width : '8%',
 			}, {
-				field : 'tags', title : '所属标签'
+				field : 'tags', title : '所属标签', width : '8%',
 			}, {
 				field : 'status', title : '发布状态', width : '8%',
 				formatter : function(value, row, index) {
@@ -64,14 +64,11 @@ var ArticleTable = function() {
 					return '<span class="label label-default">草稿</span>';
 				}
 			}, {
-				field : 'oper', title : '操作',
+				field : 'oper', title : '操作', width : '15%',
 				formatter : function(value, row, index) {
 					var oper = new Array(), cid = row.cid;
 					oper.push('<a href="/admin/article/'+cid+'" class="btn btn-primary btn-sm waves-effect waves-light m-b-5"><i class="fa fa-edit"></i> <span>编辑</span></a>');
 					oper.push('<a id="delete" onclick="delArticle('+cid+')" class="btn btn-danger btn-sm waves-effect waves-light m-b-5"><i class="fa fa-trash-o"></i> <span>删除</span></a>');
-	                /*if(row.status == 'publish') {
-	                	oper.push('<a class="btn btn-warning btn-sm waves-effect waves-light m-b-5" href="/article/'+cid+'" target="_blank"><i class="fa fa-rocket"></i> <span>查看</span></a>');
-	                }*/
 	                return oper.join(" ");     
 				}
 			}, ],
