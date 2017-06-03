@@ -13,14 +13,14 @@ public enum Constant {
 
 	// 财务类型
 	salary("工资"), shopping("购物"), breakfast("早餐"), lunch("午餐"), dinner("晚餐"), traffic("交通"), donation("捐款"), inverst(
-			"投资出账"), earnings("投资入账"),
+			"投资出账"), earnings("投资入账"), other("其它"),
 	// 资金变动分类
 	income("收入"), expense("支出"),
 
 	// 评论状态
-	unread("未读"), /*readed("已读"),*/ replyed("已回复"),
-	
-	// 
+	unread("未读"), /* readed("已读"), */ replyed("已回复"),
+
+	//
 	;
 
 	private String desc;
@@ -38,8 +38,8 @@ public enum Constant {
 	}
 
 	public static List<Constant> financeTypes() {
-		return Arrays.asList(
-				new Constant[] { salary, shopping, breakfast, lunch, dinner, traffic, donation, inverst, earnings });
+		return Arrays.asList(new Constant[] { salary, shopping, breakfast, lunch, dinner, traffic, donation, inverst,
+				earnings, other });
 	}
 
 	public static String getFinanceCategory(String financeTypeDesc) {
