@@ -13,11 +13,9 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 		<sqlite.version>3.15.1</sqlite.version>
-		<blade-core.version>1.7.2-beta</blade-core.version>
-		<blade-kit.version>1.4.1-beta</blade-kit.version>
+		<blade.version>2.0.0-SNAPSHOT</blade.version>
 		<blade-jdbc.version>0.1.7</blade-jdbc.version>
-		<blade-tpl.verion>0.0.9</blade-tpl.verion>
-		<blade-embed-jetty.version>0.1.3</blade-embed-jetty.version>
+		<jetbrick-template.version>2.1.4</jetbrick-template.version>
 		<java.version>1.8</java.version>
 		<qiniu.version>7.0.4.1</qiniu.version>
 		<commonmark.version>0.9.0</commonmark.version>
@@ -27,13 +25,8 @@
 		<!-- mvc -->
 		<dependency>
 			<groupId>com.bladejava</groupId>
-			<artifactId>blade-core</artifactId>
-			<version>${blade-core.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.bladejava</groupId>
-			<artifactId>blade-kit</artifactId>
-			<version>${blade-kit.version}</version>
+			<artifactId>blade-mvc</artifactId>
+			<version>${blade.version}</version>
 		</dependency>
 
 		<!-- 数据库操作 -->
@@ -49,10 +42,15 @@
 		</dependency>
 
 		<!-- 模板引擎 -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.bladejava</groupId>
 			<artifactId>blade-template-jetbrick</artifactId>
 			<version>${blade-tpl.verion}</version>
+		</dependency> -->
+		<dependency>
+			<groupId>com.github.subchen</groupId>
+			<artifactId>jetbrick-template</artifactId>
+			<version>${jetbrick-template.version}</version>
 		</dependency>
 
 		<!--markdown处理 -->
@@ -67,11 +65,11 @@
 			<version>${commonmark.version}</version>
 		</dependency>
 		<!--web容器 -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.bladejava</groupId>
 			<artifactId>blade-embed-jetty</artifactId>
 			<version>${blade-embed-jetty.version}</version>
-		</dependency>
+		</dependency> -->
 		<!--RSS输出 -->
 		<!-- <dependency> <groupId>rome</groupId> <artifactId>rome</artifactId> 
 			<version>1.0</version> </dependency> -->

@@ -1,7 +1,7 @@
 package com.tale.service;
 
+import com.blade.ioc.annotation.Bean;
 import com.blade.ioc.annotation.Inject;
-import com.blade.ioc.annotation.Service;
 import com.blade.jdbc.ActiveRecord;
 import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.Paginator;
@@ -11,7 +11,7 @@ import com.tale.model.Attach;
 /**
  * Created by biezhi on 2017/2/23.
  */
-@Service
+@Bean
 public class AttachService {
 
 	@Inject
@@ -23,7 +23,7 @@ public class AttachService {
 		attach.setAuthor_id(author);
 		attach.setFkey(fkey);
 		attach.setFtype(ftype);
-		attach.setCreated(DateKit.getCurrentUnixTime());
+		attach.setCreated(DateKit.nowUnix());
 		activeRecord.insert(attach);
 		return attach;
 	}

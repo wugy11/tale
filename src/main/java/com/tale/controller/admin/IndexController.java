@@ -6,18 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.blade.Blade;
+import com.blade.Environment;
 import com.blade.ioc.annotation.Inject;
+import com.blade.kit.EncrypKit;
 import com.blade.kit.StringKit;
-import com.blade.kit.Tools;
-import com.blade.kit.base.Config;
-import com.blade.mvc.annotation.Controller;
 import com.blade.mvc.annotation.JSON;
+import com.blade.mvc.annotation.Path;
 import com.blade.mvc.annotation.QueryParam;
 import com.blade.mvc.annotation.Route;
 import com.blade.mvc.http.HttpMethod;
 import com.blade.mvc.http.Request;
-import com.blade.mvc.view.RestResponse;
+import com.blade.mvc.ui.RestResponse;
 import com.tale.constants.TaleConst;
 import com.tale.controller.BaseController;
 import com.tale.dto.BackResponse;
@@ -37,7 +36,7 @@ import jetbrick.util.ShellUtils;
 /**
  * 后台控制器 Created by biezhi on 2017/2/21.
  */
-@Controller("admin")
+@Path("admin")
 public class IndexController extends BaseController {
 
 	@Inject
@@ -55,7 +54,7 @@ public class IndexController extends BaseController {
 	/**
 	 * 仪表盘
 	 */
-	@Route(value = { "/", "index" }, method = HttpMethod.GET)
+	@Route(values = { "/", "index" }, method = HttpMethod.GET)
 	public String index(Request request) {
 		// List<Comments> comments = siteService.recentComments(10);
 		List<Contents> contents = siteService.getContens(Types.RECENT_ARTICLE, 10);
@@ -73,7 +72,7 @@ public class IndexController extends BaseController {
 	/**
 	 * 系统设置
 	 */
-	@Route(value = "setting", method = HttpMethod.GET)
+	@Route(values = "setting", method = HttpMethod.GET)
 	public String setting(Request request) {
 		Map<String, String> options = optionsService.getOptions();
 		request.attribute("options", options);
@@ -84,16 +83,14 @@ public class IndexController extends BaseController {
 	 * 保存系统设置
 	 */
 	@SuppressWarnings("rawtypes")
-	@Route(value = "setting", method = HttpMethod.POST)
+	@Route(values = "setting", method = HttpMethod.POST)
 	@JSON
 	public RestResponse saveSetting(@QueryParam String site_theme, Request request) {
 		try {
-			Map<String, String> querys = request.querys();
+			Map<String, List<String>> querys = request.parameters();
 			optionsService.saveOptions(querys);
 
-			Config config = new Config();
-			config.addAll(optionsService.getOptions());
-			TaleConst.OPTIONS = config;
+			TaleConst.OPTIONS = Environment.of(optionsService.getOptions());
 
 			// logService.save(LogActions.SYS_SETTING,
 			// JSONKit.toJSONString(querys), request.address(), this.getUid());
@@ -112,7 +109,7 @@ public class IndexController extends BaseController {
 	/**
 	 * 个人设置页面
 	 */
-	@Route(value = "profile", method = HttpMethod.GET)
+	@Route(values = "profile", method = HttpMethod.GET)
 	public String profile() {
 		return "admin/profile";
 	}
@@ -121,7 +118,7 @@ public class IndexController extends BaseController {
 	 * 保存个人信息
 	 */
 	@SuppressWarnings("rawtypes")
-	@Route(value = "profile", method = HttpMethod.POST)
+	@Route(values = "profile", method = HttpMethod.POST)
 	@JSON
 	public RestResponse saveProfile(@QueryParam String screen_name, @QueryParam String email, Request request) {
 		Users users = this.user();
@@ -141,7 +138,7 @@ public class IndexController extends BaseController {
 	 * 修改密码
 	 */
 	@SuppressWarnings("rawtypes")
-	@Route(value = "password", method = HttpMethod.POST)
+	@Route(values = "password", method = HttpMethod.POST)
 	@JSON
 	public RestResponse upPwd(@QueryParam String old_password, @QueryParam String password, Request request) {
 		Users users = this.user();
@@ -149,7 +146,7 @@ public class IndexController extends BaseController {
 			return RestResponse.fail("请确认信息输入完整");
 		}
 
-		if (!users.getPassword().equals(Tools.md5(users.getUsername() + old_password))) {
+		if (!users.getPassword().equals(EncrypKit.md5(users.getUsername() + old_password))) {
 			return RestResponse.fail("旧密码错误");
 		}
 		if (password.length() < 6 || password.length() > 14) {
@@ -159,7 +156,7 @@ public class IndexController extends BaseController {
 		try {
 			Users temp = new Users();
 			temp.setUid(users.getUid());
-			String pwd = Tools.md5(users.getUsername() + password);
+			String pwd = EncrypKit.md5(users.getUsername() + password);
 			temp.setPassword(pwd);
 			usersService.update(temp);
 			// logService.save(LogActions.UP_PWD, null, request.address(),
@@ -182,7 +179,7 @@ public class IndexController extends BaseController {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@Route(value = "backup", method = HttpMethod.POST)
+	@Route(values = "backup", method = HttpMethod.POST)
 	@JSON
 	public RestResponse backup(@QueryParam String bk_type, @QueryParam String bk_path, Request request) {
 		if (StringKit.isBlank(bk_type)) {
@@ -211,7 +208,7 @@ public class IndexController extends BaseController {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@Route(value = "advanced", method = HttpMethod.POST)
+	@Route(values = "advanced", method = HttpMethod.POST)
 	@JSON
 	public RestResponse doAdvanced(@QueryParam String cache_key, @QueryParam String block_ips,
 			@QueryParam String plugin_name, @QueryParam String rewrite_url, @QueryParam String allow_install) {
@@ -226,7 +223,7 @@ public class IndexController extends BaseController {
 		// 要过过滤的黑名单列表
 		if (StringKit.isNotBlank(block_ips)) {
 			optionsService.saveOption(Types.BLOCK_IPS, block_ips);
-			TaleConst.BLOCK_IPS.addAll(Arrays.asList(StringKit.split(block_ips, ",")));
+			TaleConst.BLOCK_IPS.addAll(Arrays.asList(block_ips.split(",")));
 		} else {
 			optionsService.saveOption(Types.BLOCK_IPS, "");
 			TaleConst.BLOCK_IPS.clear();
@@ -245,21 +242,9 @@ public class IndexController extends BaseController {
 		// 是否允许重新安装
 		if (StringKit.isNotBlank(allow_install)) {
 			optionsService.saveOption("allow_install", allow_install);
-			TaleConst.OPTIONS.asMap().put("allow_install", allow_install);
+			TaleConst.OPTIONS.toMap().put("allow_install", allow_install);
 		}
 
-		String db_rewrite = TaleConst.OPTIONS.get("rewrite_url", "");
-		if (db_rewrite.length() > 0) {
-			Blade.$().delRoute("/:pagename" + rewrite_url);
-			Blade.$().routeMatcher().update();
-		}
-
-		if (StringKit.isBlank(rewrite_url)) {
-			Blade.$().route("/:pagename" + rewrite_url, com.tale.controller.IndexController.class, "page");
-			Blade.$().routeMatcher().update();
-		}
-
-		optionsService.saveOption("rewrite_url", rewrite_url);
 		return RestResponse.ok();
 	}
 
@@ -269,8 +254,8 @@ public class IndexController extends BaseController {
 	 * @param sleep
 	 * @return
 	 */
-	@Route(value = "reload", method = HttpMethod.GET)
-	public void reload(@QueryParam(value = "sleep", defaultValue = "0") int sleep, Request request) {
+	@Route(values = "reload", method = HttpMethod.GET)
+	public void reload(@QueryParam(defaultValue = "0") int sleep, Request request) {
 		if (sleep < 0 || sleep > 999) {
 			sleep = 10;
 		}

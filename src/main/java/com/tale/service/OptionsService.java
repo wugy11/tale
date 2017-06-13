@@ -4,22 +4,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.blade.ioc.annotation.Bean;
 import com.blade.ioc.annotation.Inject;
-import com.blade.ioc.annotation.Service;
 import com.blade.jdbc.ActiveRecord;
 import com.blade.jdbc.core.Take;
+import com.blade.kit.CollectionKit;
 import com.blade.kit.StringKit;
 import com.tale.model.Options;
 
-@Service
+@Bean
 public class OptionsService {
 
 	@Inject
 	private ActiveRecord activeRecord;
 
-	public void saveOptions(Map<String, String> options) {
-		if (null != options && !options.isEmpty()) {
-			options.forEach((k, v) -> saveOption(k, v));
+	public void saveOptions(Map<String, List<String>> options) {
+		if (!CollectionKit.isEmpty(options)) {
+			options.forEach((k, v) -> saveOption(k, v.get(0)));
 		}
 	}
 

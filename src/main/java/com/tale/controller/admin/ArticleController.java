@@ -7,16 +7,15 @@ import java.util.Map;
 import com.blade.ioc.annotation.Inject;
 import com.blade.jdbc.core.Take;
 import com.blade.kit.StringKit;
-import com.blade.mvc.annotation.Controller;
-import com.blade.mvc.annotation.EntityObj;
 import com.blade.mvc.annotation.JSON;
+import com.blade.mvc.annotation.Path;
 import com.blade.mvc.annotation.PathParam;
 import com.blade.mvc.annotation.QueryParam;
 import com.blade.mvc.annotation.Route;
 import com.blade.mvc.http.HttpMethod;
 import com.blade.mvc.http.Request;
 import com.blade.mvc.multipart.FileItem;
-import com.blade.mvc.view.RestResponse;
+import com.blade.mvc.ui.RestResponse;
 import com.tale.constants.TaleConst;
 import com.tale.controller.BaseController;
 import com.tale.dto.Types;
@@ -35,7 +34,7 @@ import com.tale.utils.TaleUtils;
 /**
  * 文章管理控制器 Created by biezhi on 2017/2/21.
  */
-@Controller("admin/article")
+@Path("admin/article")
 public class ArticleController extends BaseController {
 
 	@Inject
@@ -52,22 +51,22 @@ public class ArticleController extends BaseController {
 	/**
 	 * 文章管理首页
 	 */
-	@Route(value = "")
+	@Route(values = "", method = HttpMethod.GET)
 	public String index(Request request) {
 		List<Metas> tags = metasService.getMetas(Types.TAG);
 		request.attribute("tags", tags);
 		return "admin/articleList";
 	}
 
-	@Route(value = "/selectArticleList", method = HttpMethod.POST)
+	@Route(values = "/selectArticleList", method = HttpMethod.POST)
 	@JSON
-	public List<Contents> articleList(@QueryParam(value = "page", defaultValue = "1") int page,
-			@QueryParam(value = "limit", defaultValue = "10") int limit, @QueryParam(value = "tags") String tags,
-			@QueryParam(value = "title") String title, Request request) {
+	public List<Contents> articleList(@QueryParam(name = "page", defaultValue = "1") int page,
+			@QueryParam(name = "limit", defaultValue = "10") int limit, @QueryParam String tags,
+			@QueryParam String title, Request request) {
 		Take take = new Take(Contents.class).eq("type", Types.ARTICLE).page(page, limit, "created desc");
-		if (!StringKit.isEmpty(tags))
+		if (StringKit.isNotBlank(tags))
 			take.in("tags", Arrays.asList(tags.split(",")));
-		if (!StringKit.isEmpty(title))
+		if (StringKit.isNotBlank(title))
 			take.like("title", title);
 		List<Contents> articleList = contentsService.getArticlesList(take);
 		return articleList;
@@ -76,7 +75,7 @@ public class ArticleController extends BaseController {
 	/**
 	 * 文章发布页面
 	 */
-	@Route(value = "publish", method = HttpMethod.GET)
+	@Route(values = "publish", method = HttpMethod.GET)
 	public String newArticle(Request request) {
 		List<Metas> tags = metasService.getMetas(Types.TAG);
 		request.attribute("tags", tags);
@@ -90,7 +89,7 @@ public class ArticleController extends BaseController {
 	/**
 	 * 文章编辑页面
 	 */
-	@Route(value = "/:cid", method = HttpMethod.GET)
+	@Route(values = "/:cid", method = HttpMethod.GET)
 	public String editArticle(@PathParam String cid, Request request) {
 		Contents contents = contentsService.getContents(cid);
 		request.attribute("contents", contents);
@@ -108,15 +107,14 @@ public class ArticleController extends BaseController {
 	/**
 	 * 图片上传到七牛服务器
 	 */
-	@Route(value = "uploadToQiniu", method = HttpMethod.POST)
+	@Route(values = "uploadToQiniu", method = HttpMethod.POST)
 	@JSON
 	public String uploadImg(Request request) {
 		Map<String, FileItem> fileItemMap = request.fileItems();
 		for (Map.Entry<String, FileItem> entry : fileItemMap.entrySet()) {
 			FileItem f = entry.getValue();
-			String fname = f.fileName();
-			if (f.file().length() / 1024 <= TaleConst.MAX_FILE_SIZE) {
-				return TaleUtils.uploadFile(f.file(), fname);
+			if (f.length() / 1024 <= TaleConst.MAX_FILE_SIZE) {
+				return TaleUtils.uploadFile(f.fileName(), f.name());
 			}
 		}
 		return "";
@@ -125,9 +123,9 @@ public class ArticleController extends BaseController {
 	/**
 	 * 发布文章操作
 	 */
-	@Route(value = "publish", method = HttpMethod.POST)
+	@Route(values = "publish", method = HttpMethod.POST)
 	@JSON
-	public RestResponse<?> publishArticle(@EntityObj Contents contents) {
+	public RestResponse<?> publishArticle(@QueryParam Contents contents) {
 
 		Users users = this.user();
 
@@ -152,9 +150,9 @@ public class ArticleController extends BaseController {
 	/**
 	 * 修改文章操作
 	 */
-	@Route(value = "modify", method = HttpMethod.POST)
+	@Route(values = "modify", method = HttpMethod.POST)
 	@JSON
-	public RestResponse<?> modifyArticle(@EntityObj Contents contents) {
+	public RestResponse<?> modifyArticle(@QueryParam Contents contents) {
 
 		Users users = this.user();
 		contents.setAuthor_id(users.getUid());
@@ -175,7 +173,7 @@ public class ArticleController extends BaseController {
 	/**
 	 * 删除文章操作
 	 */
-	@Route(value = "delete")
+	@Route(values = "delete")
 	@JSON
 	public RestResponse<?> delete(@QueryParam int cid, Request request) {
 		try {
@@ -195,7 +193,7 @@ public class ArticleController extends BaseController {
 		return RestResponse.ok();
 	}
 
-	@Route(value = "/statisticPieData", method = HttpMethod.POST)
+	@Route(values = "/statisticPieData", method = HttpMethod.POST)
 	@JSON
 	public Map<String, Object> statisticPieData(@QueryParam String month) {
 		return contentsService.statisticPieData(month);

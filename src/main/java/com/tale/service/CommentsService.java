@@ -3,8 +3,8 @@ package com.tale.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.blade.ioc.annotation.Bean;
 import com.blade.ioc.annotation.Inject;
-import com.blade.ioc.annotation.Service;
 import com.blade.jdbc.ActiveRecord;
 import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.Paginator;
@@ -18,7 +18,7 @@ import com.tale.model.Comments;
 import com.tale.model.Contents;
 import com.tale.utils.TaleUtils;
 
-@Service
+@Bean
 public class CommentsService {
 
 	@Inject
@@ -55,7 +55,7 @@ public class CommentsService {
 		}
 		try {
 			comments.setOwner_id(contents.getAuthor_id());
-			comments.setCreated(DateKit.getCurrentUnixTime());
+			comments.setCreated(DateKit.nowUnix());
 			activeRecord.insert(comments);
 
 			Contents temp = new Contents();
@@ -100,7 +100,7 @@ public class CommentsService {
 					List<Comments> children = new ArrayList<>();
 					getChildren(children, comment.getCoid());
 					comment.setChildren(children);
-					if (CollectionKit.isNotEmpty(children)) {
+					if (!CollectionKit.isEmpty(children)) {
 						comment.setLevels(1);
 					}
 					comments.add(comment);

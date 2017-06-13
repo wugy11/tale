@@ -3,14 +3,14 @@ package com.tale.controller.admin;
 import com.blade.ioc.annotation.Inject;
 import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.Paginator;
-import com.blade.mvc.annotation.Controller;
 import com.blade.mvc.annotation.JSON;
+import com.blade.mvc.annotation.Path;
 import com.blade.mvc.annotation.PathParam;
 import com.blade.mvc.annotation.QueryParam;
 import com.blade.mvc.annotation.Route;
 import com.blade.mvc.http.HttpMethod;
 import com.blade.mvc.http.Request;
-import com.blade.mvc.view.RestResponse;
+import com.blade.mvc.ui.RestResponse;
 import com.tale.constants.TaleConst;
 import com.tale.controller.BaseController;
 import com.tale.dto.Types;
@@ -25,7 +25,7 @@ import com.tale.service.SiteService;
 /**
  * Created by biezhi on 2017/2/21.
  */
-@Controller("admin/page")
+@Path("admin/page")
 public class PageController extends BaseController {
 
 	// private static final Logger LOGGER =
@@ -43,7 +43,7 @@ public class PageController extends BaseController {
 	@Inject
 	private SiteService siteService;
 
-	@Route(value = "", method = HttpMethod.GET)
+	@Route(values = "", method = HttpMethod.GET)
 	public String index(Request request) {
 		Paginator<Contents> contentsPaginator = contentsService.getArticles(
 				new Take(Contents.class).eq("type", Types.PAGE).page(1, TaleConst.MAX_POSTS, "created desc"));
@@ -51,13 +51,13 @@ public class PageController extends BaseController {
 		return "admin/page_list";
 	}
 
-	@Route(value = "new", method = HttpMethod.GET)
+	@Route(values = "new", method = HttpMethod.GET)
 	public String newPage(Request request) {
 		request.attribute(Types.ATTACH_URL, Commons.site_option(Types.ATTACH_URL, Commons.site_url()));
 		return "admin/page_edit";
 	}
 
-	@Route(value = "/:cid", method = HttpMethod.GET)
+	@Route(values = "/:cid", method = HttpMethod.GET)
 	public String editPage(@PathParam String cid, Request request) {
 		Contents contents = contentsService.getContents(cid);
 		request.attribute("contents", contents);
@@ -66,7 +66,7 @@ public class PageController extends BaseController {
 	}
 
 	@SuppressWarnings("rawtypes")
-	@Route(value = "publish", method = HttpMethod.POST)
+	@Route(values = "publish", method = HttpMethod.POST)
 	@JSON
 	public RestResponse publishPage(@QueryParam String title, @QueryParam String content, @QueryParam String status,
 			@QueryParam String slug, @QueryParam String fmt_type, @QueryParam Boolean allow_comment) {
@@ -98,7 +98,7 @@ public class PageController extends BaseController {
 	}
 
 	@SuppressWarnings("rawtypes")
-	@Route(value = "modify", method = HttpMethod.POST)
+	@Route(values = "modify", method = HttpMethod.POST)
 	@JSON
 	public RestResponse modifyArticle(@QueryParam Integer cid, @QueryParam String title, @QueryParam String content,
 			@QueryParam String fmt_type, @QueryParam String status, @QueryParam String slug,
@@ -130,7 +130,7 @@ public class PageController extends BaseController {
 	}
 
 	@SuppressWarnings("rawtypes")
-	@Route(value = "delete")
+	@Route(values = "delete")
 	@JSON
 	public RestResponse delete(@QueryParam int cid, Request request) {
 		try {

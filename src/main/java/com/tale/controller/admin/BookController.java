@@ -5,14 +5,13 @@ import java.util.List;
 import com.blade.ioc.annotation.Inject;
 import com.blade.jdbc.core.Take;
 import com.blade.kit.StringKit;
-import com.blade.mvc.annotation.Controller;
-import com.blade.mvc.annotation.EntityObj;
 import com.blade.mvc.annotation.JSON;
+import com.blade.mvc.annotation.Path;
 import com.blade.mvc.annotation.QueryParam;
 import com.blade.mvc.annotation.Route;
 import com.blade.mvc.http.HttpMethod;
 import com.blade.mvc.http.Request;
-import com.blade.mvc.view.RestResponse;
+import com.blade.mvc.ui.RestResponse;
 import com.tale.controller.BaseController;
 import com.tale.model.Book;
 import com.tale.service.BookService;
@@ -22,7 +21,7 @@ import com.tale.service.BookService;
  * 
  * @author wugy 2017-5-6 10:47:39
  */
-@Controller("admin/book")
+@Path("admin/book")
 public class BookController extends BaseController {
 
 	@Inject
@@ -31,14 +30,14 @@ public class BookController extends BaseController {
 	/**
 	 * 书单首页管理
 	 */
-	@Route(value = "")
+	@Route(values = "")
 	public String index() {
 		return "admin/bookList";
 	}
 
-	@Route(value = "/saveBook", method = HttpMethod.POST)
+	@Route(values = "/saveBook", method = HttpMethod.POST)
 	@JSON
-	public RestResponse<?> saveBook(@EntityObj Book book) {
+	public RestResponse<?> saveBook(@QueryParam Book book) {
 		try {
 			bookService.saveBook(book);
 		} catch (Exception e) {
@@ -48,8 +47,8 @@ public class BookController extends BaseController {
 		}
 		return RestResponse.ok();
 	}
-	
-	@Route(value = "/deleteBook", method = HttpMethod.POST)
+
+	@Route(values = "/deleteBook", method = HttpMethod.POST)
 	@JSON
 	public RestResponse<?> deleteBook(@QueryParam String ids) {
 		try {
@@ -62,13 +61,12 @@ public class BookController extends BaseController {
 		return RestResponse.ok();
 	}
 
-	@Route(value = "/selectBookList", method = HttpMethod.POST)
+	@Route(values = "/selectBookList", method = HttpMethod.POST)
 	@JSON
-	public List<Book> selectBookList(@QueryParam(value = "page", defaultValue = "1") int page,
-			@QueryParam(value = "limit", defaultValue = "10") int limit, @QueryParam(value = "name") String name,
-			Request request) {
+	public List<Book> selectBookList(@QueryParam(defaultValue = "1") int page,
+			@QueryParam(defaultValue = "10") int limit, @QueryParam String name, Request request) {
 		Take take = new Take(Book.class).page(page, limit, "id desc");
-		if (!StringKit.isEmpty(name))
+		if (StringKit.isNotBlank(name))
 			take.like("name", name);
 		List<Book> bookList = bookService.selectBookList(take);
 		return bookList;

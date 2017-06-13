@@ -8,17 +8,17 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.blade.Const;
+import com.blade.ioc.annotation.Bean;
 import com.blade.ioc.annotation.Inject;
-import com.blade.ioc.annotation.Service;
 import com.blade.jdbc.ar.SampleActiveRecord;
 import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.Paginator;
 import com.blade.kit.CollectionKit;
 import com.blade.kit.DateKit;
+import com.blade.kit.EncrypKit;
 import com.blade.kit.FileKit;
 import com.blade.kit.StringKit;
-import com.blade.kit.Tools;
+import com.blade.kit.UUID;
 import com.tale.constants.TaleConst;
 import com.tale.dto.Archive;
 import com.tale.dto.BackResponse;
@@ -38,10 +38,7 @@ import com.tale.utils.MapCache;
 import com.tale.utils.TaleUtils;
 import com.tale.utils.ZipUtils;
 
-/**
- * Created by biezhi on 2017/2/23.
- */
-@Service
+@Bean
 public class SiteService {
 
 	@Inject
@@ -62,16 +59,15 @@ public class SiteService {
 	public MapCache mapCache = new MapCache();
 
 	public void initSite(Users users) {
-		String pwd = Tools.md5(users.getUsername() + users.getPassword());
+		String pwd = EncrypKit.md5(users.getUsername() + users.getPassword());
 		users.setPassword(pwd);
 		users.setScreen_name(users.getUsername());
-		users.setCreated(DateKit.getCurrentUnixTime());
+		users.setCreated(DateKit.nowUnix());
 		// Integer uid = activeRecord.insert(users);
 
 		try {
-			String cp = SiteService.class.getClassLoader().getResource("").getPath();
-			File lock = new File(cp + Const.INSTALLED);
-			lock.createNewFile();
+			// String cp =
+			// SiteService.class.getClassLoader().getResource("").getPath();
 			TaleConst.INSTALL = Boolean.TRUE;
 			// logService.save(LogActions.INIT_SITE, null, "", uid.intValue());
 		} catch (Exception e) {
@@ -106,7 +102,7 @@ public class SiteService {
 			List<Integer> cids = activeRecord.list(Integer.class,
 					"select cid from t_contents where type = ? and status = ? order by rand() * cid limit ?",
 					Types.ARTICLE, Types.PUBLISH, limit);
-			if (CollectionKit.isNotEmpty(cids)) {
+			if (!CollectionKit.isEmpty(cids)) {
 				Object[] inCids = cids.toArray(new Integer[cids.size()]);
 				return activeRecord.list(new Take(Contents.class).in("cid", inCids));
 			}
@@ -153,17 +149,17 @@ public class SiteService {
 		if (null != archives) {
 			archives.forEach(archive -> {
 				String date_str = archive.getDate_str();
-				Date sd = DateKit.dateFormat(date_str, "yyyy年MM月");
+				Date sd = DateKit.toDate(date_str, "yyyy年MM月");
 				archive.setDate(sd);
 
-				int start = DateKit.getUnixTimeByDate(sd);
+				int start = DateKit.toUnix(sd);
 
 				Calendar calender = Calendar.getInstance();
 				calender.setTime(sd);
 				calender.add(Calendar.MONTH, 1);
 				Date endSd = calender.getTime();
 
-				int end = DateKit.getUnixTimeByDate(endSd) - 1;
+				int end = DateKit.toUnix(endSd) - 1;
 				List<Contents> contentss = activeRecord
 						.list(new Take(Contents.class).eq("type", Types.ARTICLE).eq("status", Types.PUBLISH)
 								.eq("allow_feed", 1).gt("created", start).lt("created", end).orderby("created desc"));
@@ -194,7 +190,7 @@ public class SiteService {
 			String bkAttachDir = TaleLoader.CLASSPATH + "upload";
 			String bkThemesDir = TaleLoader.CLASSPATH + "templates/themes";
 
-			String fname = DateKit.dateFormat(new Date(), fmt) + "_" + StringKit.getRandomNumber(5) + ".zip";
+			String fname = DateKit.toString(fmt) + "_" + UUID.UU16() + ".zip";
 
 			String attachPath = bk_path + "/" + "attachs_" + fname;
 			String themesPath = bk_path + "/" + "themes_" + fname;
@@ -207,8 +203,7 @@ public class SiteService {
 		}
 		// 备份数据库
 		if ("db".equals(bk_type)) {
-			String filePath = "upload/" + DateKit.getToday("yyyyMMddHHmmss") + "_" + StringKit.getRandomNumber(8)
-					+ ".db";
+			String filePath = "upload/" + DateKit.toString("yyyyMMddHHmmss") + "_" + UUID.UU16() + ".db";
 			String cp = TaleLoader.CLASSPATH + filePath;
 			FileKit.createParentDir(cp);
 			FileKit.copy(SqliteJdbc.DB_PATH, cp);
@@ -245,7 +240,7 @@ public class SiteService {
 		if (Types.RANDOM_META.equals(searchType)) {
 			List<Integer> mids = activeRecord.list(Integer.class,
 					"select mid from t_metas where type = ? order by rand() * mid limit ?", type, limit);
-			if (CollectionKit.isNotEmpty(mids)) {
+			if (!CollectionKit.isEmpty(mids)) {
 				String in = TaleUtils.listToInSql(mids);
 				String sql = "select a.*, count(b.cid) as count from t_metas a left join `t_relationships` b on a.mid = b.mid "
 						+ "where a.mid in " + in + "group by a.mid order by count desc, a.mid desc";

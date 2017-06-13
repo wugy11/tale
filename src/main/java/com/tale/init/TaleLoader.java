@@ -1,7 +1,5 @@
 package com.tale.init;
 
-import static com.blade.Blade.$;
-
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -10,7 +8,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 import com.blade.Blade;
-import com.blade.config.BConfig;
 import com.blade.kit.FileKit;
 
 /**
@@ -20,16 +17,18 @@ public final class TaleLoader {
 
 	public static final String CLASSPATH = TaleLoader.class.getClassLoader().getResource("").getPath();
 
+	public static Blade blade;
+
 	private TaleLoader() {
 	}
 
-	public static void init() {
-		BConfig bConfig = $().bConfig();
-		loadPlugins(bConfig);
-		loadThemes(bConfig);
+	public static void init(Blade _blade) {
+		blade = _blade;
+		loadPlugins();
+		loadThemes();
 	}
 
-	public static void loadThemes(BConfig bConfig) {
+	public static void loadThemes() {
 
 		String themeDir = CLASSPATH + "templates/themes";
 		try {
@@ -41,23 +40,22 @@ public final class TaleLoader {
 		for (File f : dir) {
 			if (f.isDirectory() && FileKit.isDirectory(f.getPath() + "/static")) {
 				String themePath = "/templates/themes/" + f.getName();
-				bConfig.addStatic(new String[] { themePath + "/style.css", themePath + "/screenshot.png",
+				blade.addStatics(new String[] { themePath + "/style.css", themePath + "/screenshot.png",
 						themePath + "/static" });
 			}
 		}
 	}
 
 	public static void loadTheme(String themePath) {
-		Blade.$().embedServer().addStatic(themePath + "/style.css", themePath + "/screenshot.png",
-				themePath + "/static");
+		blade.addStatics(themePath + "/style.css", themePath + "/screenshot.png", themePath + "/static");
 	}
 
-	public static void loadPlugins(BConfig bConfig) {
+	public static void loadPlugins() {
 		File pluginDir = new File(CLASSPATH + "plugins");
 		if (pluginDir.exists() && pluginDir.isDirectory()) {
 			File[] plugins = pluginDir.listFiles();
 			for (File plugin : plugins) {
-				loadPlugin(bConfig, plugin);
+				loadPlugin(plugin);
 			}
 		}
 	}
@@ -68,7 +66,7 @@ public final class TaleLoader {
 	 * @param pluginFile
 	 *            插件文件
 	 */
-	public static void loadPlugin(BConfig bConfig, File pluginFile) {
+	public static void loadPlugin(File pluginFile) {
 		try {
 			if (pluginFile.isFile() && pluginFile.getName().endsWith(".jar")) {
 				URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
@@ -77,7 +75,7 @@ public final class TaleLoader {
 				add.invoke(classLoader, pluginFile.toURI().toURL());
 
 				String pluginName = pluginFile.getName().substring(6);
-				bConfig.addStatic(new String[] { "/templates/plugins/" + pluginName + "/static" });
+				blade.addStatics(new String[] { "/templates/plugins/" + pluginName + "/static" });
 			}
 		} catch (Exception e) {
 			throw new RuntimeException("插件 [" + pluginFile.getName() + "] 加载失败");

@@ -1,26 +1,23 @@
 package com.tale.controller;
 
-import com.blade.Const;
+import com.blade.Environment;
 import com.blade.ioc.annotation.Inject;
-import com.blade.kit.FileKit;
 import com.blade.kit.StringKit;
-import com.blade.kit.base.Config;
-import com.blade.mvc.annotation.Controller;
 import com.blade.mvc.annotation.JSON;
+import com.blade.mvc.annotation.Path;
 import com.blade.mvc.annotation.QueryParam;
 import com.blade.mvc.annotation.Route;
 import com.blade.mvc.http.HttpMethod;
 import com.blade.mvc.http.Request;
-import com.blade.mvc.view.RestResponse;
+import com.blade.mvc.ui.RestResponse;
 import com.tale.constants.TaleConst;
 import com.tale.exception.TipException;
-import com.tale.init.TaleLoader;
 import com.tale.model.Users;
 import com.tale.service.OptionsService;
 import com.tale.service.SiteService;
 import com.tale.utils.TaleUtils;
 
-@Controller("install")
+@Path("install")
 public class InstallController extends BaseController {
 
 	// private static final Logger LOGGER =
@@ -37,10 +34,9 @@ public class InstallController extends BaseController {
 	 *
 	 * @return
 	 */
-	@Route(value = "/", method = HttpMethod.GET)
+	@Route(values = "/", method = HttpMethod.GET)
 	public String index(Request request) {
-		boolean existInstall = TaleUtils.getCfg().getBoolean("app.installed", false)
-				|| FileKit.exist(TaleLoader.CLASSPATH + Const.INSTALLED);
+		boolean existInstall = TaleUtils.getEnv().getBoolean("app.installed", false);
 		int allow_reinstall = TaleConst.OPTIONS.getInt("allow_install", 0);
 
 		if (allow_reinstall == 1) {
@@ -51,11 +47,11 @@ public class InstallController extends BaseController {
 		return "install";
 	}
 
-	@Route(value = "/", method = HttpMethod.POST)
+	@Route(values = "/", method = HttpMethod.POST)
 	@JSON
 	public RestResponse<?> doInstall(@QueryParam String site_title, @QueryParam String site_url,
 			@QueryParam String admin_user, @QueryParam String admin_email, @QueryParam String admin_pwd) {
-		if (FileKit.exist(TaleLoader.CLASSPATH + Const.INSTALLED)
+		if (TaleUtils.getEnv().getBoolean("app.installed", false)
 				&& TaleConst.OPTIONS.getInt("allow_install", 0) != 1) {
 			return RestResponse.fail("请勿重复安装");
 		}
@@ -89,9 +85,7 @@ public class InstallController extends BaseController {
 			optionsService.saveOption("site_title", site_title);
 			optionsService.saveOption("site_url", site_url);
 
-			Config config = new Config();
-			config.addAll(optionsService.getOptions());
-			TaleConst.OPTIONS = config;
+			TaleConst.OPTIONS = Environment.of(optionsService.getOptions());
 		} catch (Exception e) {
 			String msg = "安装失败";
 			if (e instanceof TipException) {

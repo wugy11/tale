@@ -5,14 +5,13 @@ import java.util.Map;
 
 import com.blade.ioc.annotation.Inject;
 import com.blade.jdbc.core.Take;
-import com.blade.mvc.annotation.Controller;
-import com.blade.mvc.annotation.EntityObj;
 import com.blade.mvc.annotation.JSON;
+import com.blade.mvc.annotation.Path;
 import com.blade.mvc.annotation.QueryParam;
 import com.blade.mvc.annotation.Route;
 import com.blade.mvc.http.HttpMethod;
 import com.blade.mvc.http.Request;
-import com.blade.mvc.view.RestResponse;
+import com.blade.mvc.ui.RestResponse;
 import com.tale.controller.BaseController;
 import com.tale.model.Finance;
 import com.tale.model.Users;
@@ -23,20 +22,20 @@ import com.tale.service.FinanceService;
  * 
  * @author wugy 2017-5-12 07:29:50
  */
-@Controller("admin/finance")
+@Path("admin/finance")
 public class FinanceController extends BaseController {
 
 	@Inject
 	private FinanceService financeService;
 
-	@Route(value = "", method = HttpMethod.GET)
+	@Route(values = "", method = HttpMethod.GET)
 	public String index() {
 		return "admin/financeList";
 	}
 
-	@Route(value = "/saveFinance", method = HttpMethod.POST)
+	@Route(values = "/saveFinance", method = HttpMethod.POST)
 	@JSON
-	public RestResponse<?> saveFinance(@EntityObj Finance finance) {
+	public RestResponse<?> saveFinance(@QueryParam Finance finance) {
 		try {
 			Users user = user();
 			if (null != user) {
@@ -51,7 +50,7 @@ public class FinanceController extends BaseController {
 		return RestResponse.ok();
 	}
 
-	@Route(value = "/deleteFinance", method = HttpMethod.POST)
+	@Route(values = "/deleteFinance", method = HttpMethod.POST)
 	@JSON
 	public RestResponse<?> deleteFinance(@QueryParam String ids) {
 		try {
@@ -64,27 +63,27 @@ public class FinanceController extends BaseController {
 		return RestResponse.ok();
 	}
 
-	@Route(value = "/selectFinanceList", method = HttpMethod.POST)
+	@Route(values = "/selectFinanceList", method = HttpMethod.POST)
 	@JSON
-	public List<Finance> selectFinanceList(@QueryParam(value = "page", defaultValue = "1") int page,
-			@QueryParam(value = "limit", defaultValue = "10") int limit, Request request) {
+	public List<Finance> selectFinanceList(@QueryParam(defaultValue = "1") int page,
+			@QueryParam(defaultValue = "10") int limit, Request request) {
 		Take take = new Take(Finance.class).page(page, limit).desc("expense_time").desc("id");
 		List<Finance> financeList = financeService.selectFinanceList(take);
 		return financeList;
 	}
 
-	@Route(value = "/statistics", method = HttpMethod.GET)
+	@Route(values = "/statistics", method = HttpMethod.GET)
 	public String statistics() {
 		return "admin/financeStatistics";
 	}
 
-	@Route(value = "/statisticPieData", method = HttpMethod.POST)
+	@Route(values = "/statisticPieData", method = HttpMethod.POST)
 	@JSON
 	public Map<String, Object> statisticByDay(@QueryParam String month) {
 		return financeService.statisticPieData(month);
 	}
-	
-	@Route(value = "/statisticLineData", method = HttpMethod.POST)
+
+	@Route(values = "/statisticLineData", method = HttpMethod.POST)
 	@JSON
 	public Map<String, Object> statisticLineData() {
 		return financeService.statisticLineData();

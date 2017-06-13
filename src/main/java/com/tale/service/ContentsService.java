@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.blade.ioc.annotation.Bean;
 import com.blade.ioc.annotation.Inject;
-import com.blade.ioc.annotation.Service;
 import com.blade.jdbc.ActiveRecord;
 import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.PageRow;
@@ -21,7 +21,7 @@ import com.tale.model.Users;
 import com.tale.utils.TaleUtils;
 import com.vdurmont.emoji.EmojiParser;
 
-@Service
+@Bean
 public class ContentsService {
 
 	@Inject
@@ -84,7 +84,7 @@ public class ContentsService {
 
 		contents.setContent(EmojiParser.parseToAliases(contents.getContent()));
 
-		int time = DateKit.getCurrentUnixTime();
+		int time = DateKit.nowUnix();
 		contents.setCreated(time);
 		contents.setModified(time);
 
@@ -115,7 +115,7 @@ public class ContentsService {
 		if (null == contents.getAuthor_id()) {
 			throw new TipException("请登录后发布文章");
 		}
-		int time = DateKit.getCurrentUnixTime();
+		int time = DateKit.nowUnix();
 		contents.setModified(time);
 
 		Integer cid = contents.getCid();
@@ -124,7 +124,7 @@ public class ContentsService {
 
 		activeRecord.update(contents);
 
-		if (!StringKit.equals(contents.getType(), Types.PAGE)) {
+		if (!Types.PAGE.equals(contents.getType())) {
 			String sql = "delete from t_relationships where cid = ?";
 			activeRecord.execute(sql, cid);
 		}
@@ -191,8 +191,8 @@ public class ContentsService {
 	 * 文章统计：按月查询，显示对应文章数
 	 */
 	public Map<String, Object> statisticPieData(String month) {
-		if (StringKit.isEmpty(month))
-			month = DateKit.getToday("yyyy-MM");
+		if (StringKit.isBlank(month))
+			month = DateKit.toString(DateKit.now(), "yyyy-MM");
 		StringBuilder sql = new StringBuilder();
 		sql.append("select strftime('%Y-%m', datetime(created, 'unixepoch', 'localtime')) month_str,")
 				.append("strftime('%Y-%m-%d', datetime(created, 'unixepoch', 'localtime')) date_str,")
@@ -217,8 +217,8 @@ public class ContentsService {
 	 * 文章统计：按月查询，按标签分类，显示对应文章数
 	 */
 	public Map<String, Object> articleStatistic(String month, String tags) {
-		if (StringKit.isEmpty(month))
-			month = DateKit.getToday("yyyy-MM");
+		if (StringKit.isBlank(month))
+			month = DateKit.toString("yyyy-MM");
 		StringBuilder sql = new StringBuilder();
 		sql.append("select strftime('%Y-%m', datetime(created, 'unixepoch', 'localtime')) month_str,")
 				.append("strftime('%Y-%m-%d', datetime(created, 'unixepoch', 'localtime')) date_str,")

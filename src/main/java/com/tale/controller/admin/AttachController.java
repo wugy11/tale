@@ -1,7 +1,8 @@
 package com.tale.controller.admin;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -10,16 +11,14 @@ import com.blade.ioc.annotation.Inject;
 import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.Paginator;
 import com.blade.kit.CollectionKit;
-import com.blade.kit.FileKit;
-import com.blade.kit.Tools;
-import com.blade.mvc.annotation.Controller;
 import com.blade.mvc.annotation.JSON;
+import com.blade.mvc.annotation.Path;
 import com.blade.mvc.annotation.QueryParam;
 import com.blade.mvc.annotation.Route;
 import com.blade.mvc.http.HttpMethod;
 import com.blade.mvc.http.Request;
 import com.blade.mvc.multipart.FileItem;
-import com.blade.mvc.view.RestResponse;
+import com.blade.mvc.ui.RestResponse;
 import com.tale.constants.TaleConst;
 import com.tale.controller.BaseController;
 import com.tale.dto.Types;
@@ -37,7 +36,7 @@ import com.tale.utils.TaleUtils;
  *
  * Created by biezhi on 2017/2/21.
  */
-@Controller("admin/attach")
+@Path("admin/attach")
 public class AttachController extends BaseController {
 
 	// private static final Logger LOGGER =
@@ -55,9 +54,9 @@ public class AttachController extends BaseController {
 	/**
 	 * 附件页面
 	 */
-	@Route(value = "", method = HttpMethod.GET)
-	public String index(Request request, @QueryParam(value = "page", defaultValue = "1") int page,
-			@QueryParam(value = "limit", defaultValue = "12") int limit) {
+	@Route(values = "", method = HttpMethod.GET)
+	public String index(Request request, @QueryParam(defaultValue = "1") int page,
+			@QueryParam(defaultValue = "12") int limit) {
 		Paginator<Attach> attachPaginator = attachService
 				.getAttachs(new Take(Attach.class).page(page, limit, "id desc"));
 		request.attribute("attachs", attachPaginator);
@@ -75,7 +74,7 @@ public class AttachController extends BaseController {
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	@Route(value = "upload", method = HttpMethod.POST)
+	@Route(values = "upload", method = HttpMethod.POST)
 	@JSON
 	public RestResponse upload(Request request) {
 
@@ -91,16 +90,14 @@ public class AttachController extends BaseController {
 			fileItems.forEach((FileItem f) -> {
 				String fname = f.fileName();
 
-				File upFile = f.file();
-				if (upFile.length() / 1024 <= TaleConst.MAX_FILE_SIZE) {
+				// File upFile = f.file();
+				if (f.length() / 1024 <= TaleConst.MAX_FILE_SIZE) {
 					String fkey = TaleUtils.getFileKey(fname);
-					String ftype = TaleUtils.isImage(upFile) ? Types.IMAGE : Types.FILE;
+					String ftype = f.contentType().contains("image") ? Types.IMAGE : Types.FILE;
 					String filePath = TaleUtils.upDir + fkey;
 
-					File file = new File(filePath);
 					try {
-						Tools.copyFileUsingFileChannels(upFile, file);
-						upFile.delete();
+						Files.write(Paths.get(filePath), f.data());
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -130,7 +127,7 @@ public class AttachController extends BaseController {
 	}
 
 	@SuppressWarnings("rawtypes")
-	@Route(value = "delete")
+	@Route(values = "delete")
 	@JSON
 	public RestResponse delete(@QueryParam Integer id, Request request) {
 		try {
@@ -140,7 +137,7 @@ public class AttachController extends BaseController {
 			attachService.delete(id);
 			siteService.cleanCache(Types.C_STATISTICS);
 			String upDir = TaleLoader.CLASSPATH.substring(0, TaleLoader.CLASSPATH.length() - 1);
-			FileKit.delete(upDir + attach.getFkey());
+			Files.delete(Paths.get(upDir + attach.getFkey()));
 			// logService.save(LogActions.DEL_ATTACH, attach.getFkey(),
 			// request.address(), this.getUid());
 		} catch (Exception e) {

@@ -3,8 +3,8 @@ package com.tale.constants;
 import java.util.List;
 import java.util.Set;
 
+import com.blade.Environment;
 import com.blade.kit.CollectionKit;
-import com.blade.kit.base.Config;
 import com.tale.dto.PluginMenu;
 
 /**
@@ -17,9 +17,9 @@ public class TaleConst {
 	public static final String USER_IN_COOKIE = "S_L_ID";
 	public static String AES_SALT = "0123456789abcdef";
 	public static String LOGIN_SESSION_KEY = "login_user";
-	public static Config OPTIONS = new Config();
+	public static Environment OPTIONS = Environment.of(CollectionKit.newHashMap());
 	public static Boolean INSTALL = false;
-	public static Config BCONF = null;
+	public static Environment BCONF = null;
 
 	/**
 	 * 最大页码

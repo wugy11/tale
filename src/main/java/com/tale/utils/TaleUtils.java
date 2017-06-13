@@ -1,17 +1,13 @@
 package com.tale.utils;
 
-import static com.blade.Blade.$;
-
-import java.awt.Image;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.imageio.ImageIO;
 
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;
@@ -19,17 +15,18 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
-import com.blade.context.WebContextHolder;
+import com.blade.Blade;
+import com.blade.Environment;
 import com.blade.kit.Assert;
 import com.blade.kit.CollectionKit;
 import com.blade.kit.DateKit;
+import com.blade.kit.EncrypKit;
 import com.blade.kit.FileKit;
 import com.blade.kit.StringKit;
-import com.blade.kit.Tools;
-import com.blade.kit.base.Config;
+import com.blade.mvc.WebContextHolder;
 import com.blade.mvc.http.Request;
 import com.blade.mvc.http.Response;
-import com.blade.mvc.http.wrapper.Session;
+import com.blade.mvc.http.Session;
 import com.qiniu.common.QiniuException;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
@@ -51,11 +48,11 @@ abstract public class TaleUtils {
 	public static final String bucket;
 
 	static {
-		Config config = TaleUtils.getCfg();
-		accessKey = config.get("qiniu.accessKey");
-		secretKey = config.get("qiniu.secretKey");
-		domain = config.get("qiniu.domain");
-		bucket = config.get("qiniu.bucket");
+		Environment env = getEnv();
+		accessKey = env.getString("qiniu.accessKey");
+		secretKey = env.getString("qiniu.secretKey");
+		domain = env.getString("qiniu.domain");
+		bucket = env.getString("qiniu.bucket");
 	}
 
 	/**
@@ -63,12 +60,12 @@ abstract public class TaleUtils {
 	 * 
 	 * @return 返回图片链接
 	 */
-	public static String uploadFile(File file, String key) {
+	public static String uploadFile(String filePath, String key) {
 		Auth auth = Auth.create(accessKey, secretKey);
 		UploadManager uploadManager = new UploadManager();
 		com.qiniu.http.Response res = null;
 		try {
-			res = uploadManager.put(file, key, auth.uploadToken(bucket));
+			res = uploadManager.put(filePath, key, auth.uploadToken(bucket));
 			if (res.isOK())
 				return String.format("http://%s/%s", domain, key);
 		} catch (QiniuException e) {
@@ -81,24 +78,24 @@ abstract public class TaleUtils {
 	 * 获取统计饼图日期数据
 	 */
 	public static List<List<Object>> getPieScatterData(String month) {
-		List<List<Object>> scatterData = CollectionKit.createLinkedList();
+		List<List<Object>> scatterData = CollectionKit.newLinkedList();
 
 		Assert.notBlank(month);
 
 		Calendar calendar = Calendar.getInstance();
-		Date dateStart = DateKit.dateFormat(month + "-01", "yyyy-MM-dd");
+		Date dateStart = DateKit.toDate(month + "-01", "yyyy-MM-dd");
 		calendar.setTime(dateStart);
 		int m = calendar.get(Calendar.MONTH);
 		calendar.set(Calendar.MONTH, m + 1);
 		Date dateEnd = calendar.getTime();
 
-		int start = DateKit.getUnixTimeByDate(dateStart);
-		int end = DateKit.getUnixTimeByDate(dateEnd);
+		int start = DateKit.toUnix(dateStart);
+		int end = DateKit.toUnix(dateEnd);
 
 		int dayTime = 3600 * 24;
 		for (int time = start; time < end; time += dayTime) {
 			List<Object> dateList = CollectionKit.newArrayList(1);
-			dateList.add(DateKit.dateFormat(DateKit.getDateByUnixTime(time), "yyyy-MM-dd"));
+			dateList.add(DateKit.toString(time, "yyyy-MM-dd"));
 			dateList.add(Math.floor(Math.random() * 10000));
 			scatterData.add(dateList);
 		}
@@ -123,7 +120,7 @@ abstract public class TaleUtils {
 	 */
 	public static void setCookie(Response response, Integer uid) {
 		try {
-			String val = Tools.enAes(uid.toString(), TaleConst.AES_SALT);
+			String val = new String(EncrypKit.encryptAES(uid.toString().getBytes(), TaleConst.AES_SALT.getBytes()));
 			boolean isSSL = Commons.site_url().startsWith("https");
 			response.cookie("/", TaleConst.USER_IN_COOKIE, val, one_month, isSSL);
 		} catch (Exception e) {
@@ -135,7 +132,7 @@ abstract public class TaleUtils {
 	 * 返回当前登录用户
 	 */
 	public static Users getLoginUser() {
-		Session session = WebContextHolder.session();
+		Session session = WebContextHolder.request().session();
 		if (null == session) {
 			return null;
 		}
@@ -157,10 +154,11 @@ abstract public class TaleUtils {
 	 */
 	public static Integer getCookieUid(Request request) {
 		if (null != request) {
-			String value = request.cookie(TaleConst.USER_IN_COOKIE);
-			if (StringKit.isNotBlank(value)) {
+			Optional<String> value = request.cookie(TaleConst.USER_IN_COOKIE);
+			if (value.isPresent()) {
 				try {
-					String uid = Tools.deAes(value, TaleConst.AES_SALT);
+					String uid = new String(
+							EncrypKit.decryptAES(value.get().getBytes(), TaleConst.AES_SALT.getBytes()));
 					return StringKit.isNotBlank(uid) && StringKit.isNumber(uid) ? Integer.valueOf(uid) : null;
 				} catch (Exception e) {
 				}
@@ -205,24 +203,6 @@ abstract public class TaleUtils {
 			return html.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
 		}
 		return "";
-	}
-
-	/**
-	 * 判断文件是否是图片类型
-	 */
-	public static boolean isImage(File imageFile) {
-		if (!imageFile.exists()) {
-			return false;
-		}
-		try {
-			Image img = ImageIO.read(imageFile);
-			if (img == null || img.getWidth(null) <= 0 || img.getHeight(null) <= 0) {
-				return false;
-			}
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
 	}
 
 	/**
@@ -278,7 +258,7 @@ abstract public class TaleUtils {
 	public static final String upDir = TaleLoader.CLASSPATH.substring(0, TaleLoader.CLASSPATH.length() - 1);
 
 	public static String getFileKey(String name) {
-		String prefix = "/upload/" + DateKit.dateFormat(new Date(), "yyyy/MM");
+		String prefix = "/upload/" + DateKit.toString("yyyy/MM");
 		String dir = upDir + prefix;
 		if (!FileKit.exist(dir)) {
 			new File(dir).mkdirs();
@@ -286,7 +266,7 @@ abstract public class TaleUtils {
 		return prefix + "/" + com.blade.kit.UUID.UU32() + "." + FileKit.getExtension(name);
 	}
 
-	public static Config getCfg() {
-		return $().bConfig().config();
+	public static Environment getEnv() {
+		return Blade.me().environment();
 	}
 }

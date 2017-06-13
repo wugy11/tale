@@ -3,15 +3,15 @@ package com.tale.controller.admin;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.DateKit;
 import com.blade.kit.StringKit;
-import com.blade.mvc.annotation.Controller;
 import com.blade.mvc.annotation.JSON;
+import com.blade.mvc.annotation.Path;
 import com.blade.mvc.annotation.QueryParam;
 import com.blade.mvc.annotation.Route;
 import com.blade.mvc.http.HttpMethod;
 import com.blade.mvc.http.Request;
 import com.blade.mvc.http.Response;
-import com.blade.mvc.http.wrapper.Session;
-import com.blade.mvc.view.RestResponse;
+import com.blade.mvc.http.Session;
+import com.blade.mvc.ui.RestResponse;
 import com.tale.constants.TaleConst;
 import com.tale.controller.BaseController;
 import com.tale.exception.TipException;
@@ -22,7 +22,7 @@ import com.tale.utils.TaleUtils;
 /**
  * 登录，退出 Created by biezhi on 2017/2/21.
  */
-@Controller("admin")
+@Path("admin")
 public class AuthController extends BaseController {
 
 	// private static final Logger LOGGER =
@@ -34,17 +34,17 @@ public class AuthController extends BaseController {
 	// @Inject
 	// private LogService logService;
 
-	@Route(value = "login", method = HttpMethod.GET)
+	@Route(values = "login", method = HttpMethod.GET)
 	public String login(Response response) {
 		if (null != this.user()) {
-			response.go("/admin/index");
+			response.redirect("/admin/index");
 			return null;
 		}
 		return "admin/login";
 	}
 
 	@SuppressWarnings("rawtypes")
-	@Route(value = { "login" }, method = HttpMethod.POST)
+	@Route(values = { "login" }, method = HttpMethod.POST)
 	@JSON
 	public RestResponse doLogin(@QueryParam String username, @QueryParam String password, @QueryParam String remeber_me,
 			Request request, Session session, Response response) {
@@ -64,7 +64,7 @@ public class AuthController extends BaseController {
 			}
 			Users temp = new Users();
 			temp.setUid(user.getUid());
-			temp.setLogged(DateKit.getCurrentUnixTime());
+			temp.setLogged(DateKit.nowUnix());
 			usersService.update(temp);
 			// JSONKit.toJSONString(request.querys());
 			LOGGER.info("登录成功：{}", username);

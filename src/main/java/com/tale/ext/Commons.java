@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 import com.blade.jdbc.model.Paginator;
 import com.blade.kit.CollectionKit;
 import com.blade.kit.DateKit;
+import com.blade.kit.EncrypKit;
 import com.blade.kit.StringKit;
-import com.blade.kit.Tools;
 import com.blade.kit.UUID;
 import com.tale.constants.TaleConst;
 import com.tale.service.SiteService;
@@ -156,7 +156,7 @@ public final class Commons {
 		if (StringKit.isBlank(email)) {
 			return avatarUrl;
 		}
-		String hash = Tools.md5(email.trim().toLowerCase());
+		String hash = EncrypKit.md5(email.trim().toLowerCase());
 		return avatarUrl + "/" + hash;
 	}
 
@@ -178,7 +178,7 @@ public final class Commons {
 	 * @return
 	 */
 	public static String fmtdate(Date date, String fmt) {
-		return DateKit.dateFormat(date, fmt);
+		return DateKit.toString(date, fmt);
 	}
 
 	/**
@@ -190,7 +190,7 @@ public final class Commons {
 	 */
 	public static String fmtdate(Integer unixTime, String patten) {
 		if (null != unixTime && StringKit.isNotBlank(patten)) {
-			return DateKit.formatDateByUnixTime(unixTime, patten);
+			return DateKit.toString(unixTime, patten);
 		}
 		return "";
 	}

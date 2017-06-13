@@ -1,7 +1,9 @@
 package com.tale.service;
 
+import java.util.List;
+
+import com.blade.ioc.annotation.Bean;
 import com.blade.ioc.annotation.Inject;
-import com.blade.ioc.annotation.Service;
 import com.blade.jdbc.ActiveRecord;
 import com.blade.jdbc.core.Take;
 import com.blade.kit.StringKit;
@@ -11,11 +13,8 @@ import com.tale.exception.TipException;
 import com.tale.model.Contents;
 import com.tale.model.Metas;
 import com.tale.model.Relationships;
-import com.tale.service.MetasService;
 
-import java.util.List;
-
-@Service
+@Bean
 public class MetasService {
 
 	@Inject
@@ -42,7 +41,7 @@ public class MetasService {
 			throw new TipException("项目关联id不能为空");
 		}
 		if (StringKit.isNotBlank(names) && StringKit.isNotBlank(type)) {
-			String[] nameArr = StringKit.split(names, ",");
+			String[] nameArr = names.split(",");
 			for (String name : nameArr) {
 				this.saveOrUpdate(cid, name, type);
 			}
@@ -140,7 +139,7 @@ public class MetasService {
 	}
 
 	private String reMeta(String name, String metas) {
-		String[] ms = StringKit.split(metas, ",");
+		String[] ms = metas.split(",");
 		StringBuffer sbuf = new StringBuffer();
 		for (String m : ms) {
 			if (!name.equals(m)) {
