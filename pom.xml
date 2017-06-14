@@ -21,7 +21,6 @@
     </properties>
 
     <dependencies>
-        <!-- mvc -->
         <dependency>
             <groupId>com.devotion</groupId>
             <artifactId>blue-core</artifactId>
@@ -58,9 +57,6 @@
             <artifactId>commonmark-ext-gfm-tables</artifactId>
             <version>${commonmark.version}</version>
         </dependency>
-        <!--RSS输出 -->
-        <!-- <dependency> <groupId>rome</groupId> <artifactId>rome</artifactId>
-            <version>1.0</version> </dependency> -->
         <!--过滤emoji字符 -->
         <dependency>
             <groupId>com.vdurmont</groupId>
