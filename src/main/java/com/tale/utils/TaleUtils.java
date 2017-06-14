@@ -1,6 +1,8 @@
 package com.tale.utils;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,7 +23,6 @@ import com.blade.kit.Assert;
 import com.blade.kit.CollectionKit;
 import com.blade.kit.DateKit;
 import com.blade.kit.EncrypKit;
-import com.blade.kit.FileKit;
 import com.blade.kit.StringKit;
 import com.blade.mvc.WebContextHolder;
 import com.blade.mvc.http.Request;
@@ -260,10 +261,10 @@ abstract public class TaleUtils {
 	public static String getFileKey(String name) {
 		String prefix = "/upload/" + DateKit.toString("yyyy/MM");
 		String dir = upDir + prefix;
-		if (!FileKit.exist(dir)) {
+		if (!Files.exists(Paths.get(dir))) {
 			new File(dir).mkdirs();
 		}
-		return prefix + "/" + com.blade.kit.UUID.UU32() + "." + FileKit.getExtension(name);
+		return prefix + "/" + com.blade.kit.UUID.UU32() + "." + StringKit.fileExt(name);
 	}
 
 	public static Environment getEnv() {

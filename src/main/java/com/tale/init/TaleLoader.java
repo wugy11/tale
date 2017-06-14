@@ -6,9 +6,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import com.blade.Blade;
-import com.blade.kit.FileKit;
 
 /**
  * Created by biezhi on 2017/3/1.
@@ -38,7 +39,7 @@ public final class TaleLoader {
 		}
 		File[] dir = new File(themeDir).listFiles();
 		for (File f : dir) {
-			if (f.isDirectory() && FileKit.isDirectory(f.getPath() + "/static")) {
+			if (f.isDirectory() && Files.isDirectory(Paths.get(f.getPath() + "/static"))) {
 				String themePath = "/templates/themes/" + f.getName();
 				blade.addStatics(new String[] { themePath + "/style.css", themePath + "/screenshot.png",
 						themePath + "/static" });

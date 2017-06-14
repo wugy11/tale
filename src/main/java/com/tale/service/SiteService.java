@@ -1,6 +1,9 @@
 package com.tale.service;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -16,7 +19,6 @@ import com.blade.jdbc.model.Paginator;
 import com.blade.kit.CollectionKit;
 import com.blade.kit.DateKit;
 import com.blade.kit.EncrypKit;
-import com.blade.kit.FileKit;
 import com.blade.kit.StringKit;
 import com.blade.kit.UUID;
 import com.tale.constants.TaleConst;
@@ -184,7 +186,7 @@ public class SiteService {
 			if (StringKit.isBlank(bk_path)) {
 				throw new TipException("请输入备份文件存储路径");
 			}
-			if (!FileKit.isDirectory(bk_path)) {
+			if (!Files.isDirectory(Paths.get(bk_path))) {
 				throw new TipException("请输入一个存在的目录");
 			}
 			String bkAttachDir = TaleLoader.CLASSPATH + "upload";
@@ -205,8 +207,9 @@ public class SiteService {
 		if ("db".equals(bk_type)) {
 			String filePath = "upload/" + DateKit.toString("yyyyMMddHHmmss") + "_" + UUID.UU16() + ".db";
 			String cp = TaleLoader.CLASSPATH + filePath;
-			FileKit.createParentDir(cp);
-			FileKit.copy(SqliteJdbc.DB_PATH, cp);
+			Path path = Paths.get(cp);
+			Files.createDirectory(path);
+			Files.copy(Paths.get(SqliteJdbc.DB_PATH), path);
 			backResponse.setSql_path("/" + filePath);
 			// 10秒后删除备份文件
 			new Timer().schedule(new TimerTask() {
