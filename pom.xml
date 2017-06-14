@@ -12,11 +12,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        
 		<sqlite.version>3.15.1</sqlite.version>
 		<blade.version>2.0.0-SNAPSHOT</blade.version>
-		<blade-jdbc.version>0.1.7</blade-jdbc.version>
 		<jetbrick-template.version>2.1.4</jetbrick-template.version>
-		<java.version>1.8</java.version>
 		<qiniu.version>7.0.4.1</qiniu.version>
 		<commonmark.version>0.9.0</commonmark.version>
 	</properties>
@@ -24,8 +23,8 @@
 	<dependencies>
 		<!-- mvc -->
 		<dependency>
-			<groupId>com.bladejava</groupId>
-			<artifactId>blade-mvc</artifactId>
+			<groupId>com.devotion</groupId>
+			<artifactId>blue-core</artifactId>
 			<version>${blade.version}</version>
 		</dependency>
 
@@ -36,17 +35,12 @@
 			<version>${sqlite.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.bladejava</groupId>
-			<artifactId>blade-jdbc</artifactId>
-			<version>${blade-jdbc.version}</version>
+			<groupId>com.devotion</groupId>
+			<artifactId>blue-jdbc</artifactId>
+			<version>${blade.version}</version>
 		</dependency>
 
 		<!-- 模板引擎 -->
-		<!-- <dependency>
-			<groupId>com.bladejava</groupId>
-			<artifactId>blade-template-jetbrick</artifactId>
-			<version>${blade-tpl.verion}</version>
-		</dependency> -->
 		<dependency>
 			<groupId>com.github.subchen</groupId>
 			<artifactId>jetbrick-template</artifactId>
@@ -64,12 +58,6 @@
 			<artifactId>commonmark-ext-gfm-tables</artifactId>
 			<version>${commonmark.version}</version>
 		</dependency>
-		<!--web容器 -->
-		<!-- <dependency>
-			<groupId>com.bladejava</groupId>
-			<artifactId>blade-embed-jetty</artifactId>
-			<version>${blade-embed-jetty.version}</version>
-		</dependency> -->
 		<!--RSS输出 -->
 		<!-- <dependency> <groupId>rome</groupId> <artifactId>rome</artifactId> 
 			<version>1.0</version> </dependency> -->
