@@ -22,7 +22,6 @@ import com.blade.kit.FileKit;
 import com.blade.kit.StringKit;
 import com.blade.kit.base.Config;
 import com.blade.mvc.view.ViewSettings;
-import com.blade.mvc.view.template.JetbrickTemplateEngine;
 import com.tale.constants.TaleConst;
 import com.tale.dto.Types;
 import com.tale.ext.AdminCommons;
