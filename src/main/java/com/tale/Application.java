@@ -9,7 +9,7 @@ public class Application {
 	public static void main(String[] args) throws Exception {
 		Blade blade = Blade.me();
 		TaleLoader.init(blade);
-		blade.start(Application.class, args);
+		blade.start(Application.class);
 	}
 
 }

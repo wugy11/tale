@@ -87,12 +87,10 @@ public class WebContext implements BeanProcessor {
 		if (StringKit.isNotBlank(ips)) {
 			TaleConst.BLOCK_IPS.addAll(Arrays.asList(ips.split(",")));
 		}
-		if (environment.getBoolean("app.installed", false)) {
-			TaleConst.INSTALL = Boolean.TRUE;
-		}
-
+			
 		Theme.THEME = "themes/" + Commons.site_option("site_theme");
 
+		TaleConst.INSTALL = environment.getBoolean("app.installed", false);
 		TaleConst.BCONF = environment;
 	}
 
