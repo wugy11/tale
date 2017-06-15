@@ -46,7 +46,7 @@ public class WebContext implements BeanProcessor {
 
 	@Override
 	public void processor(Blade blade) {
-		JetbrickTemplateEngine templateEngine = new JetbrickTemplateEngine();
+		JetbrickTemplateEngine templateEngine = new JetbrickTemplateEngine(blade);
 
 		List<String> macros = CollectionKit.newArrayList(8);
 		macros.add("/comm/macros.html");
@@ -64,9 +64,9 @@ public class WebContext implements BeanProcessor {
 				macros.add(macroName);
 			}
 		}
-		StringBuffer sbuf = new StringBuffer();
-		macros.forEach(s -> sbuf.append(',').append(s));
-		templateEngine.addConfig("jetx.import.macros", sbuf.substring(1));
+		StringBuffer sb = new StringBuffer();
+		macros.forEach(s -> sb.append(',').append(s));
+		templateEngine.addConfig("jetx.import.macros", sb.substring(1));
 
 		GlobalResolver resolver = templateEngine.getGlobalResolver();
 		resolver.registerFunctions(Commons.class);
