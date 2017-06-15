@@ -1,11 +1,5 @@
 package com.tale.controller.admin;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 import com.blade.Environment;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.EncrypKit;
@@ -24,14 +18,18 @@ import com.tale.dto.Statistics;
 import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
-import com.tale.init.TaleLoader;
 import com.tale.model.Contents;
 import com.tale.model.Users;
 import com.tale.service.OptionsService;
 import com.tale.service.SiteService;
 import com.tale.service.UsersService;
-
 import jetbrick.util.ShellUtils;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 后台控制器 Created by biezhi on 2017/2/21.
@@ -175,8 +173,6 @@ public class IndexController extends BaseController {
 
 	/**
 	 * 系统备份
-	 * 
-	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
 	@Route(values = "backup", method = HttpMethod.POST)
@@ -204,8 +200,6 @@ public class IndexController extends BaseController {
 
 	/**
 	 * 保存高级选项设置
-	 * 
-	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
 	@Route(values = "advanced", method = HttpMethod.POST)
@@ -250,9 +244,6 @@ public class IndexController extends BaseController {
 
 	/**
 	 * 重启系统
-	 * 
-	 * @param sleep
-	 * @return
 	 */
 	@Route(values = "reload", method = HttpMethod.GET)
 	public void reload(@QueryParam(defaultValue = "0") int sleep, Request request) {
@@ -261,7 +252,7 @@ public class IndexController extends BaseController {
 		}
 		try {
 			// sh tale.sh reload 10
-			String webHome = new File(TaleLoader.CLASSPATH).getParent();
+			String webHome = new File(TaleConst.CLASSPATH).getParent();
 			String cmd = "sh " + webHome + "/bin tale.sh reload " + sleep;
 			LOGGER.info("execute shell: {}", cmd);
 			ShellUtils.shell(cmd);

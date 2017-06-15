@@ -1,12 +1,5 @@
 package com.tale.controller.admin;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import com.blade.ioc.annotation.Inject;
 import com.blade.jdbc.core.Take;
 import com.blade.jdbc.model.Paginator;
@@ -24,12 +17,18 @@ import com.tale.controller.BaseController;
 import com.tale.dto.Types;
 import com.tale.exception.TipException;
 import com.tale.ext.Commons;
-import com.tale.init.TaleLoader;
 import com.tale.model.Attach;
 import com.tale.model.Users;
 import com.tale.service.AttachService;
 import com.tale.service.SiteService;
 import com.tale.utils.TaleUtils;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 附件管理
@@ -136,7 +135,7 @@ public class AttachController extends BaseController {
 				return RestResponse.fail("不存在该附件");
 			attachService.delete(id);
 			siteService.cleanCache(Types.C_STATISTICS);
-			String upDir = TaleLoader.CLASSPATH.substring(0, TaleLoader.CLASSPATH.length() - 1);
+			String upDir = TaleConst.CLASSPATH.substring(0, TaleConst.CLASSPATH.length() - 1);
 			Files.delete(Paths.get(upDir + attach.getFkey()));
 			// logService.save(LogActions.DEL_ATTACH, attach.getFkey(),
 			// request.address(), this.getUid());

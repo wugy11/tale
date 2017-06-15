@@ -17,7 +17,7 @@ public class JetTag {
         if (StringKit.isNotBlank(value)) {
             value = ctx.getBodyContent();
         }
-        ctx.getWriter().print(value.toString());
+        ctx.getWriter().print(value);
     }
 
 }

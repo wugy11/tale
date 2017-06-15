@@ -1,6 +1,7 @@
 package com.tale.init;
 
 import com.blade.kit.ClassKit;
+import com.tale.constants.TaleConst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +27,7 @@ public final class SqliteJdbc {
     }
 
     private static final String DB_NAME = "tale.db";
-    public static String DB_PATH = SqliteJdbc.class.getClassLoader().getResource("").getPath() + DB_NAME;
+    public static String DB_PATH = TaleConst.CLASSPATH + DB_NAME;
     public static String DB_SRC = "jdbc:sqlite://" + DB_PATH;
 
     static {
@@ -49,7 +50,7 @@ public final class SqliteJdbc {
                     .executeQuery("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='t_options'");
             int count = rs.getInt(1);
             if (count == 0) {
-                String cp = SqliteJdbc.class.getClassLoader().getResource("").getPath();
+                String cp = TaleConst.CLASSPATH;
                 InputStreamReader isr = new InputStreamReader(new FileInputStream(cp + "schema.sql"), "UTF-8");
                 String sql = new BufferedReader(isr).lines().collect(Collectors.joining("\n"));
                 statement.executeUpdate(sql);

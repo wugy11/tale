@@ -32,9 +32,6 @@ public final class Commons {
 
 	/**
 	 * 判断分页中是否有数据
-	 *
-	 * @param paginator
-	 * @return
 	 */
 	public static boolean is_empty(Paginator<?> paginator) {
 		return null == paginator || CollectionKit.isEmpty(paginator.getList());
@@ -42,8 +39,6 @@ public final class Commons {
 
 	/**
 	 * 返回网站首页链接，如：http://tale.biezhi.me
-	 *
-	 * @return
 	 */
 	public static String site_url() {
 		return site_url("");
@@ -51,8 +46,6 @@ public final class Commons {
 
 	/**
 	 * 返回当前主题名称
-	 *
-	 * @return
 	 */
 	public static String site_theme() {
 		return site_option("site_theme", "default");
@@ -63,7 +56,6 @@ public final class Commons {
 	 *
 	 * @param sub
 	 *            后面追加的地址
-	 * @return
 	 */
 	public static String site_url(String sub) {
 		return site_option("site_url") + sub;
@@ -71,8 +63,6 @@ public final class Commons {
 
 	/**
 	 * 网站标题
-	 *
-	 * @return
 	 */
 	public static String site_title() {
 		return site_option("site_title");
@@ -80,9 +70,6 @@ public final class Commons {
 
 	/**
 	 * 网站配置项
-	 *
-	 * @param key
-	 * @return
 	 */
 	public static String site_option(String key) {
 		return site_option(key, "");
@@ -90,11 +77,6 @@ public final class Commons {
 
 	/**
 	 * 网站配置项
-	 *
-	 * @param key
-	 * @param defalutValue
-	 *            默认值
-	 * @return
 	 */
 	public static String site_option(String key, String defalutValue) {
 		if (StringKit.isBlank(key)) {
@@ -105,8 +87,6 @@ public final class Commons {
 
 	/**
 	 * 返回站点设置的描述信息
-	 * 
-	 * @return
 	 */
 	public static String site_description() {
 		return site_option("site_description");
@@ -114,10 +94,6 @@ public final class Commons {
 
 	/**
 	 * 截取字符串
-	 *
-	 * @param str
-	 * @param len
-	 * @return
 	 */
 	public static String substr(String str, int len) {
 		if (str.length() > len) {
@@ -128,8 +104,6 @@ public final class Commons {
 
 	/**
 	 * 返回主题URL
-	 *
-	 * @return
 	 */
 	public static String theme_url() {
 		return Commons.site_url(TEMPLATES + Theme.THEME);
@@ -137,9 +111,6 @@ public final class Commons {
 
 	/**
 	 * 返回主题下的文件路径
-	 *
-	 * @param sub
-	 * @return
 	 */
 	public static String theme_url(String sub) {
 		return Commons.site_url(TEMPLATES + Theme.THEME + sub);
@@ -147,9 +118,6 @@ public final class Commons {
 
 	/**
 	 * 返回gravatar头像地址
-	 *
-	 * @param email
-	 * @return
 	 */
 	public static String gravatar(String email) {
 		String avatarUrl = "https://secure.gravatar.com/avatar";
@@ -162,9 +130,6 @@ public final class Commons {
 
 	/**
 	 * 格式化unix时间戳为日期
-	 *
-	 * @param unixTime
-	 * @return
 	 */
 	public static String fmtdate(Integer unixTime) {
 		return fmtdate(unixTime, "yyyy-MM-dd");
@@ -172,10 +137,6 @@ public final class Commons {
 
 	/**
 	 * 格式化日期
-	 * 
-	 * @param date
-	 * @param fmt
-	 * @return
 	 */
 	public static String fmtdate(Date date, String fmt) {
 		return DateKit.toString(date, fmt);
@@ -183,10 +144,6 @@ public final class Commons {
 
 	/**
 	 * 格式化unix时间戳为日期
-	 *
-	 * @param unixTime
-	 * @param patten
-	 * @return
 	 */
 	public static String fmtdate(Integer unixTime, String patten) {
 		if (null != unixTime && StringKit.isNotBlank(patten)) {
@@ -197,10 +154,6 @@ public final class Commons {
 
 	/**
 	 * 获取随机数
-	 * 
-	 * @param max
-	 * @param str
-	 * @return
 	 */
 	public static String random(int max, String str) {
 		return UUID.random(1, max) + str;
@@ -210,9 +163,6 @@ public final class Commons {
 	 * An :grinning:awesome :smiley:string &#128516;with a few :wink:emojis!
 	 *
 	 * 这种格式的字符转换为emoji表情
-	 *
-	 * @param value
-	 * @return
 	 */
 	public static String emoji(String value) {
 		return EmojiParser.parseToUnicode(value);
@@ -220,8 +170,6 @@ public final class Commons {
 
 	/**
 	 * 获取文章第一张图片
-	 *
-	 * @return
 	 */
 	public static String show_thumb(String content) {
 		content = TaleUtils.mdToHtml(content);
